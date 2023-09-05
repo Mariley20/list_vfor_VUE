@@ -2,12 +2,13 @@ import { DOWNLOAD_DATE } from '@/constants/settings'
 
 const getRowsParsed = (rows, columnCount) => {
   const newRows = []
+  console.log(rows)
   rows.forEach((row, rowIndex) => {
     const rowHasColspans = getRowHasColspan(row)
     const newRow = row.map((rowValue, colIndex) => {
       const data = {
         value: rowValue,
-        rowIndex,
+        rowIndex: rowIndex + 2,
         colIndex
       }
       if (rowValue === DOWNLOAD_DATE) {
@@ -22,7 +23,9 @@ const getRowsParsed = (rows, columnCount) => {
       return data
     })
 
-    newRows.push(newRow)
+    const newRowFiltered = newRow.filter(row => !!row)
+
+    newRows.push(newRowFiltered)
   })
 
   return newRows
@@ -42,9 +45,9 @@ const getColspanValue = (colIndex, rowData, columnCount) => {
   let counter = colIndex + 1
 
   if (counter === rowData.length) {
-    return columnCount - rowData.length - 1
+    return columnCount - colIndex + 1
   }
-  while (rowData[counter] === undefined && counter < rowData.length) {
+  while ((rowData[counter] === undefined || rowData[counter] === null) && counter < rowData.length) {
     colspanCount += 1
     counter += 1
   }

@@ -4,7 +4,8 @@ export const DOWNLOAD_DATE = ' Fecha de descarga '
 /* Constantes de proveedores */
 export const PREVIOUS_NET_WORTH = ' Valor neto anterior '
 export const FREIGHT_COST = ' Costo de flete '
-export const FACTOR_LANDED = ' Costo de flete '
+export const FACTOR_LANDED = ' FACTOR LANDED '
+export const PACKING_COST = ' Costo de Embalaje '
 export const FINAL_FULL_VALUE = ' Valor total final '
 export const FULL_OFFER_VALUE = ' Valor Total de la Oferta '
 

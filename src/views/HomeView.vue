@@ -1,20 +1,43 @@
 <template>
   <div>
-    <input
-      id="input"
-      type="file"
-      @change="uploadExcelFile($event)"
-    >
+    <div>
+      <input
+        id="input"
+        type="file"
+        @change="uploadExcelFile($event)"
+      >
+      <v-btn
+        v-if="!!firstWorksheet"
+        color="primary"
+        @click="handleDownloadExcel"
+      >
+        Download
+      </v-btn>
+    </div>
     <div class="overflow-auto">
       <table
         id="Table2XLSX"
         class="sheet-table caption"
       >
         <tbody>
-          <template v-for="(row, i) in firstWorksheetRows">
-            <WorkSheetRow
-              v-if="row.length > 0"
-              :key="i"
+          <template v-for="(row, i) in sheetRowsTender">
+            <WorkSheetTenderRow
+              :key="`tender_${i}`"
+              :row-data="row"
+              :worksheet-ref="firstWorksheetRef"
+            />
+          </template>
+          <template v-for="(row, j) in sheetRowsProviders">
+            <WorkSheetProviderRow
+              :key="`provider_${j}`"
+              :row-data="row"
+              :worksheet-ref="firstWorksheetRef"
+              @edit:factor-landed="handleEditFactorLanded($event)"
+            />
+          </template>
+          <template v-for="(row, h) in sheetRowsProducts">
+            <WorkSheetProductRow
+              :key="`product_${h}`"
               :row-data="row"
               :worksheet-ref="firstWorksheetRef"
             />
@@ -22,17 +45,37 @@
         </tbody>
       </table>
     </div>
+    <CellModalEdit
+      v-if="!!cellDataToEdit"
+      v-model="showCellModalEdit"
+      :item="cellDataToEdit"
+      @click:edit-cell="handleSaveEditFactorLanded"
+    />
   </div>
 </template>
 
 <script>
-import WorkSheetRow from '@/components/WorkSheetRow.vue'
+import WorkSheetTenderRow from '@/components/WorkSheetTenderRow.vue'
+import WorkSheetProviderRow from '@/components/WorkSheetProviderRow.vue'
+import WorkSheetProductRow from '@/components/WorkSheetProductRow.vue'
+import CellModalEdit from '@/components/CellModalEdit.vue'
+import addRowsOrColumns from '@/helpers/addRowsOrColumns'
+import getRowsParsed from '@/helpers/getRowsParsed'
+import getTenderRows from '@/helpers/getTenderRows'
+import getProviderRows from '@/helpers/getProviderRows'
+import getProductRows from '@/helpers/getProductRows'
+// import { PACKING_COST, FACTOR_LANDED } from '@/constants/settings'
 
-import { read, utils } from 'xlsx'
+import { read, utils, writeFile } from 'xlsx-js-style'
 
 export default {
   name: 'HomeView',
-  components: { WorkSheetRow },
+  components: {
+    WorkSheetTenderRow,
+    WorkSheetProductRow,
+    WorkSheetProviderRow,
+    CellModalEdit
+  },
   data () {
     return {
       excelData: [],
@@ -41,8 +84,11 @@ export default {
       sheetRowsTender: [],
       sheetRowsProviders: [],
       sheetRowsProducts: [],
+      firstWorksheet: null,
       firstWorksheetRows: [],
-      firstWorksheetRef: null
+      firstWorksheetRef: null,
+      showCellModalEdit: false,
+      cellDataToEdit: null
     }
   },
   methods: {
@@ -56,30 +102,55 @@ export default {
 
         const workbook = read(arrayBuffer)
         const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]]
-        const range = utils.decode_range(firstWorksheet['!ref'] || 'A1')
-        this.firstWorksheetRef = {
-          ref: firstWorksheet['!ref'],
-          cols: range.e.c,
-          rows: range.e.r
-        }
-
         const firstWorksheetData = utils.sheet_to_json(firstWorksheet, { header: 1, nullError: true })
-        this.firstWorksheetRows = firstWorksheetData
+
+        const newWorksheetJson = addRowsOrColumns(firstWorksheetData)
+        const newFirstWorksheet = utils.aoa_to_sheet(newWorksheetJson)
+
+        this.createNewWorksheet(newFirstWorksheet)
       }
       fileReader.readAsArrayBuffer(selectedXlsxFile)
+    },
+    createNewWorksheet (firstWorksheet) {
+      this.firstWorksheetRows = utils.sheet_to_json(firstWorksheet, { header: 1, nullError: true })
+      const range = utils.decode_range(firstWorksheet['!ref'] || 'A1')
+      this.firstWorksheetRef = {
+        ref: firstWorksheet['!ref'],
+        cols: range.e.c,
+        rows: range.e.r
+      }
+      // console.log(this.firstWorksheetRows)
+      const rowsparsed = getRowsParsed(this.firstWorksheetRows, range.e.c)
+      console.log(firstWorksheet)
+      this.sheetRowsTender = getTenderRows(rowsparsed)
+      this.sheetRowsProviders = getProviderRows(rowsparsed)
+      this.sheetRowsProducts = getProductRows(rowsparsed)
+      // console.log('ws', this.firstWorksheetRef)
+      // console.log('wxxs', this.sheetRowsProviders)
+      this.firstWorksheet = firstWorksheet
+    },
+    handleDownloadExcel () {
+      const wb = utils.book_new()
+      utils.book_append_sheet(wb, this.firstWorksheet, 'Sheet1')
+      writeFile(wb, 'souther_xxx.xlsx')
+    },
+    handleEditFactorLanded (item) {
+      this.cellDataToEdit = item
+      this.showCellModalEdit = true
+    },
+    handleSaveEditFactorLanded (item) {
+      const cellAddress = utils.encode_cell({
+        r: item.rowIndex,
+        c: item.colIndex
+      })
+      this.firstWorksheet[cellAddress].v = item.value
+      this.createNewWorksheet(this.firstWorksheet)
+      this.cellDataToEdit = null
+      this.showCellModalEdit = false
     }
   }
 }
 
-/*
-- helper yo le envio un numero 1 => A
-5 => E
-25 => Y
-26 = AA
-51 = BA
-num > 25
-prefix
-*/
 </script>
 <style lang="scss" scoped>
 .sheet-table {

@@ -83,7 +83,7 @@ export default {
       if (counter === this.rowData.length) {
         return this.columnCount - (this.rowData.length - 1)
       }
-      while (this.rowData[counter] === undefined && counter < this.rowData.length) {
+      while ((this.rowData[counter] === undefined || this.rowData[counter] === null) && counter < this.rowData.length) {
         colspanCount += 1
         counter += 1
       }
