@@ -64,6 +64,8 @@ import getRowsParsed from '@/helpers/getRowsParsed'
 import getTenderRows from '@/helpers/getTenderRows'
 import getProviderRows from '@/helpers/getProviderRows'
 import getProductRows from '@/helpers/getProductRows'
+// import getProductByProvider from '@/helpers/getProductByProvider'
+import getLandedPricesByProduct from '@/helpers/getLandedPricesByProduct'
 // import { PACKING_COST, FACTOR_LANDED } from '@/constants/settings'
 
 import { read, utils, writeFile } from 'xlsx-js-style'
@@ -119,14 +121,10 @@ export default {
         cols: range.e.c,
         rows: range.e.r
       }
-      // console.log(this.firstWorksheetRows)
       const rowsparsed = getRowsParsed(this.firstWorksheetRows, range.e.c)
-      console.log(firstWorksheet)
       this.sheetRowsTender = getTenderRows(rowsparsed)
       this.sheetRowsProviders = getProviderRows(rowsparsed)
       this.sheetRowsProducts = getProductRows(rowsparsed)
-      // console.log('ws', this.firstWorksheetRef)
-      // console.log('wxxs', this.sheetRowsProviders)
       this.firstWorksheet = firstWorksheet
     },
     handleDownloadExcel () {
@@ -144,6 +142,16 @@ export default {
         c: item.colIndex
       })
       this.firstWorksheet[cellAddress].v = item.value
+
+      const landedPrices = getLandedPricesByProduct(this.sheetRowsProducts, item.providerId - 1, item.value)
+      landedPrices.forEach(element => {
+        const landedPriceAddress = utils.encode_cell({
+          r: element.rowIndex,
+          c: element.colIndex
+        })
+        this.firstWorksheet[landedPriceAddress].v = element.value
+      })
+
       this.createNewWorksheet(this.firstWorksheet)
       this.cellDataToEdit = null
       this.showCellModalEdit = false

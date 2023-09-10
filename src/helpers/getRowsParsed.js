@@ -8,7 +8,7 @@ const getRowsParsed = (rows, columnCount) => {
     const newRow = row.map((rowValue, colIndex) => {
       const data = {
         value: rowValue,
-        rowIndex: rowIndex + 2,
+        rowIndex: rowIndex,
         colIndex
       }
       if (rowValue === DOWNLOAD_DATE) {

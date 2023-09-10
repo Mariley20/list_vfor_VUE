@@ -76,15 +76,16 @@ export default {
     }
   },
   created () {
-    this.itemValue = this.item.value
+    this.itemValue = this.item.value * 100
   },
   methods: {
     handleSaveData () {
-      const { colIndex, rowIndex } = this.item
+      const { colIndex, rowIndex, providerId } = this.item
       const data = {
-        value: this.itemValue,
+        value: this.itemValue / 100,
         colIndex,
-        rowIndex
+        rowIndex,
+        providerId
       }
       this.$emit('click:edit-cell', data)
     }

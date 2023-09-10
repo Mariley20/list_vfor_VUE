@@ -5,19 +5,22 @@
       :key="i"
       :colspan="col.colspan"
     >
-      {{ col.value }}
-      <template v-if="columnIsEditable && i > 0">
+      <template v-if="columnIsFactorLanded && i > 0">
+        {{ getFactorLandedFormatted(col.value ) }}
         <v-btn
           fab
           width="24"
           color="primary"
           height="24"
-          @click="handleEditItem(col)"
+          @click="handleEditItem(col,i)"
         >
           <v-icon small>
             mdi-pencil
           </v-icon>
         </v-btn>
+      </template>
+      <template v-else>
+        {{ col.value }}
       </template>
     </td>
   </tr>
@@ -32,15 +35,18 @@ export default {
     rowData: { type: Array, default: () => [] }
   },
   computed: {
-    columnIsEditable () {
+    columnIsFactorLanded () {
       return this.rowData[0].value === FACTOR_LANDED
     }
   },
   methods: {
-    handleEditItem (item) {
+    handleEditItem (item, i) {
       if (this.rowData[0].value === FACTOR_LANDED) {
-        this.$emit('edit:factor-landed', item)
+        this.$emit('edit:factor-landed', { ...item, providerId: i })
       }
+    },
+    getFactorLandedFormatted (value) {
+      return `${value * 100}%`
     }
   }
 }

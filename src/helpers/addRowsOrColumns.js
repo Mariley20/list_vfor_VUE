@@ -29,9 +29,9 @@ const addRowsOrColumns = (rows) => {
     }
     if (index >= shortTextRowIndex) {
       const rowCloned = JSON.parse(JSON.stringify(row))
-      columnsIndex.reverse().forEach(colIndex => {
-        const value = index === shortTextRowIndex ? LANDED_PRICE : 0
-        rowCloned.splice(colIndex + 1, 0, value)
+      columnsIndex.forEach((colIndex, i) => {
+        const value = index === shortTextRowIndex ? LANDED_PRICE : row[colIndex]
+        rowCloned.splice(colIndex + i + 1, 0, value)
       })
       rowsCloned.push(rowCloned)
     }
