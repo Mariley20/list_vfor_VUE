@@ -2,7 +2,6 @@ import { DOWNLOAD_DATE } from '@/constants/settings'
 
 const getRowsParsed = (rows, columnCount) => {
   const newRows = []
-  console.log(rows)
   rows.forEach((row, rowIndex) => {
     const rowHasColspans = getRowHasColspan(row)
     const newRow = row.map((rowValue, colIndex) => {

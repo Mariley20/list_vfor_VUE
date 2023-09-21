@@ -3,6 +3,7 @@
     <td
       v-for="(col, i) in rowData"
       :key="i"
+      :style="{'background-color': col.background}"
     >
       {{ col.value }}
     </td>
@@ -14,13 +15,15 @@ export default {
   props: {
     rowData: { type: Array, default: () => [] }
   }
+
 }
 </script>
 
 <style lang="scss" scoped>
 .sheet-row td {
   border: 1px solid rgb(228, 228, 228);
-  min-width: 120px;
+  min-width: 70px;
+  font-size: 10px;
   // white-space: nowrap;
   padding: 2px 8px;
 }

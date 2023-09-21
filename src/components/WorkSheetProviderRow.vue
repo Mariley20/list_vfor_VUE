@@ -4,6 +4,7 @@
       v-for="(col, i) in rowData"
       :key="i"
       :colspan="col.colspan"
+      :style="{'background-color': col.background}"
     >
       <template v-if="columnIsFactorLanded && i > 0">
         {{ getFactorLandedFormatted(col.value ) }}
@@ -46,7 +47,7 @@ export default {
       }
     },
     getFactorLandedFormatted (value) {
-      return `${value * 100}%`
+      return `${Math.round((value * 100) * 100) / 100}%`
     }
   }
 }

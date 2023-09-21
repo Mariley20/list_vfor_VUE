@@ -4,7 +4,7 @@ const getProductByProvider = (rowsParsedProducts, providerId) => {
   const chunkSizes = []
   rowsParsedProducts[0].forEach((item, index) => {
     if (item.value === AMOUNT) {
-      chunkSizes.push(index + 1)
+      chunkSizes.push(index + 2)
     }
   })
   let counter = 0
@@ -12,8 +12,8 @@ const getProductByProvider = (rowsParsedProducts, providerId) => {
   while (counter < chunkSizes.length) {
     const chunks = []
     rowsParsedProducts.forEach((item, index) => {
-      const indexInit = counter === 0 ? 0 : chunkSizes[counter - 1] + 1
-      const indexEnd = chunkSizes[counter] + 1
+      const indexInit = counter === 0 ? 0 : chunkSizes[counter - 1]
+      const indexEnd = chunkSizes[counter]
       const chunk = item.slice(indexInit, indexEnd)
       chunks.push(chunk)
     })

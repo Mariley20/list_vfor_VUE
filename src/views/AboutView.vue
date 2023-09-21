@@ -64,6 +64,7 @@ import getRowsParsed from '@/helpers/getRowsParsed'
 import getTenderRows from '@/helpers/getTenderRows'
 import getProviderRows from '@/helpers/getProviderRows'
 import getProductRows from '@/helpers/getProductRows'
+import getFirstWorksheetRowsCalculated from '@/helpers/getFirstWorksheetRowsCalculated'
 // import getProductByProvider from '@/helpers/getProductByProvider'
 import getLandedPricesByProduct from '@/helpers/getLandedPricesByProduct'
 // import { PACKING_COST, FACTOR_LANDED } from '@/constants/settings'
@@ -121,10 +122,14 @@ export default {
         cols: range.e.c,
         rows: range.e.r
       }
+      this.firstWorksheetRows = getFirstWorksheetRowsCalculated(this.firstWorksheetRows)
+      // console.log('xxxx', x)
       const rowsparsed = getRowsParsed(this.firstWorksheetRows, range.e.c)
       this.sheetRowsTender = getTenderRows(rowsparsed)
-      this.sheetRowsProviders = getProviderRows(rowsparsed)
       this.sheetRowsProducts = getProductRows(rowsparsed)
+      this.sheetRowsProviders = getProviderRows(rowsparsed, this.sheetRowsProducts)
+
+      /*  */
       this.firstWorksheet = firstWorksheet
     },
     handleDownloadExcel () {
@@ -144,11 +149,13 @@ export default {
       this.firstWorksheet[cellAddress].v = item.value
 
       const landedPrices = getLandedPricesByProduct(this.sheetRowsProducts, item.providerId - 1, item.value)
-      landedPrices.forEach(element => {
+
+      landedPrices.forEach((element, i) => {
         const landedPriceAddress = utils.encode_cell({
           r: element.rowIndex,
           c: element.colIndex
         })
+
         this.firstWorksheet[landedPriceAddress].v = element.value
       })
 

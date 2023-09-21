@@ -4,10 +4,11 @@ import getProductByProvider from '@/helpers/getProductByProvider'
 const getLandedPricesByProduct = (productRows, providerId, factorLandedValue) => {
   const products = getProductByProvider(productRows)[providerId]
 
-  const netPriceIndex = productRows[0].findIndex(item => item.value === NET_PRICE)
-  const landedPriceIndex = productRows[0].findIndex(item => item.value === LANDED_PRICE)
+  const netPriceIndex = products[0].findIndex(item => item.value === NET_PRICE)
+  const landedPriceIndex = products[0].findIndex(item => item.value === LANDED_PRICE)
 
   const items = []
+
   products.forEach((row, index) => {
     if (index > 0) {
       const landedPriceItem = row[landedPriceIndex]
