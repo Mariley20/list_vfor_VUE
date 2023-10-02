@@ -6,10 +6,8 @@ import vuetify from '@/plugins/vuetify'
 
 Vue.config.productionTip = false
 
-// eslint-disable-next-line no-new
 new Vue({
   router,
-  // store,
   vuetify,
-  ...App
-})
+  render: h => h(App)
+}).$mount('#app')
