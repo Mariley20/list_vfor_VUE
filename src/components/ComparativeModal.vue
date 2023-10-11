@@ -66,7 +66,7 @@
                       class="px-3 text-no-wrap"
                     >
                       {{ item.value }} <br>
-                      <small>({{ item.provider.value }})</small>
+                      <small>({{ row[1].provider.value }})</small>
                     </div>
                   </td>
                 </template>
