@@ -149,6 +149,7 @@ export default {
     }),
     getDataParaHistorico () {
       const priceNetIndex = []
+      this.historicoItems = []
 
       this.sheetRowsProducts[0].forEach((item, i) => {
         if (item.value === NET_PRICE) {
