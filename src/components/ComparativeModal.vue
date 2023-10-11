@@ -136,8 +136,6 @@ export default {
       deep: true,
       handler (newValue, oldValue) {
         this.getDataParaHistorico()
-        // const products = getProductByProvider(this.sheetRowsProducts)
-        // console.log(products)
       }
     }
   },
@@ -157,7 +155,6 @@ export default {
         }
       })
 
-      // console.log(priceLandedIndex)
       this.sheetRowsProducts.forEach((item, i) => {
         if (i > 0) {
           const historicoItemsAux = [item[0]]

@@ -105,7 +105,6 @@ const getProductRows = (rows) => {
       })
     }
   })
-  console.log(productRowsParsed)
   return productRowsParsed
 }
 
