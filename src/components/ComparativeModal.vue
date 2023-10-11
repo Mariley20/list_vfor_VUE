@@ -95,7 +95,7 @@
 
 <script>
 // import getProductByProvider from '@/helpers/getProductByProvider'
-import { NET_PRICE } from '@/constants/settings'
+import { NET_PRICE, LANDED_PRICE } from '@/constants/settings'
 import { mapActions } from 'vuex'
 
 export default {
@@ -105,7 +105,7 @@ export default {
   },
   data () {
     return {
-      historicoItems: [[{ value: 'Texto breve' }, { value: 'Precio Neto' }, { value: 'Historico' }, { value: 'Variación' }]]
+      historicoItems: []
     }
   },
   computed: {
@@ -148,18 +148,20 @@ export default {
       setHistoricalData: 'app/setHistoricalData'
     }),
     getDataParaHistorico () {
-      const priceNetIndex = []
-      this.historicoItems = []
+      const priceLandedIndex = []
+      this.historicoItems = [[{ value: 'Texto breve' }, { value: 'Precio Neto' }, { value: 'Historico' }, { value: 'Variación' }]]
 
       this.sheetRowsProducts[0].forEach((item, i) => {
-        if (item.value === NET_PRICE) {
-          priceNetIndex.push(i)
+        if (item.value === LANDED_PRICE) {
+          priceLandedIndex.push(i)
         }
       })
+
+      // console.log(priceLandedIndex)
       this.sheetRowsProducts.forEach((item, i) => {
         if (i > 0) {
           const historicoItemsAux = [item[0]]
-          priceNetIndex.forEach(index => {
+          priceLandedIndex.forEach(index => {
             if (item[index].isTheBestOption) {
               historicoItemsAux.push(item[index], { value: item[index].value }, { value: 0 })
             }
