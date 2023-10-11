@@ -3,6 +3,7 @@
     <td
       v-for="(col, i) in rowData"
       :key="i"
+      :colspan="i > 0 ? 5 : 1"
     >
       {{ col.value }}
     </td>
