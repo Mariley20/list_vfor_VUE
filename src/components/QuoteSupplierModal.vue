@@ -12,7 +12,7 @@
         :height="40"
       >
         <v-toolbar-title>
-          Editar Factor Landed
+          Editar contenido
         </v-toolbar-title>
         <v-spacer />
         <v-btn
@@ -23,7 +23,7 @@
         </v-btn>
       </v-app-bar>
       <v-card-text class="pa-0 fill-height">
-        <v-container
+        <!-- <v-container
           fluid
         >
           <v-text-field
@@ -34,14 +34,13 @@
             outlined
             suffix="%"
           />
-        </v-container>
+        </v-container> -->
       </v-card-text>
       <v-card-actions>
         <v-spacer />
         <v-btn
           height="32"
           color="primary"
-          @click="handleSaveData"
         >
           Guardar
           <v-icon left>
@@ -57,12 +56,10 @@
 <script>
 export default {
   props: {
-    value: { type: Boolean, default: false },
-    item: { type: Object, default: null }
+    value: { type: Boolean, default: false }
   },
   data () {
     return {
-      itemValue: ''
     }
   },
   computed: {
@@ -76,19 +73,8 @@ export default {
     }
   },
   created () {
-    this.itemValue = this.item.value * 100
   },
   methods: {
-    handleSaveData () {
-      const { colIndex, rowIndex, providerId } = this.item
-      const data = {
-        value: this.itemValue / 100,
-        colIndex,
-        rowIndex,
-        providerId
-      }
-      this.$emit('click:edit-cell', data)
-    }
   }
 
 }

@@ -8,17 +8,29 @@
       >
       <v-btn
         v-if="!!firstWorksheet"
-        color="primary"
+        color="pink"
         @click="handleDownloadExcel"
       >
         Download
       </v-btn>
+      <v-btn
+        v-if="!!firstWorksheet"
+        color="success"
+        class="mx-4"
+        @click="handleDownloadExcel"
+      >
+        Agregar nueva cotización
+      </v-btn>
+      <v-btn
+        v-if="!!firstWorksheet"
+        color="primary"
+        @click="showCompativeModal =!showCompativeModal"
+      >
+        Ver historico
+      </v-btn>
     </div>
     <div class="overflow-auto">
-      <table
-        id="Table2XLSX"
-        class="sheet-table caption"
-      >
+      <table class="sheet-table caption">
         <tbody>
           <template v-for="(row, i) in sheetRowsTender">
             <WorkSheetTenderRow
@@ -45,6 +57,11 @@
         </tbody>
       </table>
     </div>
+    <ComparativeModal
+      v-if="!!firstWorksheet"
+      v-model="showCompativeModal"
+      :sheet-rows-products="sheetRowsProducts"
+    />
     <CellModalEdit
       v-if="!!cellDataToEdit"
       v-model="showCellModalEdit"
@@ -59,6 +76,7 @@ import WorkSheetTenderRow from '@/components/WorkSheetTenderRow.vue'
 import WorkSheetProviderRow from '@/components/WorkSheetProviderRow.vue'
 import WorkSheetProductRow from '@/components/WorkSheetProductRow.vue'
 import CellModalEdit from '@/components/CellModalEdit.vue'
+import ComparativeModal from '@/components/ComparativeModal.vue'
 import addRowsOrColumns from '@/helpers/addRowsOrColumns'
 import getRowsParsed from '@/helpers/getRowsParsed'
 import getTenderRows from '@/helpers/getTenderRows'
@@ -72,12 +90,13 @@ import getLandedPricesByProduct from '@/helpers/getLandedPricesByProduct'
 import { read, utils, writeFile } from 'xlsx-js-style'
 
 export default {
-  name: 'HomeView',
+  name: 'AboutView',
   components: {
     WorkSheetTenderRow,
     WorkSheetProductRow,
     WorkSheetProviderRow,
-    CellModalEdit
+    CellModalEdit,
+    ComparativeModal
   },
   data () {
     return {
@@ -91,6 +110,7 @@ export default {
       firstWorksheetRows: [],
       firstWorksheetRef: null,
       showCellModalEdit: false,
+      showCompativeModal: false,
       cellDataToEdit: null
     }
   },
@@ -123,7 +143,6 @@ export default {
         rows: range.e.r
       }
       this.firstWorksheetRows = getFirstWorksheetRowsCalculated(this.firstWorksheetRows)
-      // console.log('xxxx', x)
       const rowsparsed = getRowsParsed(this.firstWorksheetRows, range.e.c)
       this.sheetRowsTender = getTenderRows(rowsparsed)
       this.sheetRowsProducts = getProductRows(rowsparsed)
@@ -169,7 +188,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .sheet-table {
-  border:1px solid black;
-  border-collapse:collapse;
+  border: 1px solid black;
+  border-collapse: collapse;
 }
 </style>

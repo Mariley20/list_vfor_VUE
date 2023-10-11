@@ -3,7 +3,7 @@
     <td
       v-for="(col, i) in rowData"
       :key="i"
-      :colspan="col.colspan"
+      :colspan="col.colspan -4"
       :style="{'background-color': col.background}"
     >
       <template v-if="columnIsFactorLanded && i > 0">

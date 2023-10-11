@@ -1,12 +1,16 @@
 <template>
   <tr class="sheet-row">
-    <td
-      v-for="(col, i) in rowData"
-      :key="i"
-      :style="{'background-color': col.background}"
-    >
-      {{ col.value }}
-    </td>
+    <template v-for="(col, i) in rowData">
+      <td
+        v-if="!col.hide"
+        :key="i"
+        :style="{
+          'background-color': col.background,
+        }"
+      >
+        {{ col.value }}
+      </td>
+    </template>
   </tr>
 </template>
 
@@ -24,7 +28,6 @@ export default {
   border: 1px solid rgb(228, 228, 228);
   min-width: 70px;
   font-size: 10px;
-  // white-space: nowrap;
   padding: 2px 8px;
 }
 </style>
