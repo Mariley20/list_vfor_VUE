@@ -1,13 +1,13 @@
 import { DOWNLOAD_DATE } from '@/constants/settings'
 
-const getRowsParsed = (rows, columnCount) => {
+const getRowsParsed = (rows, columnCount, rowStart) => {
   const newRows = []
   rows.forEach((row, rowIndex) => {
     const rowHasColspans = getRowHasColspan(row)
     const newRow = row.map((rowValue, colIndex) => {
       const data = {
         value: rowValue,
-        rowIndex: rowIndex,
+        rowIndex: rowIndex + rowStart,
         colIndex
       }
       if (rowValue === DOWNLOAD_DATE) {

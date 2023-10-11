@@ -140,10 +140,11 @@ export default {
       this.firstWorksheetRef = {
         ref: firstWorksheet['!ref'],
         cols: range.e.c,
-        rows: range.e.r
+        rows: range.e.r,
+        rowStart: range.s.r
       }
       this.firstWorksheetRows = getFirstWorksheetRowsCalculated(this.firstWorksheetRows)
-      const rowsparsed = getRowsParsed(this.firstWorksheetRows, range.e.c)
+      const rowsparsed = getRowsParsed(this.firstWorksheetRows, range.e.c, range.s.r)
       this.sheetRowsTender = getTenderRows(rowsparsed)
       this.sheetRowsProducts = getProductRows(rowsparsed)
       this.sheetRowsProviders = getProviderRows(rowsparsed, this.sheetRowsProducts)
@@ -165,8 +166,8 @@ export default {
         r: item.rowIndex,
         c: item.colIndex
       })
-      this.firstWorksheet[cellAddress].v = item.value
 
+      this.firstWorksheet[cellAddress].v = item.value
       const landedPrices = getLandedPricesByProduct(this.sheetRowsProducts, item.providerId - 1, item.value)
 
       landedPrices.forEach((element, i) => {
