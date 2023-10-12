@@ -1,7 +1,7 @@
 <template>
   <v-dialog
     v-model="showModal"
-    width="600"
+    width="800"
     persistent
   >
     <v-card>
@@ -23,7 +23,7 @@
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-app-bar>
-      <v-card-text class="fill-height pt-4">
+      <v-card-text class="fill-height pt-4 d-flex justify-center">
         <table>
           <tbody>
             <tr class="sheet-row">
@@ -57,16 +57,18 @@
                     >{{ getVariacion(row, rowIndex) }}</span>
                     <div
                       v-else-if="x===1"
-                      class="text-no-wrap px-3"
+                      style="max-width: 220px;"
+                      class=" px-3"
                     >
                       <b>{{ item.value }}</b>
                     </div>
                     <div
                       v-else
-                      class="px-3 text-no-wrap"
+                      class="px-3 "
+                      style="max-width: 220px;"
                     >
                       {{ item.value }} <br>
-                      <small>({{ row[1].provider.value }})</small>
+                      <small>({{ row[1]?.provider?.value |'' }})</small>
                     </div>
                   </td>
                 </template>

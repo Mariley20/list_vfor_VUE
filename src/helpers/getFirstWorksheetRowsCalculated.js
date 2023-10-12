@@ -1,4 +1,4 @@
-import { SHORT_TEXT, FULL_OFFER_VALUE, AMOUNT, NET_WORTH, FREIGHT_COST, PREVIOUS_NET_WORTH } from '@/constants/settings'
+import { SHORT_TEXT, FULL_OFFER_VALUE, AMOUNT, NET_WORTH, FREIGHT_COST } from '@/constants/settings'
 
 const getFirstWorksheetRowsCalculated = (rows) => {
   const newRows = rows
@@ -37,16 +37,17 @@ const getFirstWorksheetRowsCalculated = (rows) => {
       })
     }
     //   /* Valor total final  row */ calculado de otra manera
-    if (row[0] === PREVIOUS_NET_WORTH) {
-      /* Valor neto anterior  row */
-      row.forEach((rowValue, j) => {
-        if (typeof rowValue === 'number') {
-          newRows[rowIndex][j] = Math.round((newRows[rowIndex + 4][j] + newRows[rowIndex - 6][j]) * 100) / 100
-        }
-      })
-    }
+    // if (row[0] === PREVIOUS_NET_WORTH) {
+    //   /* Valor neto anterior  row */
+    //   row.forEach((rowValue, j) => {
+    //     if (typeof rowValue === 'number') {
+    //       newRows[rowIndex][j] = Math.round((newRows[rowIndex + 4][j] + newRows[rowIndex - 6][j]) * 100) / 100
+    //     }
+    //   })
+    // }
   })
 
+  /* Calcular valor neto */
   const netProductValueIndex = []
 
   productRowsParsed[0].forEach((item, i) => {

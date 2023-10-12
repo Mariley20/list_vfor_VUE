@@ -50,9 +50,9 @@ const getProductRows = (rows) => {
       }
     })
     if (i > 0) {
-      const netItems = row.filter((item, j) => {
-        return item.value > 0 && netProductValueIndex.includes(j)
-      })
+      // const netItems = row.filter((item, j) => {
+      //   return item.value > 0 && netProductValueIndex.includes(j)
+      // })
       const landedPriceItems = row.filter((item, j) => {
         return item.value > 0 && priceLandedIndex.includes(j)
       })
@@ -66,37 +66,42 @@ const getProductRows = (rows) => {
         }
       })
 
-      const netValues = netItems.map(item => item.value)
+      // const netValues = netItems.map(item => item.value)
       const priceLandedValues = landedPriceItems.map(item => item.value)
       // const priceNetValues = priceNetItems.map(item => item.value)
       const DeliveryDaysValues = deliveryDaysItems.map(item => parseInt(item.value))
-      const netValueMin = Math.min(...netValues)
+      // const netValueMin = Math.min(...netValues)
       const deliveryDaysValueMin = Math.min(...DeliveryDaysValues)
       const priceLandedValueMin = Math.min(...priceLandedValues)
       // const priceNetValueMin = Math.min(...priceNetValues)
 
-      netProductValueIndex.forEach(index => {
-        if (row[index].value === 0) {
-          productRowsParsed[i][index].background = '#ffc7ce'
+      deliveryDaysIndex.forEach(index => {
+        // console.log(parseInt(row[index].value), deliveryDaysValueMin)
+        // if (row[index].value === 0) {
+        //   productRowsParsed[i][index].background = '#ffc7ce'
+        // }
+        // if (row[index].value === netValueMin) {
+        // productRowsParsed[i][index].background = '#92d050'
+        // const deliveryDays = parseInt(row[index - 1].value)
+        if (parseInt(row[index].value) === deliveryDaysValueMin && row[index + 1].value > 0) {
+          // productRowsParsed[i][index - 1].background = '#92d050'
+          // productRowsParsed[i][index - 1].isTheBestOption = true
+          productRowsParsed[i][index].isTheBestOption = true
+          productRowsParsed[i][index].background = '#ffd859'
+          // productRowsParsed[i][index + 4].isTheBestOption = true
         }
-        if (row[index].value === netValueMin) {
-          productRowsParsed[i][index].background = '#92d050'
-          const deliveryDays = parseInt(row[index - 1].value)
-          if (deliveryDays === deliveryDaysValueMin) {
-            productRowsParsed[i][index - 1].background = '#92d050'
-            productRowsParsed[i][index - 1].isTheBestOption = true
-            productRowsParsed[i][index].isTheBestOption = true
-            productRowsParsed[i][index + 4].isTheBestOption = true
-          }
-        }
+        // }
       })
       priceLandedIndex.forEach(index => {
-        if (row[index].value === 0) {
-          productRowsParsed[i][index].background = '#ffc7ce'
-        }
+        // if (row[index].value === 0) {
+        //   productRowsParsed[i][index].background = '#ffc7ce'
+        // }
         if (row[index].value === priceLandedValueMin) {
           productRowsParsed[i][index].background = '#92d050'
           productRowsParsed[i][index].isTheBestOption = true
+          productRowsParsed[i][index - 1].isTheBestOption = true
+          productRowsParsed[i][index - 5].isTheBestOption = true
+          productRowsParsed[i][index - 6].isTheBestOption = true
         }
         // if (row[index - 1].value === priceNetValueMin) {
         //   productRowsParsed[i][index - 1].background = '#92d050'
