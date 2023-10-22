@@ -11,7 +11,7 @@
         color="pink"
         @click="handleDownloadExcel"
       >
-        Download
+        export pdf
       </v-btn>
       <v-btn
         v-if="!!firstWorksheet"
@@ -30,34 +30,10 @@
       </v-btn>
     </div>
     <div class="overflow-auto">
-      <table class="sheet-table caption">
-        <tbody>
-          <template v-for="(row, i) in sheetRowsTender">
-            <WorkSheetTenderRow
-              :key="`tender_${i}`"
-              :row-data="row"
-              :worksheet-ref="firstWorksheetRef"
-            />
-          </template>
-          <template v-for="(row, j) in sheetRowsProviders">
-            <WorkSheetProviderRow
-              :key="`provider_${j}`"
-              :row-data="row"
-              :worksheet-ref="firstWorksheetRef"
-              @edit:factor-landed="handleEditFactorLanded($event)"
-            />
-          </template>
-          <template v-for="(row, h) in sheetRowsProducts">
-            <WorkSheetProductRow
-              :key="`product_${h}`"
-              :row-data="row"
-              :worksheet-ref="firstWorksheetRef"
-            />
-          </template>
-        </tbody>
-      </table>
+      <AppLicitacionSeccion />
+      <AppCompaniesSection />
     </div>
-    <ComparativeModal
+    <!-- <ComparativeModal
       v-if="!!firstWorksheet"
       v-model="showCompativeModal"
       :sheet-rows-products="sheetRowsProducts"
@@ -67,36 +43,25 @@
       v-model="showCellModalEdit"
       :item="cellDataToEdit"
       @click:edit-cell="handleSaveEditFactorLanded"
-    />
+    /> -->
   </div>
 </template>
 
 <script>
-import WorkSheetTenderRow from '@/components/WorkSheetTenderRow.vue'
-import WorkSheetProviderRow from '@/components/WorkSheetProviderRow.vue'
-import WorkSheetProductRow from '@/components/WorkSheetProductRow.vue'
-import CellModalEdit from '@/components/CellModalEdit.vue'
-import ComparativeModal from '@/components/ComparativeModal.vue'
-import addRowsOrColumns from '@/helpers/addRowsOrColumns'
-import getRowsParsed from '@/helpers/getRowsParsed'
-import getTenderRows from '@/helpers/getTenderRows'
-import getProviderRows from '@/helpers/getProviderRows'
-import getProductRows from '@/helpers/getProductRows'
-import getFirstWorksheetRowsCalculated from '@/helpers/getFirstWorksheetRowsCalculated'
-// import getProductByProvider from '@/helpers/getProductByProvider'
-import getLandedPricesByProduct from '@/helpers/getLandedPricesByProduct'
-// import { PACKING_COST, FACTOR_LANDED } from '@/constants/settings'
+import getLicitacionDataFromExcelTosave from '@/helpers/getLicitacionDataFromExcelTosave'
+import getCompaniesFromExcelTosave from '@/helpers/getCompaniesFromExcelTosave'
+import getProductsDataFromExcelTosave from '@/helpers/getProductsDataFromExcelTosave'
+import getLicitacionDetailsFromExcelTosave from '@/helpers/getLicitacionDetailsFromExcelTosave'
+import { SouthernApp as SouthernAppAPI } from '@/api/app.js'
 
-import { read, utils, writeFile } from 'xlsx-js-style'
+import { read, utils } from 'xlsx-js-style'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'AboutView',
   components: {
-    WorkSheetTenderRow,
-    WorkSheetProductRow,
-    WorkSheetProviderRow,
-    CellModalEdit,
-    ComparativeModal
+    AppLicitacionSeccion: () => import('@/components/AppLicitacionSeccion.vue'),
+    AppCompaniesSection: () => import('@/components/AppCompaniesSection.vue')
   },
   data () {
     return {
@@ -114,7 +79,16 @@ export default {
       cellDataToEdit: null
     }
   },
+  created () {
+    this.deleteFullData()
+  },
   methods: {
+    ...mapActions({
+      setLicitacionData: 'licitacion/setLicitacionData',
+      setLicitacionDetails: 'licitacion/setLicitacionDetails',
+      setProducts: 'licitacion/setProducts',
+      setCompanies: 'licitacion/setCompanies'
+    }),
     uploadExcelFile (event) {
       const selectedXlsxFile = event.target.files[0]
 
@@ -127,62 +101,68 @@ export default {
         const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]]
         const firstWorksheetData = utils.sheet_to_json(firstWorksheet, { header: 1, nullError: true })
 
-        const newWorksheetJson = addRowsOrColumns(firstWorksheetData)
-        const newFirstWorksheet = utils.aoa_to_sheet(newWorksheetJson)
-
-        this.createNewWorksheet(newFirstWorksheet)
+        this.saveFullData(firstWorksheetData)
       }
       fileReader.readAsArrayBuffer(selectedXlsxFile)
     },
-    createNewWorksheet (firstWorksheet) {
-      this.firstWorksheetRows = utils.sheet_to_json(firstWorksheet, { header: 1, nullError: true })
-      const range = utils.decode_range(firstWorksheet['!ref'] || 'A1')
-      this.firstWorksheetRef = {
-        ref: firstWorksheet['!ref'],
-        cols: range.e.c,
-        rows: range.e.r,
-        rowStart: range.s.r
-      }
-      this.firstWorksheetRows = getFirstWorksheetRowsCalculated(this.firstWorksheetRows)
-      const rowsparsed = getRowsParsed(this.firstWorksheetRows, range.e.c, range.s.r)
-      this.sheetRowsTender = getTenderRows(rowsparsed)
-      this.sheetRowsProducts = getProductRows(rowsparsed)
-      this.sheetRowsProviders = getProviderRows(rowsparsed, this.sheetRowsProducts)
+    async saveFullData (firstWorksheetData) {
+      const licitacionDataToSave = getLicitacionDataFromExcelTosave(firstWorksheetData)
+      const companiesDataToSave = getCompaniesFromExcelTosave(firstWorksheetData)
+      const productsDataToSave = getProductsDataFromExcelTosave(firstWorksheetData)
+      const licitacionDetails = getLicitacionDetailsFromExcelTosave(firstWorksheetData)
 
-      /*  */
-      this.firstWorksheet = firstWorksheet
-    },
-    handleDownloadExcel () {
-      const wb = utils.book_new()
-      utils.book_append_sheet(wb, this.firstWorksheet, 'Sheet1')
-      writeFile(wb, 'souther_xxx.xlsx')
-    },
-    handleEditFactorLanded (item) {
-      this.cellDataToEdit = item
-      this.showCellModalEdit = true
-    },
-    handleSaveEditFactorLanded (item) {
-      const cellAddress = utils.encode_cell({
-        r: item.rowIndex,
-        c: item.colIndex
-      })
+      console.log(firstWorksheetData)
+      try {
+        productsDataToSave.forEach(async (product, index) => {
+          const productId = await SouthernAppAPI.createProduct({ data: product })
 
-      this.firstWorksheet[cellAddress].v = item.value
-      const landedPrices = getLandedPricesByProduct(this.sheetRowsProducts, item.providerId - 1, item.value)
+          productsDataToSave[index].id = productId
+        })
+        companiesDataToSave.forEach(async (company, index) => {
+          const companyId = await SouthernAppAPI.createCompany({ data: company })
+          companiesDataToSave[index].id = companyId
+        })
+        const licitacionId = await SouthernAppAPI.createLicitacion({ data: licitacionDataToSave })
+        licitacionDetails.forEach(async (detail, index) => {
+          const company = companiesDataToSave.find(company => company.name === detail.company_name)
+          const product = productsDataToSave.find(product => product.name === detail.product_name)
 
-      landedPrices.forEach((element, i) => {
-        const landedPriceAddress = utils.encode_cell({
-          r: element.rowIndex,
-          c: element.colIndex
+          licitacionDetails[index].licitacion_id = licitacionId
+          licitacionDetails[index].company_id = company.id
+          licitacionDetails[index].producto_id = product.id
+          licitacionDetails[index].producto_position = product.position
+
+          const licitacionDetailId = await SouthernAppAPI.createDetalleLicitacion({ data: licitacionDetails[index] })
+          licitacionDetails[index].id = licitacionDetailId
         })
 
-        this.firstWorksheet[landedPriceAddress].v = element.value
-      })
+        this.setLicitacionData({ data: licitacionDataToSave })
+        this.setLicitacionDetails({ licitacionDetails: licitacionDetails })
+        this.setCompanies({ data: companiesDataToSave })
+        this.setProducts({ products: productsDataToSave })
+      } catch (error) {
 
-      this.createNewWorksheet(this.firstWorksheet)
-      this.cellDataToEdit = null
-      this.showCellModalEdit = false
+      }
+    },
+    async deleteFullData () {
+      const companies = await SouthernAppAPI.getCompanies()
+      const products = await SouthernAppAPI.getProducts()
+      const licitacion = await SouthernAppAPI.getLicitacion()
+      const licitacionDetails = await SouthernAppAPI.getLicitacionDetails()
+      licitacionDetails.forEach(async (detail) => {
+        await SouthernAppAPI.deleteLicitacionDetailById({ detailLicitacionId: detail.id })
+      })
+      licitacion.forEach(async (licitacion) => {
+        await SouthernAppAPI.deleteLicitacionById({ licitacionId: licitacion.id })
+      })
+      products.forEach(async (product) => {
+        await SouthernAppAPI.deleteProductById({ productId: product.id })
+      })
+      companies.forEach(async (company) => {
+        await SouthernAppAPI.deleteCompanyById({ companyId: company.id })
+      })
     }
+
   }
 }
 
