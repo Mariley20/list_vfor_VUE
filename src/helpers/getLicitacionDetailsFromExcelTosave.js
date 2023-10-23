@@ -36,8 +36,8 @@ const getLicitacionDetailsFromExcelTosave = (rows) => {
         price: product[5],
         cantidad: product[6],
         price_landed: product[5],
-        manual_selection: false,
-        select_automatic: false
+        better_dias_de_entrega: false,
+        better_price_landed: false
       }
 
       companiesProducts.push(productData)

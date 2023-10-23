@@ -12,77 +12,39 @@
       <div>Precio neto</div>
       <div>Precio Landed</div>
       <div>Cantidad</div>
+      <div>X</div>
     </div>
 
-    <div
-      v-for="(detail, index) in companyLicitaciones"
+    <AppLicitacionDetailItem
+      v-for="(licitacionDetail, index) in companyLicitacionDetails"
       :key="index"
-      class="licitacion-detail"
-      :class="{ 'licitacion-detail__hide-products': !showProductName }"
-    >
-      <div
-        v-if="showProductName"
-        class="font-weight-bold"
-        style="line-height: normal;"
-      >
-        {{ products[index].name }}
-      </div>
-      <div :class="getDeliveryDaysClass(detail)">
-        {{ detail.dias_de_entrega }}
-      </div>
-      <div>{{ detail.price * detail.cantidad }}</div>
-      <div>{{ detail.price }}</div>
-      <div :class="getPriceLandedClass(detail)">
-        {{ detail.price_landed }}
-      </div>
-      <div>{{ detail.cantidad }}</div>
-    </div>
+      :company="company"
+      :company-index="companyIndex"
+      :licitacion-detail="licitacionDetail"
+    />
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
-
+import { mapState } from 'vuex'
+import AppLicitacionDetailItem from '@/components/AppLicitacionDetailItem.vue'
 export default {
+  components: {
+    AppLicitacionDetailItem
+  },
   props: {
     company: { type: Object, default: null },
     companyIndex: { type: Number, default: 0 }
   },
   computed: {
     ...mapState({
-      licitacionDetails: (state) => state.licitacion.licitacionDetails,
-      products: (state) => state.licitacion.products
-    }),
-    ...mapGetters({
-      licitacionDetailIdsBestPriceLanded: 'licitacion/licitacionDetailIdsBestPriceLanded',
-      licitacionDetailIdsBestDeliveryDays: 'licitacion/licitacionDetailIdsBestDeliveryDays'
+      licitacionDetails: (state) => state.licitacion.licitacionDetails
     }),
     showProductName () {
       return this.companyIndex === 0
     },
-    companyLicitaciones () {
+    companyLicitacionDetails () {
       return this.licitacionDetails.filter(detail => detail.company_id === this.company.id)
-    }
-
-  },
-  methods: {
-    getPriceLandedClass (licitacionDetail) {
-      if (licitacionDetail.manual_selection) {
-        return 'success'
-      }
-      if (this.licitacionDetailIdsBestPriceLanded.includes(licitacionDetail.uuid)) {
-        return 'success'
-      }
-      return null
-    },
-    getDeliveryDaysClass (licitacionDetail) {
-      if (licitacionDetail.manual_selection) {
-        return 'warning'
-      }
-      if (this.licitacionDetailIdsBestDeliveryDays.includes(licitacionDetail.uuid)) {
-        return 'warning'
-      }
-      return null
     }
   }
 }
@@ -92,16 +54,17 @@ export default {
 .licitacion-detail {
   display: grid;
   text-align: center;
-  grid-template-columns: 110px repeat(5, 65px);
-  border: 1px solid rgb(228, 228, 228);
+  grid-template-columns: 110px 60px 60px 110px repeat(2, 60px) 30px;
+  // border: 1px solid rgb(228, 228, 228);
 
   &>div {
     padding: 4px;
-    align-self: center;
+    align-self: stretch;
+    border-left: 1px solid #ddd;
   }
 
   &__hide-products {
-    grid-template-columns: repeat(5, 65px);
+    grid-template-columns: 60px 60px 110px repeat(2, 60px) 30px;
   }
 }
 </style>

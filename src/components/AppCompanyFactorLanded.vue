@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   props: {
@@ -24,9 +24,18 @@ export default {
       companyFactorLanded: 0
     }
   },
+  computed: {
+    ...mapState({
+      licitacionDetails: (state) => state.licitacion.licitacionDetails
+    }),
+    companyLicitacionDetails () {
+      return this.licitacionDetails.filter(detail => detail.company_id === this.company.id)
+    }
+  },
   methods: {
     ...mapActions({
-      updatePartialCompanyData: 'licitacion/updatePartialCompanyData'
+      updatePartialCompanyData: 'licitacion/updatePartialCompanyData',
+      updatePartialLicitacionDetailData: 'licitacion/updatePartialLicitacionDetailData'
     }),
     handleChangeFactorLanded () {
       const companyId = this.company.id
@@ -35,6 +44,14 @@ export default {
       }
 
       this.updatePartialCompanyData({ companyId, data })
+
+      this.companyLicitacionDetails.forEach(detail => {
+        const data = {
+          price_landed: Math.round((detail.price + (detail.price * (this.companyFactorLanded / 100))) * 100) / 100
+        }
+
+        this.updatePartialLicitacionDetailData({ licitacionDetailId: detail.id, data })
+      })
     }
   }
 }

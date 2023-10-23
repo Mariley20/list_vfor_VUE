@@ -91,7 +91,7 @@
               {{ company.numero_de_oferta }}
             </td>
           </tr>
-          <tr>
+          <tr style="background-color: #92d050;">
             <td class="font-weight-bold">
               Valor total final
             </td>
@@ -99,7 +99,7 @@
               v-for="(company, companyIndex) in companies"
               :key="companyIndex"
             >
-              {{ company.valor_total_final }}
+              {{ getValorTotalFinal(company) }}
             </td>
           </tr>
           <tr>
@@ -184,7 +184,7 @@
               v-for="(company, companyIndex) in companies"
               :key="companyIndex"
             >
-              {{ company.valor_total_final }}
+              {{ getTotalOferta(company) }}
             </td>
           </tr>
           <tr>
@@ -221,8 +221,27 @@ export default {
   computed: {
     ...mapState({
       companies: (state) => state.licitacion.companies,
-      products: (state) => state.licitacion.products
+      licitacionDetails: (state) => state.licitacion.licitacionDetails
     })
+  },
+  methods: {
+    getTotalOferta (company) {
+      const companyLicitacionDetails = this.licitacionDetails.filter(detail => detail.company_id === company.id)
+
+      return companyLicitacionDetails.reduce((accumulator, currentValue) => {
+        return accumulator + (currentValue.price * currentValue.cantidad)
+      }, 0)
+    },
+    getValorTotalFinal (company) {
+      const companyLicitacionDetails = this.licitacionDetails.filter(detail => detail.company_id === company.id)
+
+      return companyLicitacionDetails.reduce((accumulator, currentValue) => {
+        if (currentValue.better_price_landed) {
+          return accumulator + (currentValue.price * currentValue.cantidad)
+        }
+        return accumulator + 0
+      }, 0)
+    }
   }
 }
 </script>

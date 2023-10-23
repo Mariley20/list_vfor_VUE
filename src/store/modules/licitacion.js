@@ -21,10 +21,8 @@ const getters = {
     state.products.forEach(product => {
       const detailProduct = state.licitacionDetails
         .filter(detail => detail.producto_id === product.id && detail.price_landed > 0)
-      if (detailProduct.length === 1) {
-        detailIds.push(detailProduct[0])
-      }
-      if (detailProduct.length > 1) {
+
+      if (detailProduct.length >= 1) {
         const detailProductSorted = detailProduct.sort((a, b) => a.price_landed - b.price_landed)
         detailIds.push(detailProductSorted[0])
       }
@@ -66,7 +64,7 @@ const actions = {
   updatePartialProductData ({ commit }, { productId, data }) {
     commit(UPDATE_PARTIAL_PRODUCT_DATA, { productId, data })
   },
-  updatePartialLicitacionDetailData ({ commit }, { licitacionDetailId, data }) {
+  updatePartialLicitacionDetailData ({ commit, state }, { licitacionDetailId, data }) {
     commit(UPDATE_PARTIAL_LICITACION_DETAIL_DATA, { licitacionDetailId, data })
   }
 }

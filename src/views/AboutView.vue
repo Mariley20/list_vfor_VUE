@@ -52,6 +52,7 @@ import getLicitacionDataFromExcelTosave from '@/helpers/getLicitacionDataFromExc
 import getCompaniesFromExcelTosave from '@/helpers/getCompaniesFromExcelTosave'
 import getProductsDataFromExcelTosave from '@/helpers/getProductsDataFromExcelTosave'
 import getLicitacionDetailsFromExcelTosave from '@/helpers/getLicitacionDetailsFromExcelTosave'
+import getLicitacionDetailsCompared from '@/helpers/getLicitacionDetailsCompared'
 import { SouthernApp as SouthernAppAPI } from '@/api/app.js'
 
 import { read, utils } from 'xlsx-js-style'
@@ -137,7 +138,7 @@ export default {
         })
 
         this.setLicitacionData({ data: licitacionDataToSave })
-        this.setLicitacionDetails({ licitacionDetails: licitacionDetails })
+        this.setLicitacionDetails({ licitacionDetails: getLicitacionDetailsCompared(licitacionDetails, productsDataToSave) })
         this.setCompanies({ data: companiesDataToSave })
         this.setProducts({ products: productsDataToSave })
       } catch (error) {
