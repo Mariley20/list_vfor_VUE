@@ -3,13 +3,28 @@
     class="licitacion-detail-item"
     :class="{ 'licitacion-detail-item__hide-products': !showProductName }"
   >
-    <div
+    <template
       v-if="showProductName"
-      class="font-weight-bold"
-      style="line-height: normal;"
     >
-      {{ licitacionDetail.product_name }}
-    </div>
+      <div
+        class="font-weight-bold"
+        style="line-height: normal;"
+      >
+        <small>#{{ licitacionDetailIndex+1 }}</small>
+      </div>
+      <div
+        class="font-weight-bold"
+        style="line-height: normal;"
+      >
+        <small>{{ productCode }}</small>
+      </div>
+      <div
+        class="font-weight-bold overflow-hidden"
+        style="line-height: normal;"
+      >
+        <small>{{ licitacionDetail.product_name }}</small>
+      </div>
+    </template>
     <div :class="deliveryDaysClass">
       {{ licitacionDetail.dias_de_entrega }}
     </div>
@@ -73,7 +88,10 @@ export default {
     ...mapGetters({
       licitacionDetailIdsBestDeliveryDays: 'licitacion/licitacionDetailIdsBestDeliveryDays'
     }),
-
+    productCode () {
+      const product = this.products.find(item => item.id === this.licitacionDetail.producto_id)
+      return product.code
+    },
     showProductName () {
       return this.companyIndex === 0
     },
@@ -140,7 +158,8 @@ export default {
 .licitacion-detail-item {
   display: grid;
   text-align: center;
-  grid-template-columns: 110px 60px 60px 120px repeat(2, 60px) 30px;
+  grid-template-columns: 28px 61px 130px 60px 60px 120px repeat(2, 60px) 30px;
+  grid-template-rows: 37px;
   // border: 1px solid rgb(228, 228, 228);
 
   &>div {

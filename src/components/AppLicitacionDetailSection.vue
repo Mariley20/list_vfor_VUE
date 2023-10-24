@@ -4,9 +4,17 @@
       class="licitacion-detail font-weight-bold"
       :class="{ 'licitacion-detail__hide-products': !showProductName }"
     >
-      <div v-if="showProductName">
-        Texto breve
-      </div>
+      <template v-if="showProductName">
+        <div>
+          <small>#</small>
+        </div>
+        <div>
+          <small>MATERIAL</small>
+        </div>
+        <div>
+          Texto breve
+        </div>
+      </template>
       <div>Dias de entrega</div>
       <div>Valor neto</div>
       <div>Precio neto</div>
@@ -21,6 +29,7 @@
       :company="company"
       :company-index="companyIndex"
       :licitacion-detail="licitacionDetail"
+      :licitacion-detail-index="index"
     />
   </div>
 </template>
@@ -54,7 +63,7 @@ export default {
 .licitacion-detail {
   display: grid;
   text-align: center;
-  grid-template-columns: 110px 60px 60px 120px repeat(2, 60px) 30px;
+  grid-template-columns: 28px 61px 130px 60px 60px 120px repeat(2, 60px) 30px;
   // border: 1px solid rgb(228, 228, 228);
 
   &>div {

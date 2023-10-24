@@ -21,24 +21,22 @@
           @change="uploadProductCodesFile($event)"
         >
       </div>
-      <v-btn
-        v-if="!!firstWorksheet"
+      <!-- <v-btn
         color="pink"
-        @click="handleDownloadExcel"
       >
         export pdf
-      </v-btn>
-      <!-- <v-btn
-        v-if="licitacionDetails.length>0"
-        color="success"
-        class="mx-4"
-        @click="handleDownloadExcel"
-      >
-        Agregar nueva cotización
       </v-btn> -->
       <v-btn
         v-if="licitacionDetails.length>0"
+        color="success"
+        class="mx-4 text-none"
+      >
+        Agregar nueva cotización
+      </v-btn>
+      <v-btn
+        v-if="licitacionDetails.length>0"
         color="primary"
+        class="text-none"
         @click="showCompativeModal =!showCompativeModal"
       >
         Ver historico

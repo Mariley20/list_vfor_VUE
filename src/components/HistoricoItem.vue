@@ -4,7 +4,9 @@
       <div>
         <div>{{ licitacionDetail.product_name }}</div>
         <small>{{ licitacionDetail.company_name }}</small>
-        <b v-if="!!productCode">{{ productCode }}</b>
+        <div class="font-weight-medium">
+          <small v-if="!!productCode">{{ productCode }}</small>
+        </div>
       </div>
     </td>
     <td>{{ licitacionDetail.price }}</td>

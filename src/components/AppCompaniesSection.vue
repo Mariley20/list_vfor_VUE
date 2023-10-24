@@ -192,6 +192,7 @@
               v-for="(company, companyIndex) in companies"
               :key="companyIndex"
               :colspan="companyIndex === 0 ? 2 : 1"
+              class="px-0"
             >
               <AppLicitacionDetailSection
                 :company="company"
@@ -228,19 +229,23 @@ export default {
     getTotalOferta (company) {
       const companyLicitacionDetails = this.licitacionDetails.filter(detail => detail.company_id === company.id)
 
-      return companyLicitacionDetails.reduce((accumulator, currentValue) => {
+      const total = companyLicitacionDetails.reduce((accumulator, currentValue) => {
         return accumulator + (currentValue.price * currentValue.cantidad)
       }, 0)
+
+      return Math.round((total) * 100) / 100
     },
     getValorTotalFinal (company) {
       const companyLicitacionDetails = this.licitacionDetails.filter(detail => detail.company_id === company.id)
 
-      return companyLicitacionDetails.reduce((accumulator, currentValue) => {
+      const total = companyLicitacionDetails.reduce((accumulator, currentValue) => {
         if (currentValue.better_price_landed) {
           return accumulator + (currentValue.price * currentValue.cantidad)
         }
         return accumulator + 0
       }, 0)
+
+      return Math.round((total) * 100) / 100
     }
   }
 }

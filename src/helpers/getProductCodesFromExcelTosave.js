@@ -9,7 +9,7 @@ const getProductCodesFromExcelTosave = (rows, products) => {
       const rowProductName = item[__EMPTY_13] || ''
       return rowProductName.trim() === productName
     })
-    product.code = row ? row[__EMPTY_10] || '' : ''
+    product.code = row ? row[__EMPTY_10].slice(-9) || '' : ''
   })
   return products
 }
