@@ -13,7 +13,7 @@
     <div :class="deliveryDaysClass">
       {{ licitacionDetail.dias_de_entrega }}
     </div>
-    <div>{{ licitacionDetail.price * licitacionDetail.cantidad }}</div>
+    <div>{{ licitacionDetailValorNeto }}</div>
     <div>
       <!-- <v-text-field
         v-model.number="companyPriceNeto"
@@ -79,6 +79,9 @@ export default {
     },
     companyFactorLanded () {
       return this.company.factor_landed
+    },
+    licitacionDetailValorNeto () {
+      return Math.round((this.licitacionDetail.price * this.licitacionDetail.cantidad) * 100) / 100
     },
     priceLandedClass () {
       if (this.licitacionDetail.better_price_landed) {

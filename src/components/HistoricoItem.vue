@@ -3,7 +3,8 @@
     <td>
       <div>
         <div>{{ licitacionDetail.product_name }}</div>
-        <div>{{ licitacionDetail.company_name }}</div>
+        <small>{{ licitacionDetail.company_name }}</small>
+        <b v-if="!!productCode">{{ productCode }}</b>
       </div>
     </td>
     <td>{{ licitacionDetail.price }}</td>
@@ -24,7 +25,7 @@
 
 <script>
 
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   props: {
@@ -37,6 +38,9 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      products: (state) => state.licitacion.products
+    }),
     showModal: {
       get () {
         return this.value
@@ -51,6 +55,10 @@ export default {
     },
     historyVariacionText () {
       return `${this.historyVariacion * 100}%`
+    },
+    productCode () {
+      const product = this.products.find(item => item.id === this.licitacionDetail.producto_id)
+      return product.code
     }
   },
   mounted () {

@@ -1,11 +1,26 @@
 <template>
-  <div>
-    <div>
-      <input
-        id="input"
-        type="file"
-        @change="uploadExcelFile($event)"
-      >
+  <v-container fluid>
+    <div class="d-flex flex-wrap mb-4 align-center">
+      <div>
+        <div class="primary--text subtitle-2">
+          Subir excel de licitacion
+        </div>
+        <input
+          id="input"
+          type="file"
+          @change="uploadExcelFile($event)"
+        >
+      </div>
+      <div v-if="products.length> 0">
+        <div class="primary--text subtitle-2">
+          Subir codigos de producto
+        </div>
+        <input
+          id="input"
+          type="file"
+          @change="uploadProductCodesFile($event)"
+        >
+      </div>
       <v-btn
         v-if="!!firstWorksheet"
         color="pink"
@@ -29,6 +44,7 @@
         Ver historico
       </v-btn>
     </div>
+    <v-divider class="mb-4" />
     <div class="overflow-auto">
       <AppLicitacionSeccion />
       <AppCompaniesSection />
@@ -42,7 +58,7 @@
       :item="cellDataToEdit"
       @click:edit-cell="handleSaveEditFactorLanded"
     /> -->
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -51,6 +67,7 @@ import getCompaniesFromExcelTosave from '@/helpers/getCompaniesFromExcelTosave'
 import getProductsDataFromExcelTosave from '@/helpers/getProductsDataFromExcelTosave'
 import getLicitacionDetailsFromExcelTosave from '@/helpers/getLicitacionDetailsFromExcelTosave'
 import getLicitacionDetailsCompared from '@/helpers/getLicitacionDetailsCompared'
+import getProductCodesFromExcelTosave from '@/helpers/getProductCodesFromExcelTosave'
 import { SouthernApp as SouthernAppAPI } from '@/api/app.js'
 
 import { read, utils } from 'xlsx-js-style'
@@ -81,7 +98,8 @@ export default {
   },
   computed: {
     ...mapState({
-      licitacionDetails: (state) => state.licitacion.licitacionDetails
+      licitacionDetails: (state) => state.licitacion.licitacionDetails,
+      products: (state) => state.licitacion.products
     })
   },
   created () {
@@ -107,6 +125,27 @@ export default {
         const firstWorksheetData = utils.sheet_to_json(firstWorksheet, { header: 1, nullError: true })
 
         this.saveFullData(firstWorksheetData)
+      }
+      fileReader.readAsArrayBuffer(selectedXlsxFile)
+    },
+    uploadProductCodesFile (event) {
+      const selectedXlsxFile = event.target.files[0]
+
+      const fileReader = new FileReader()
+
+      fileReader.onload = () => {
+        const arrayBuffer = fileReader.result
+
+        const workbook = read(arrayBuffer)
+        const firstWorksheet = workbook.Sheets[workbook.SheetNames[1]]
+        const firstWorksheetData = utils.sheet_to_json(firstWorksheet, {
+          header: 12
+          // nullError: true
+          // blankrows: false,
+          // raw: false
+        })
+        const products = getProductCodesFromExcelTosave(firstWorksheetData, this.products)
+        this.setProducts({ products: products })
       }
       fileReader.readAsArrayBuffer(selectedXlsxFile)
     },
