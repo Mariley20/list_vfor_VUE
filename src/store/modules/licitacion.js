@@ -90,6 +90,7 @@ const mutations = {
     }
   },
   [UPDATE_PARTIAL_PRODUCT_DATA] (state, { productId, data }) {
+    console.log(productId, data)
     const productIndex = state.products.findIndex(product => product.id === productId)
     for (const [key, value] of Object.entries(data)) {
       state.products[productIndex][key] = value

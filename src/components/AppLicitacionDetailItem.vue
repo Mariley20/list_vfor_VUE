@@ -137,7 +137,7 @@ export default {
 .licitacion-detail-item {
   display: grid;
   text-align: center;
-  grid-template-columns: 110px 60px 60px 110px repeat(2, 60px) 30px;
+  grid-template-columns: 110px 60px 60px 120px repeat(2, 60px) 30px;
   // border: 1px solid rgb(228, 228, 228);
 
   &>div {
@@ -148,13 +148,13 @@ export default {
   }
 
   &__hide-products {
-    grid-template-columns: 60px 60px 110px repeat(2, 60px) 30px;
+    grid-template-columns: 60px 60px 120px repeat(2, 60px) 30px;
   }
 
   .price-input {
     border: 1px solid #ddd;
     border-radius: 4px;
-    max-width: 56px;
+    max-width: 65px;
     padding: 2px 4px;
     margin-right: 8px;
   }

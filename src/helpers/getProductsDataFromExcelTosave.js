@@ -11,7 +11,8 @@ const getProductsDataFromExcelTosave = (rows) => {
       uuid: uuidv4(),
       name: row[0],
       code: '',
-      position: index
+      position: index,
+      last_price: 0
     }
     productsDataToSave.push(data)
   })

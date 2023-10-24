@@ -13,16 +13,16 @@
       >
         export pdf
       </v-btn>
-      <v-btn
-        v-if="!!firstWorksheet"
+      <!-- <v-btn
+        v-if="licitacionDetails.length>0"
         color="success"
         class="mx-4"
         @click="handleDownloadExcel"
       >
         Agregar nueva cotización
-      </v-btn>
+      </v-btn> -->
       <v-btn
-        v-if="!!firstWorksheet"
+        v-if="licitacionDetails.length>0"
         color="primary"
         @click="showCompativeModal =!showCompativeModal"
       >
@@ -33,12 +33,10 @@
       <AppLicitacionSeccion />
       <AppCompaniesSection />
     </div>
-    <!-- <ComparativeModal
-      v-if="!!firstWorksheet"
+    <HistoricoModal
       v-model="showCompativeModal"
-      :sheet-rows-products="sheetRowsProducts"
     />
-    <CellModalEdit
+  <!--   <CellModalEdit
       v-if="!!cellDataToEdit"
       v-model="showCellModalEdit"
       :item="cellDataToEdit"
@@ -56,13 +54,14 @@ import getLicitacionDetailsCompared from '@/helpers/getLicitacionDetailsCompared
 import { SouthernApp as SouthernAppAPI } from '@/api/app.js'
 
 import { read, utils } from 'xlsx-js-style'
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'AboutView',
   components: {
     AppLicitacionSeccion: () => import('@/components/AppLicitacionSeccion.vue'),
-    AppCompaniesSection: () => import('@/components/AppCompaniesSection.vue')
+    AppCompaniesSection: () => import('@/components/AppCompaniesSection.vue'),
+    HistoricoModal: () => import('@/components/HistoricoModal.vue')
   },
   data () {
     return {
@@ -79,6 +78,11 @@ export default {
       showCompativeModal: false,
       cellDataToEdit: null
     }
+  },
+  computed: {
+    ...mapState({
+      licitacionDetails: (state) => state.licitacion.licitacionDetails
+    })
   },
   created () {
     this.deleteFullData()
