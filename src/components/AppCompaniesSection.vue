@@ -10,6 +10,7 @@
             <td
               v-for="(company, companyIndex) in companies"
               :key="companyIndex"
+              :class="getCompanyLicitacionSelected(company) ? '' : 'yellow'"
             >
               {{ company.name }}
             </td>
@@ -147,7 +148,10 @@
             </td>
           </tr>
           <tr>
-            <td class="font-weight-bold">
+            <td
+              class="font-weight-bold"
+              style="vertical-align: middle;"
+            >
               Factor Landed
             </td>
             <td
@@ -186,7 +190,10 @@
             </td>
           </tr>
           <tr>
-            <td class="font-weight-bold">
+            <td
+              class="font-weight-bold"
+              style="vertical-align: middle;"
+            >
               Comentario
             </td>
             <td
@@ -245,6 +252,10 @@ export default {
       }, 0)
 
       return Math.round((total) * 100) / 100
+    },
+    getCompanyLicitacionSelected (company) {
+      const productLicitacionDetails = this.licitacionDetails.filter(detail => detail.company_id === company.id)
+      return productLicitacionDetails.every(detail => detail.better_price_landed === false)
     }
   }
 }

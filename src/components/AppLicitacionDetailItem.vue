@@ -3,27 +3,25 @@
     class="licitacion-detail-item"
     :class="{ 'licitacion-detail-item__hide-products': !showProductName }"
   >
-    <template
-      v-if="showProductName"
-    >
+    <template v-if="showProductName">
       <div
         class="font-weight-bold"
         style="line-height: normal;"
-        :class="{'error--text': cotizadorNotFound}"
+        :class="{ 'error--text': productUnlisted }"
       >
-        <small>#{{ licitacionDetailIndex+1 }}</small>
+        <small>#{{ licitacionDetailIndex + 1 }}</small>
       </div>
       <div
         class="font-weight-bold"
         style="line-height: normal;"
-        :class="{'error--text': cotizadorNotFound}"
+        :class="{ 'error--text': productUnlisted }"
       >
         <small>{{ productCode }}</small>
       </div>
       <div
         class="font-weight-bold overflow-hidden"
         style="line-height: normal;"
-        :class="{'error--text': cotizadorNotFound}"
+        :class="{ 'error--text': productUnlisted }"
       >
         <small>{{ licitacionDetail.product_name }}</small>
       </div>
@@ -33,14 +31,45 @@
     </div>
     <div>{{ licitacionDetailValorNeto }}</div>
     <div>
-      <div class="d-flex align-center">
-        <input
-          v-model.number="companyPriceNeto"
-          type="number"
-          class="price-input"
-          @change="handlePriceNeto"
+      <div class="d-flex align-center justify-end">
+        <template v-if="showPriceNetoInput">
+          <input
+            v-model.number="companyPriceNeto"
+            type="number"
+            class="price-input"
+            @change="handlePriceNeto"
+          >
+          <v-btn
+            icon
+            width="24"
+            height="24"
+            color="success"
+            @click="showPriceNetoInput = false"
+          >
+            <v-icon small>
+              mdi-content-save-check
+            </v-icon>
+          </v-btn>
+        </template>
+        <div
+          v-else
+          class="d-flex align-center flex-grow-1"
         >
-        <span class="grey--text">{{ licitacionDetail.price }}</span>
+          <div class="text-center flex-grow-1">
+            {{ licitacionDetail.price }}
+          </div>
+          <v-btn
+            icon
+            width="24"
+            height="24"
+            color="primary"
+            @click="showPriceNetoInput = true"
+          >
+            <v-icon small>
+              mdi-pencil
+            </v-icon>
+          </v-btn>
+        </div>
       </div>
     </div>
     <div :class="priceLandedClass">
@@ -72,7 +101,8 @@ export default {
   data () {
     return {
       companyPriceNeto: 0,
-      checked: false
+      checked: false,
+      showPriceNetoInput: false
     }
   },
   computed: {
@@ -90,7 +120,7 @@ export default {
     showProductName () {
       return this.companyIndex === 0
     },
-    cotizadorNotFound () {
+    productUnlisted () {
       if (this.showProductName) {
         const productLicitacionDetails = this.licitacionDetails.filter(detail => detail.producto_id === this.licitacionDetail.producto_id)
         return productLicitacionDetails.every(detail => detail.better_price_landed === false)
@@ -127,6 +157,7 @@ export default {
   },
   mounted () {
     this.companyPriceNeto = this.licitacionDetail.price
+    this.checked = this.licitacionDetail.better_dias_de_entrega && this.licitacionDetail.better_price_landed
   },
   methods: {
     ...mapActions({
@@ -151,6 +182,7 @@ export default {
         licitacionDetailId: this.licitacionDetail.id,
         data
       })
+      this.showPriceNetoInput = false
     }
   }
 }
@@ -160,7 +192,7 @@ export default {
 .licitacion-detail-item {
   display: grid;
   text-align: center;
-  grid-template-columns: 28px 61px 130px 60px 60px 120px repeat(2, 60px) 30px;
+  grid-template-columns: 28px 61px 130px 60px 60px 110px repeat(2, 60px) 30px;
   grid-template-rows: 37px;
   // border: 1px solid rgb(228, 228, 228);
 
@@ -172,7 +204,7 @@ export default {
   }
 
   &__hide-products {
-    grid-template-columns: 60px 60px 120px repeat(2, 60px) 30px;
+    grid-template-columns: 60px 60px 110px repeat(2, 60px) 30px;
   }
 
   .price-input {
@@ -180,7 +212,7 @@ export default {
     border-radius: 4px;
     max-width: 65px;
     padding: 2px 4px;
-    margin-right: 8px;
+    margin-right: 4px;
   }
 }
 </style>

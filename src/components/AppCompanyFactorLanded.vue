@@ -1,15 +1,42 @@
 <template>
   <div class="d-flex align-center">
-    <v-text-field
-      v-model.number="companyFactorLanded"
-      dense
-      outlined
-      hide-details
-      style="max-width: 120px;"
-      suffix="%"
-      @change="handleChangeFactorLanded"
-    />
-    <span class="ml-3 grey--text">{{ companyFactorLanded }}%</span>
+    <template v-if="showPriceLandedInput">
+      <v-text-field
+        v-model.number="companyFactorLanded"
+        dense
+        outlined
+        hide-details
+        style="max-width: 120px;"
+        suffix="%"
+        @change="handleChangeFactorLanded"
+      />
+      <v-btn
+        icon
+        width="24"
+        height="24"
+        color="success"
+        @click="showPriceLandedInput = false"
+      >
+        <v-icon small>
+          mdi-content-save-check
+        </v-icon>
+      </v-btn>
+    </template>
+
+    <span
+      v-else
+      class="ml-3 "
+    >{{ companyFactorLanded }}%
+      <v-btn
+        icon
+        width="24"
+        height="24"
+        color="primary"
+        @click="showPriceLandedInput = true"
+      >
+        <v-icon small>mdi-pencil</v-icon>
+      </v-btn>
+    </span>
   </div>
 </template>
 
@@ -22,7 +49,8 @@ export default {
   },
   data () {
     return {
-      companyFactorLanded: 0
+      companyFactorLanded: 0,
+      showPriceLandedInput: false
     }
   },
   computed: {
@@ -53,6 +81,8 @@ export default {
 
         this.updatePartialLicitacionDetailData({ licitacionDetailId: detail.id, data })
       })
+
+      this.showPriceLandedInput = false
     }
   }
 }
