@@ -6,9 +6,10 @@
       outlined
       hide-details
       style="max-width: 120px;"
+      suffix="%"
       @change="handleChangeFactorLanded"
     />
-    <span class="ml-3">{{ companyFactorLanded }}%</span>
+    <span class="ml-3 grey--text">{{ companyFactorLanded }}%</span>
   </div>
 </template>
 

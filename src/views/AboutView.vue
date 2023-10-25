@@ -17,6 +17,7 @@
         </div>
         <input
           id="input"
+          ref="INPUT_PRODUCT_CODES"
           type="file"
           @change="uploadProductCodesFile($event)"
         >
@@ -112,7 +113,9 @@ export default {
     }),
     uploadExcelFile (event) {
       const selectedXlsxFile = event.target.files[0]
-
+      if (this.products.length > 0) {
+        this.$refs.INPUT_PRODUCT_CODES.value = ''
+      }
       const fileReader = new FileReader()
 
       fileReader.onload = () => {

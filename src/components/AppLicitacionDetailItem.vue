@@ -9,18 +9,21 @@
       <div
         class="font-weight-bold"
         style="line-height: normal;"
+        :class="{'error--text': cotizadorNotFound}"
       >
         <small>#{{ licitacionDetailIndex+1 }}</small>
       </div>
       <div
         class="font-weight-bold"
         style="line-height: normal;"
+        :class="{'error--text': cotizadorNotFound}"
       >
         <small>{{ productCode }}</small>
       </div>
       <div
         class="font-weight-bold overflow-hidden"
         style="line-height: normal;"
+        :class="{'error--text': cotizadorNotFound}"
       >
         <small>{{ licitacionDetail.product_name }}</small>
       </div>
@@ -30,14 +33,6 @@
     </div>
     <div>{{ licitacionDetailValorNeto }}</div>
     <div>
-      <!-- <v-text-field
-        v-model.number="companyPriceNeto"
-        dense
-        outlined
-        hide-details
-        class="mr-2"
-        style="min-width: 60px;"
-      /> -->
       <div class="d-flex align-center">
         <input
           v-model.number="companyPriceNeto"
@@ -45,7 +40,7 @@
           class="price-input"
           @change="handlePriceNeto"
         >
-        {{ licitacionDetail.price }}
+        <span class="grey--text">{{ licitacionDetail.price }}</span>
       </div>
     </div>
     <div :class="priceLandedClass">
@@ -94,6 +89,13 @@ export default {
     },
     showProductName () {
       return this.companyIndex === 0
+    },
+    cotizadorNotFound () {
+      if (this.showProductName) {
+        const productLicitacionDetails = this.licitacionDetails.filter(detail => detail.producto_id === this.licitacionDetail.producto_id)
+        return productLicitacionDetails.every(detail => detail.better_price_landed === false)
+      }
+      return true
     },
     companyFactorLanded () {
       return this.company.factor_landed

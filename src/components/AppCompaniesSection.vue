@@ -163,21 +163,6 @@
           </tr>
           <tr>
             <td class="font-weight-bold">
-              Comentario
-            </td>
-            <td
-              v-for="(company, companyIndex) in companies"
-              :key="companyIndex"
-              class="pa-1"
-            >
-              <!-- {{ company.comment }} -->
-              <AppCompanyComment
-                :company="company"
-              />
-            </td>
-          </tr>
-          <tr>
-            <td class="font-weight-bold">
               Valor Total de la Oferta
             </td>
             <td
@@ -197,6 +182,20 @@
               <AppLicitacionDetailSection
                 :company="company"
                 :company-index="companyIndex"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td class="font-weight-bold">
+              Comentario
+            </td>
+            <td
+              v-for="(company, companyIndex) in companies"
+              :key="companyIndex"
+              class="pa-1"
+            >
+              <AppCompanyComment
+                :company="company"
               />
             </td>
           </tr>
