@@ -18,6 +18,7 @@ const getCompaniesFromExcelTosave = (rows) => {
   companyColIndex.forEach((index, i) => {
     const data = {
       uuid: uuidv4(),
+      id: uuidv4(),
       name: providerRowsParsed[0][index],
       moneda_de_la_oferta: providerRowsParsed[1][index],
       cond_de_pago: providerRowsParsed[2][index],

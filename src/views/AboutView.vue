@@ -67,7 +67,6 @@ import getProductsDataFromExcelTosave from '@/helpers/getProductsDataFromExcelTo
 import getLicitacionDetailsFromExcelTosave from '@/helpers/getLicitacionDetailsFromExcelTosave'
 import getLicitacionDetailsCompared from '@/helpers/getLicitacionDetailsCompared'
 import getProductCodesFromExcelTosave from '@/helpers/getProductCodesFromExcelTosave'
-import { SouthernApp as SouthernAppAPI } from '@/api/app.js'
 
 import { read, utils } from 'xlsx-js-style'
 import { mapState, mapActions } from 'vuex'
@@ -100,9 +99,6 @@ export default {
       licitacionDetails: (state) => state.licitacion.licitacionDetails,
       products: (state) => state.licitacion.products
     })
-  },
-  created () {
-    this.deleteFullData()
   },
   methods: {
     ...mapActions({
@@ -141,9 +137,6 @@ export default {
         const firstWorksheet = workbook.Sheets[workbook.SheetNames[1]]
         const firstWorksheetData = utils.sheet_to_json(firstWorksheet, {
           header: 12
-          // nullError: true
-          // blankrows: false,
-          // raw: false
         })
         const products = getProductCodesFromExcelTosave(firstWorksheetData, this.products)
         this.setProducts({ products: products })
@@ -156,29 +149,15 @@ export default {
       const productsDataToSave = getProductsDataFromExcelTosave(firstWorksheetData)
       const licitacionDetails = getLicitacionDetailsFromExcelTosave(firstWorksheetData)
 
-      console.log(firstWorksheetData)
       try {
-        productsDataToSave.forEach(async (product, index) => {
-          const productId = await SouthernAppAPI.createProduct({ data: product })
-
-          productsDataToSave[index].id = productId
-        })
-        companiesDataToSave.forEach(async (company, index) => {
-          const companyId = await SouthernAppAPI.createCompany({ data: company })
-          companiesDataToSave[index].id = companyId
-        })
-        const licitacionId = await SouthernAppAPI.createLicitacion({ data: licitacionDataToSave })
         licitacionDetails.forEach(async (detail, index) => {
           const company = companiesDataToSave.find(company => company.name === detail.company_name)
           const product = productsDataToSave.find(product => product.name === detail.product_name)
 
-          licitacionDetails[index].licitacion_id = licitacionId
+          licitacionDetails[index].licitacion_id = licitacionDataToSave.id
           licitacionDetails[index].company_id = company.id
           licitacionDetails[index].producto_id = product.id
           licitacionDetails[index].producto_position = product.position
-
-          const licitacionDetailId = await SouthernAppAPI.createDetalleLicitacion({ data: licitacionDetails[index] })
-          licitacionDetails[index].id = licitacionDetailId
         })
 
         this.setLicitacionData({ data: licitacionDataToSave })
@@ -188,26 +167,7 @@ export default {
       } catch (error) {
 
       }
-    },
-    async deleteFullData () {
-      const companies = await SouthernAppAPI.getCompanies()
-      const products = await SouthernAppAPI.getProducts()
-      const licitacion = await SouthernAppAPI.getLicitacion()
-      const licitacionDetails = await SouthernAppAPI.getLicitacionDetails()
-      licitacionDetails.forEach(async (detail) => {
-        await SouthernAppAPI.deleteLicitacionDetailById({ detailLicitacionId: detail.id })
-      })
-      licitacion.forEach(async (licitacion) => {
-        await SouthernAppAPI.deleteLicitacionById({ licitacionId: licitacion.id })
-      })
-      products.forEach(async (product) => {
-        await SouthernAppAPI.deleteProductById({ productId: product.id })
-      })
-      companies.forEach(async (company) => {
-        await SouthernAppAPI.deleteCompanyById({ companyId: company.id })
-      })
     }
-
   }
 }
 

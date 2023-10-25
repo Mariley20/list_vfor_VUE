@@ -24,6 +24,7 @@ const getLicitacionDetailsFromExcelTosave = (rows) => {
       const product = row.slice(index, index + 8)
 
       const productData = {
+        id: uuidv4(),
         uuid: uuidv4(),
         licitacion_id: '',
         producto_id: '',
