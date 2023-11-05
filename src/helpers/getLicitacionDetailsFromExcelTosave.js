@@ -15,17 +15,11 @@ const getLicitacionDetailsFromExcelTosave = (rows) => {
   const companiesProducts = []
 
   companyColIndex.forEach((index) => {
-    // const data = {
-    //   company_name: rows[downloadDateIndex + 1][index],
-    //   products: []
-    // }
-
     productRowsParsed.forEach((row, productIndex) => {
       const product = row.slice(index, index + 8)
 
       const productData = {
         id: uuidv4(),
-        uuid: uuidv4(),
         licitacion_id: '',
         producto_id: '',
         company_id: '',

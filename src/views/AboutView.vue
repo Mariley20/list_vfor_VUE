@@ -22,11 +22,6 @@
           @change="uploadProductCodesFile($event)"
         >
       </div>
-      <!-- <v-btn
-        color="pink"
-      >
-        export pdf
-      </v-btn> -->
       <v-btn
         v-if="licitacionDetails.length>0"
         color="success"
@@ -51,12 +46,6 @@
     <HistoricoModal
       v-model="showCompativeModal"
     />
-  <!--   <CellModalEdit
-      v-if="!!cellDataToEdit"
-      v-model="showCellModalEdit"
-      :item="cellDataToEdit"
-      @click:edit-cell="handleSaveEditFactorLanded"
-    /> -->
   </v-container>
 </template>
 

@@ -166,7 +166,7 @@ export default {
     }),
     handleCheckboxClick (event) {
       if (event.target.checked) {
-        const licitacionDetails = getLicitacionDetailsCheckedManual(this.licitacionDetails, this.licitacionDetail.uuid)
+        const licitacionDetails = getLicitacionDetailsCheckedManual(this.licitacionDetails, this.licitacionDetail.id)
         this.setLicitacionDetails({ licitacionDetails })
       } else {
         const licitacionDetails = getLicitacionDetailsCompared(this.licitacionDetails, this.products)

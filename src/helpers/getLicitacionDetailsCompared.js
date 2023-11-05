@@ -18,11 +18,11 @@ const getLicitacionDetailsCompared = (licitacionDetails, products) => {
       betterDetailsDiasDeEntrega.push(detailProductSorted[0])
     }
   })
-  const betterLicitacionDetailIds = betterDetailsPriceLanded.map(item => item.uuid)
-  const betterDetailsDiasDeEntregaIds = betterDetailsDiasDeEntrega.map(item => item.uuid)
+  const betterLicitacionDetailIds = betterDetailsPriceLanded.map(item => item.id)
+  const betterDetailsDiasDeEntregaIds = betterDetailsDiasDeEntrega.map(item => item.id)
   licitacionDetails.forEach((detail, index) => {
-    licitacionDetails[index].better_dias_de_entrega = betterDetailsDiasDeEntregaIds.includes(detail.uuid)
-    licitacionDetails[index].better_price_landed = betterLicitacionDetailIds.includes(detail.uuid)
+    licitacionDetails[index].better_dias_de_entrega = betterDetailsDiasDeEntregaIds.includes(detail.id)
+    licitacionDetails[index].better_price_landed = betterLicitacionDetailIds.includes(detail.id)
   })
 
   return licitacionDetails
