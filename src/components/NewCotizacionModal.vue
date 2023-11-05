@@ -23,23 +23,103 @@
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-app-bar>
-      <v-card-text class="fill-height pt-4 d-flex justify-center">
+      <v-card-text class="fill-height pt-4">
+        <v-form
+          :id="FORM_COTIZACION"
+          :ref="FORM_COTIZACION"
+          v-model="validForm"
+          lazy-validation
+          @submit.prevent="saveCotizacion"
+        >
+          <div
+            class="d-flex flex-wrap"
+            style="gap:0 16px"
+          >
+            <v-text-field
+              v-model="companyData.name"
+              outlined
+              label="Proveedor"
+              dense
+              :rules="rules.name"
+              style="width: 250px;"
+            />
+            <v-text-field
+              v-model="companyData.descripcion"
+              outlined
+              label="Descripcion"
+              style="width: 250px;"
+              dense
+            />
+            <v-text-field
+              v-model="companyData.incoterm"
+              outlined
+              label="INCOTERM"
+              style="width: 250px;"
+              dense
+            />
+            <v-text-field
+              v-model.number="companyData.factor_landed"
+              outlined
+              label="Factor Landed"
+              style="width: 250px;"
+              dense
+            />
+            <v-text-field
+              v-model="companyData.comment"
+              outlined
+              label="Comentario"
+              style="width: 250px;"
+              dense
+            />
+          </div>
+        </v-form>
+
         <table>
           <tbody>
             <tr class="sheet-row">
               <th>Texto breve</th>
+              <th>Dias de entrega</th>
+              <th>Valor neto</th>
               <th>Precio neto</th>
-              <th>Precio Historico</th>
-              <th class="px-3">
-                Variación
-              </th>
+              <th>Precio Landed</th>
+              <th>Cantidad</th>
             </tr>
-            <HistoricoItem
-              v-for="(detail, rowIndex) in betterLicitacionDetails"
-              :key="rowIndex"
-              :licitacion-detail="detail"
+            <tr
+              v-for="(item, index) in newLicitacionDetails"
+              :key="index"
               class="sheet-row"
-            />
+            >
+              <td>
+                {{ item.product_name }}
+              </td>
+              <td>
+                <input
+                  v-model="item.dias_de_entrega"
+                  type="number"
+                  class="product-input"
+                >
+              </td>
+              <td>
+                {{ item.price * item.cantidad }}
+              </td>
+              <td>
+                <input
+                  v-model.number="item.price"
+                  type="number"
+                  class="product-input"
+                >
+              </td>
+              <td>
+                {{ item.price_landed }}
+              </td>
+              <td>
+                <input
+                  v-model.number="item.cantidad"
+                  type="number"
+                  class="product-input"
+                >
+              </td>
+            </tr>
           </tbody>
         </table>
       </v-card-text>
@@ -47,8 +127,10 @@
         <v-spacer />
         <v-btn
           height="32"
+          type="submit"
+          :disabled="!validForm || processingForm"
+          :form="FORM_COTIZACION"
           color="primary"
-          @click="showModal = false"
         >
           Guardar
           <v-icon left>
@@ -63,19 +145,20 @@
 
 <script>
 
-import { mapState } from 'vuex'
-import HistoricoItem from '@/components/HistoricoItem.vue'
+import { mapState, mapActions } from 'vuex'
+import { v4 as uuidv4 } from 'uuid'
+const FORM_COTIZACION = 'FORM_COTIZACION'
+
 export default {
-  components: {
-    HistoricoItem
-  },
+  components: {},
   props: {
     value: { type: Boolean, default: false }
   },
   data () {
     return {
+      FORM_COTIZACION,
       companyData: {
-        uuid: '',
+        id: uuidv4(),
         name: '',
         moneda_de_la_oferta: '',
         cond_de_pago: '',
@@ -92,11 +175,21 @@ export default {
         valor_total_de_la_oferta: 0,
         factor_landed: 0,
         comment: ''
-      }
+      },
+      newLicitacionDetails: [],
+      rules: {
+        name: [
+          (v) => !!v || 'Campo requerido'
+        ]
+      },
+      validForm: true,
+      showPassword: false,
+      processingForm: false
     }
   },
   computed: {
     ...mapState({
+      licitacion: (state) => state.licitacion.licitacion,
       licitacionDetails: (state) => state.licitacion.licitacionDetails,
       products: (state) => state.licitacion.products
     }),
@@ -107,20 +200,68 @@ export default {
       set (value) {
         this.$emit('input', value)
       }
-    },
-    betterLicitacionDetails () {
-      return this.licitacionDetails.filter(detail => detail.better_price_landed === true)
+    }
+  },
+  created () {
+    this.products.forEach(product => {
+      const data = {
+        id: uuidv4(),
+        licitacion_id: this.licitacion.id,
+        producto_id: product.id,
+        company_id: this.companyData.id,
+        product_name: product.name,
+        company_name: this.companyData.name,
+        dias_de_entrega: 0,
+        unidad: 0,
+        price: 0,
+        cantidad: product.cantidad,
+        price_landed: 0,
+        better_dias_de_entrega: false,
+        better_price_landed: false
+      }
+
+      this.newLicitacionDetails.push(data)
+    })
+  },
+  methods: {
+    ...mapActions({
+      addLicitacionDetail: 'licitacion/addLicitacionDetail',
+      addCompany: 'licitacion/addCompany'
+    }),
+    saveCotizacion () {
+      if (!this.$refs[FORM_COTIZACION].validate()) return
+      this.addCompany({ data: this.companyData })
+
+      this.newLicitacionDetails.forEach(element => {
+        const data = element
+        data.company_name = this.companyData.name
+        this.addLicitacionDetail({ licitacionDetail: data })
+      })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.sheet-table, table {
-  border: 1px solid black;
+.sheet-table,
+table {
+  border: 1px solid rgb(228, 228, 228);
   border-collapse: collapse;
+  width: 100%;
+  font-size: 12px;
 }
-.sheet-row td, th {
+
+.sheet-row td,
+th {
   border: 1px solid rgb(228, 228, 228);
   padding: 2px 8px;
-}</style>
+}
+
+.product-input {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  max-width: 80px;
+  padding: 2px 4px;
+  margin-right: 4px;
+}
+</style>

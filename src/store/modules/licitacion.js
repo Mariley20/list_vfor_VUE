@@ -2,10 +2,11 @@ import {
   SET_LICITACION_DATA,
   SET_LICITACION_DETAILS,
   SET_PRODUCTS,
-  SET_COMPANIES,
+  SET_COMPANIES, ADD_COMPANY,
   UPDATE_PARTIAL_COMPANY_DATA,
   UPDATE_PARTIAL_PRODUCT_DATA,
-  UPDATE_PARTIAL_LICITACION_DETAIL_DATA
+  UPDATE_PARTIAL_LICITACION_DETAIL_DATA,
+  ADD_LICITACION_DETAIL
 } from '@/store/mutationTypes.js'
 
 const state = () => ({
@@ -16,19 +17,6 @@ const state = () => ({
 })
 
 const getters = {
-  licitacionDetailIdsBestPriceLanded: (state) => {
-    const detailIds = []
-    state.products.forEach(product => {
-      const detailProduct = state.licitacionDetails
-        .filter(detail => detail.producto_id === product.id && detail.price_landed > 0)
-
-      if (detailProduct.length >= 1) {
-        const detailProductSorted = detailProduct.sort((a, b) => a.price_landed - b.price_landed)
-        detailIds.push(detailProductSorted[0])
-      }
-    })
-    return detailIds.map(item => item.uuid)
-  },
   licitacionDetailIdsBestDeliveryDays: (state) => {
     const detailIds = []
     state.products.forEach(product => {
@@ -42,7 +30,7 @@ const getters = {
         detailIds.push(detailProductSorted[0])
       }
     })
-    return detailIds.map(item => item.uuid)
+    return detailIds.map(item => item.id)
   }
 }
 const actions = {
@@ -52,11 +40,17 @@ const actions = {
   setLicitacionDetails ({ commit }, { licitacionDetails }) {
     commit(SET_LICITACION_DETAILS, { licitacionDetails })
   },
+  addLicitacionDetail ({ commit }, { licitacionDetail }) {
+    commit(ADD_LICITACION_DETAIL, { licitacionDetail })
+  },
   setProducts ({ commit }, { products }) {
     commit(SET_PRODUCTS, { products })
   },
   setCompanies ({ commit }, { data }) {
     commit(SET_COMPANIES, { data })
+  },
+  addCompany ({ commit }, { data }) {
+    commit(ADD_COMPANY, { data })
   },
   updatePartialCompanyData ({ commit }, { companyId, data }) {
     commit(UPDATE_PARTIAL_COMPANY_DATA, { companyId, data })
@@ -76,11 +70,17 @@ const mutations = {
   [SET_LICITACION_DETAILS] (state, { licitacionDetails }) {
     state.licitacionDetails = licitacionDetails
   },
+  [ADD_LICITACION_DETAIL] (state, { licitacionDetail }) {
+    state.licitacionDetails.push(licitacionDetail)
+  },
   [SET_PRODUCTS] (state, { products }) {
     state.products = products
   },
   [SET_COMPANIES] (state, { data }) {
     state.companies = data
+  },
+  [ADD_COMPANY] (state, { data }) {
+    state.companies.push(data)
   },
   [UPDATE_PARTIAL_COMPANY_DATA] (state, { companyId, data }) {
     const companyIndex = state.companies.findIndex(company => company.id === companyId)
