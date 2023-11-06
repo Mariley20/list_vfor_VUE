@@ -9,7 +9,7 @@ const getProductsDataFromExcelTosave = (rows) => {
   productRowsParsed.forEach((row, index) => {
     const data = {
       id: uuidv4(),
-      name: row[0],
+      name: row[0].trim(),
       code: '',
       position: index,
       last_price: 0,

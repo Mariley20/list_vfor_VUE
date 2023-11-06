@@ -23,7 +23,7 @@ const getLicitacionDetailsFromExcelTosave = (rows) => {
         licitacion_id: '',
         producto_id: '',
         company_id: '',
-        product_name: row[0],
+        product_name: row[0].trim(),
         company_name: rows[downloadDateIndex + 1][index],
         dias_de_entrega: parseInt(product[0]),
         unidad: product[3],
@@ -32,7 +32,9 @@ const getLicitacionDetailsFromExcelTosave = (rows) => {
         cantidad: product[6],
         price_landed: product[5],
         better_dias_de_entrega: false,
-        better_price_landed: false
+        better_price_landed: false,
+        manually_selected: false,
+        disabled: false
       }
 
       companiesProducts.push(productData)
