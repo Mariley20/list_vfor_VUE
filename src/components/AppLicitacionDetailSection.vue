@@ -20,7 +20,8 @@
       <div>Precio neto</div>
       <div>Precio Landed</div>
       <div>Cantidad</div>
-      <div>X</div>
+      <div>✅</div>
+      <div>❌</div>
     </div>
 
     <AppLicitacionDetailItem
@@ -63,7 +64,7 @@ export default {
 .licitacion-detail {
   display: grid;
   text-align: center;
-  grid-template-columns: 28px 61px 130px 60px 60px 110px repeat(2, 60px) 30px;
+  grid-template-columns: 28px 61px 130px 60px 60px 110px repeat(2, 60px) 30px 30px;
   // border: 1px solid rgb(228, 228, 228);
 
   &>div {
@@ -73,7 +74,7 @@ export default {
   }
 
   &__hide-products {
-    grid-template-columns: 60px 60px 110px repeat(2, 60px) 30px;
+    grid-template-columns: 60px 60px 110px repeat(2, 60px) 30px 30px;
   }
 }
 </style>

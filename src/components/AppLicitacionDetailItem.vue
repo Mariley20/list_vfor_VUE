@@ -83,6 +83,11 @@
         @change="handleCheckboxClick($event)"
       >
     </div>
+    <div>
+      <input
+        type="checkbox"
+      >
+    </div>
   </div>
 </template>
 
@@ -151,13 +156,13 @@ export default {
       immediate: false,
       deep: true,
       handler (newValue) {
-        this.checked = this.licitacionDetail.better_dias_de_entrega && this.licitacionDetail.better_price_landed
+        this.checked = this.licitacionDetail.better_price_landed
       }
     }
   },
   mounted () {
     this.companyPriceNeto = this.licitacionDetail.price
-    this.checked = this.licitacionDetail.better_dias_de_entrega && this.licitacionDetail.better_price_landed
+    this.checked = this.licitacionDetail.better_price_landed
   },
   methods: {
     ...mapActions({
@@ -192,7 +197,7 @@ export default {
 .licitacion-detail-item {
   display: grid;
   text-align: center;
-  grid-template-columns: 28px 61px 130px 60px 60px 110px repeat(2, 60px) 30px;
+  grid-template-columns: 28px 61px 130px 60px 60px 110px repeat(2, 60px) 30px 30px;
   grid-template-rows: 37px;
   // border: 1px solid rgb(228, 228, 228);
 
@@ -204,7 +209,7 @@ export default {
   }
 
   &__hide-products {
-    grid-template-columns: 60px 60px 110px repeat(2, 60px) 30px;
+    grid-template-columns: 60px 60px 110px repeat(2, 60px) 30px 30px;
   }
 
   .price-input {
