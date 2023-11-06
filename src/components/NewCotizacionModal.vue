@@ -58,7 +58,7 @@
               dense
             />
             <v-text-field
-              v-model.number="companyData.factor_landed"
+              v-model.number="companyFactorLanded"
               outlined
               label="Factor Landed"
               style="width: 250px;"
@@ -110,7 +110,7 @@
                 >
               </td>
               <td>
-                {{ item.price_landed }}
+                {{ getPriceLanded(item, index ) }}
               </td>
               <td>
                 <input
@@ -157,6 +157,7 @@ export default {
   data () {
     return {
       FORM_COTIZACION,
+      companyFactorLanded: 0,
       companyData: {
         id: uuidv4(),
         name: '',
@@ -230,6 +231,7 @@ export default {
     }),
     saveCotizacion () {
       if (!this.$refs[FORM_COTIZACION].validate()) return
+      this.companyData.factor_landed = this.companyFactorLanded / 100
       this.addCompany({ data: this.companyData })
 
       this.newLicitacionDetails.forEach(element => {
@@ -237,6 +239,13 @@ export default {
         data.company_name = this.companyData.name
         this.addLicitacionDetail({ licitacionDetail: data })
       })
+
+      this.showModal = false
+    },
+    getPriceLanded (detail, index) {
+      const priceLanded = Math.round((detail.price + (detail.price * (this.companyFactorLanded / 100))) * 100) / 100
+      this.newLicitacionDetails[index].price_landed = priceLanded
+      return priceLanded
     }
   }
 }

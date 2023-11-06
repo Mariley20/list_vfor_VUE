@@ -61,6 +61,9 @@ export default {
       return this.licitacionDetails.filter(detail => detail.company_id === this.company.id)
     }
   },
+  created () {
+    this.companyFactorLanded = this.company.factor_landed > 0 ? this.company.factor_landed * 100 : 0
+  },
   methods: {
     ...mapActions({
       updatePartialCompanyData: 'licitacion/updatePartialCompanyData',
