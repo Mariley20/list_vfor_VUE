@@ -147,24 +147,20 @@ export default {
       const productsDataToSave = getProductsDataFromExcelTosave(firstWorksheetData)
       const licitacionDetails = getLicitacionDetailsFromExcelTosave(firstWorksheetData)
 
-      try {
-        licitacionDetails.forEach(async (detail, index) => {
-          const company = companiesDataToSave.find(company => company.name === detail.company_name)
-          const product = productsDataToSave.find(product => product.name === detail.product_name)
+      licitacionDetails.forEach(async (detail, index) => {
+        const company = companiesDataToSave.find(company => company.name === detail.company_name)
+        const product = productsDataToSave.find(product => product.name === detail.product_name)
 
-          licitacionDetails[index].licitacion_id = licitacionDataToSave.id
-          licitacionDetails[index].company_id = company.id
-          licitacionDetails[index].producto_id = product.id
-          licitacionDetails[index].producto_position = product.position
-        })
+        licitacionDetails[index].licitacion_id = licitacionDataToSave.id
+        licitacionDetails[index].company_id = company.id
+        licitacionDetails[index].producto_id = product.id
+        licitacionDetails[index].producto_position = product.position
+      })
 
-        this.setLicitacionData({ data: licitacionDataToSave })
-        this.setLicitacionDetails({ licitacionDetails: getLicitacionDetailsCompared(licitacionDetails, productsDataToSave) })
-        this.setCompanies({ data: companiesDataToSave })
-        this.setProducts({ products: productsDataToSave })
-      } catch (error) {
-
-      }
+      this.setLicitacionData({ data: licitacionDataToSave })
+      this.setLicitacionDetails({ licitacionDetails: getLicitacionDetailsCompared(licitacionDetails, productsDataToSave) })
+      this.setCompanies({ data: companiesDataToSave })
+      this.setProducts({ products: productsDataToSave })
     },
     handleCreateCotizacion () {
       this.showNewCotizacionModal = true
