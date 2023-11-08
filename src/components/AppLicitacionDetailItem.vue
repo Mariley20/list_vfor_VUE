@@ -26,11 +26,25 @@
         <small>{{ licitacionDetail.product_name }}</small>
       </div>
     </template>
-    <div :class="deliveryDaysClass">
+    <div
+      :class="{
+        'text-decoration-line-through error--text': licitacionDetail.disabled,
+        'warning': licitacionDetail.better_dias_de_entrega
+      }"
+    >
       {{ licitacionDetail.dias_de_entrega }}
     </div>
-    <div>{{ licitacionDetailValorNeto }}</div>
-    <div>
+    <div
+      style="position: relative;"
+      :class="{ 'text-decoration-line-through error--text': licitacionDetail.disabled }"
+    >
+      {{ licitacionDetailValorNeto }}
+      <div
+        v-if="licitacionDetail.better_price_landed"
+        class="tag"
+      />
+    </div>
+    <div :class="{ 'text-decoration-line-through error--text': licitacionDetail.disabled }">
       <div class="d-flex align-center justify-end">
         <template v-if="showPriceNetoInput">
           <input
@@ -72,20 +86,32 @@
         </div>
       </div>
     </div>
-    <div :class="priceLandedClass">
+    <div
+      :class="{
+        'text-decoration-line-through error--text': licitacionDetail.disabled,
+        'success': licitacionDetail.better_price_landed
+      }"
+    >
       {{ licitacionDetail.price_landed }}
     </div>
-    <div>{{ licitacionDetail.cantidad }}</div>
+    <div :class="{ 'text-decoration-line-through error--text': licitacionDetail.disabled }">
+      {{ licitacionDetail.cantidad }}
+    </div>
     <div>
       <input
-        v-model="checked"
+        v-model="licitacionDetailManually"
         type="checkbox"
-        @change="handleCheckboxClick($event)"
+        :disabled="licitacionDetail.disabled"
+        @change="handleManuallySelectCheckClick($event)"
       >
     </div>
     <div>
       <input
+        v-model="licitacionDetailDisabled"
         type="checkbox"
+        :disabled="licitacionDetail.manually_selected"
+        class="error--text"
+        @change="handleDisabledCheckClick($event)"
       >
     </div>
   </div>
@@ -93,8 +119,6 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-import getLicitacionDetailsCompared from '@/helpers/getLicitacionDetailsCompared'
-import getLicitacionDetailsCheckedManual from '@/helpers/getLicitacionDetailsCheckedManual'
 
 export default {
   props: {
@@ -106,7 +130,8 @@ export default {
   data () {
     return {
       companyPriceNeto: 0,
-      checked: false,
+      licitacionDetailManually: false,
+      licitacionDetailDisabled: false,
       showPriceNetoInput: false
     }
   },
@@ -137,18 +162,6 @@ export default {
     },
     licitacionDetailValorNeto () {
       return Math.round((this.licitacionDetail.price * this.licitacionDetail.cantidad) * 100) / 100
-    },
-    priceLandedClass () {
-      if (this.licitacionDetail.better_price_landed) {
-        return 'success'
-      }
-      return null
-    },
-    deliveryDaysClass () {
-      if (this.licitacionDetail.better_dias_de_entrega) {
-        return 'warning'
-      }
-      return null
     }
   },
   watch: {
@@ -156,27 +169,33 @@ export default {
       immediate: false,
       deep: true,
       handler (newValue) {
-        this.checked = this.licitacionDetail.better_price_landed
+        this.licitacionDetailManually = this.licitacionDetail.manually_selected
+        this.licitacionDetailDisabled = this.licitacionDetail.disabled
       }
     }
   },
   mounted () {
     this.companyPriceNeto = this.licitacionDetail.price
-    this.checked = this.licitacionDetail.better_price_landed
+    this.licitacionDetailManually = this.licitacionDetail.manually_selected
   },
   methods: {
     ...mapActions({
       updatePartialLicitacionDetailData: 'licitacion/updatePartialLicitacionDetailData',
+      disableLicitacionDetail: 'licitacion/disableLicitacionDetail',
+      manuallySelectLicitacionDetail: 'licitacion/manuallySelectLicitacionDetail',
       setLicitacionDetails: 'licitacion/setLicitacionDetails'
     }),
-    handleCheckboxClick (event) {
-      if (event.target.checked) {
-        const licitacionDetails = getLicitacionDetailsCheckedManual(this.licitacionDetails, this.licitacionDetail.id)
-        this.setLicitacionDetails({ licitacionDetails })
-      } else {
-        const licitacionDetails = getLicitacionDetailsCompared(this.licitacionDetails, this.products)
-        this.setLicitacionDetails({ licitacionDetails })
-      }
+    handleManuallySelectCheckClick (event) {
+      const licitacionDetailId = this.licitacionDetail.id
+      const productId = this.licitacionDetail.producto_id
+      const manually = event.target.checked
+      this.manuallySelectLicitacionDetail({ licitacionDetailId, productId, manually })
+    },
+    handleDisabledCheckClick (event) {
+      const licitacionDetailId = this.licitacionDetail.id
+      const productId = this.licitacionDetail.producto_id
+      const disabled = event.target.checked
+      this.disableLicitacionDetail({ licitacionDetailId, productId, disabled })
     },
     handlePriceNeto () {
       const data = {
@@ -218,6 +237,15 @@ export default {
     max-width: 65px;
     padding: 2px 4px;
     margin-right: 4px;
+  }
+
+  .tag {
+    height: 5px;
+    width: 8px;
+    background-color: #92d050;
+    position: absolute;
+    bottom: 0;
+    right: 0;
   }
 }
 </style>

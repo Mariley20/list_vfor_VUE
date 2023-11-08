@@ -23,6 +23,7 @@ const getLicitacionDetailsCompared = (licitacionDetails, products) => {
   licitacionDetails.forEach((detail, index) => {
     licitacionDetails[index].better_dias_de_entrega = betterDetailsDiasDeEntregaIds.includes(detail.id)
     licitacionDetails[index].better_price_landed = betterLicitacionDetailIds.includes(detail.id)
+    licitacionDetails[index].manually_selected = betterLicitacionDetailIds.includes(detail.id)
   })
 
   return licitacionDetails
