@@ -9,7 +9,8 @@ import {
   ADD_LICITACION_DETAIL,
   COMPARED_LICITACION_DETAILS,
   RESET_LICITACION_DETAILS,
-  RESET_LICITACION_DETAILS_AVAILABLES
+  RESET_LICITACION_DETAILS_AVAILABLES,
+  SET_HISTORICO_DATA
 } from '@/store/mutationTypes.js'
 import getLicitacionDetailsCompared from '@/helpers/getLicitacionDetailsCompared'
 import getLicitacionDetailsComparedReset from '@/helpers/getLicitacionDetailsComparedReset'
@@ -23,33 +24,13 @@ const state = () => ({
 })
 
 const getters = {
-  licitacionDetailIdsBestDeliveryDays: (state) => {
-    const detailIds = []
-    state.products.forEach(product => {
-      const detailProduct = state.licitacionDetails
-        .filter(detail => detail.producto_id === product.id && detail.dias_de_entrega > 0 && detail.price_landed > 0)
-      if (detailProduct.length === 1) {
-        detailIds.push(detailProduct[0])
-      }
-      if (detailProduct.length > 1) {
-        const detailProductSorted = detailProduct.sort((a, b) => a.dias_de_entrega - b.dias_de_entrega)
-        detailIds.push(detailProductSorted[0])
-      }
-    })
-    return detailIds.map(item => item.id)
-  },
-  licitacionDetailsGroup: (state) => {
-    const items = []
-    state.products.forEach(product => {
-      const licitacionDetails = state.licitacionDetails.filter(detail => detail.producto_id === product.id)
-      items.push(licitacionDetails)
-    })
-    return items
-  }
 }
 const actions = {
   setLicitacionData ({ commit }, { data }) {
     commit(SET_LICITACION_DATA, { data })
+  },
+  setHistoricoData ({ commit }, { data }) {
+    commit(SET_HISTORICO_DATA, { data })
   },
   setLicitacionDetails ({ commit }, { licitacionDetails }) {
     commit(SET_LICITACION_DETAILS, { licitacionDetails })
@@ -110,6 +91,9 @@ const actions = {
 const mutations = {
   [SET_LICITACION_DATA] (state, { data }) {
     state.licitacion = data
+  },
+  [SET_HISTORICO_DATA] (state, { data }) {
+    state.historico = data
   },
   [SET_LICITACION_DETAILS] (state, { licitacionDetails }) {
     state.licitacionDetails = licitacionDetails

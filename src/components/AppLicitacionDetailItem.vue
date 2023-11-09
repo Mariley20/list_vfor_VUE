@@ -118,7 +118,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   props: {
@@ -139,9 +139,6 @@ export default {
     ...mapState({
       licitacionDetails: (state) => state.licitacion.licitacionDetails,
       products: (state) => state.licitacion.products
-    }),
-    ...mapGetters({
-      licitacionDetailIdsBestDeliveryDays: 'licitacion/licitacionDetailIdsBestDeliveryDays'
     }),
     productCode () {
       const product = this.products.find(item => item.id === this.licitacionDetail.producto_id)

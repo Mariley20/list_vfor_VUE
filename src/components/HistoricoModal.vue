@@ -3,6 +3,7 @@
     v-model="showModal"
     width="800"
     persistent
+    scrollable
   >
     <v-card>
       <v-app-bar
@@ -27,6 +28,7 @@
         <table>
           <tbody>
             <tr class="sheet-row">
+              <th>#</th>
               <th>Texto breve</th>
               <th>Precio neto</th>
               <th>Precio Historico</th>
@@ -36,7 +38,8 @@
             </tr>
             <HistoricoItem
               v-for="(detail, rowIndex) in betterLicitacionDetails"
-              :key="rowIndex"
+              :key="detail.id"
+              :index="rowIndex+1"
               :licitacion-detail="detail"
               class="sheet-row"
             />
@@ -48,7 +51,7 @@
         <v-btn
           height="32"
           color="primary"
-          @click="showModal = false"
+          @click="saveHistoricoData"
         >
           Guardar
           <v-icon left>
@@ -63,7 +66,7 @@
 
 <script>
 
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import HistoricoItem from '@/components/HistoricoItem.vue'
 export default {
   components: {
@@ -88,6 +91,26 @@ export default {
     betterLicitacionDetails () {
       return this.licitacionDetails.filter(detail => detail.better_price_landed === true)
     }
+  },
+  methods: {
+    ...mapActions({
+      setHistoricoData: 'licitacion/setHistoricoData'
+    }),
+    saveHistoricoData () {
+      const historicoData = []
+      this.betterLicitacionDetails.forEach(element => {
+        const productData = this.products.find(item => item.id === element.producto_id)
+        const data = {
+          ...productData,
+          price: element.price,
+          company_name: element.company_name
+        }
+        historicoData.push(data)
+      })
+      console.log(historicoData)
+      this.setHistoricoData({ data: historicoData })
+      this.showModal = false
+    }
   }
 }
 </script>
@@ -100,4 +123,5 @@ export default {
 .sheet-row td, th {
   border: 1px solid rgb(228, 228, 228);
   padding: 2px 8px;
-}</style>
+}
+</style>

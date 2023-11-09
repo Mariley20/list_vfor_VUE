@@ -1,5 +1,6 @@
 <template>
   <tr class="sheet-row">
+    <td>#{{ index }}</td>
     <td>
       <div>
         <div>{{ licitacionDetail.product_name }}</div>
@@ -32,6 +33,7 @@ import { mapState, mapActions } from 'vuex'
 export default {
   props: {
     value: { type: Boolean, default: false },
+    index: { type: Number, default: 0 },
     licitacionDetail: { type: Object, default: null }
   },
   data () {
@@ -72,7 +74,8 @@ export default {
     }),
     handleUpdateProductPriceHistory () {
       const data = {
-        last_price: this.historyPrice
+        last_price: this.historyPrice,
+        variacion: this.historyVariacionText
       }
       const productId = this.licitacionDetail.producto_id
       this.updatePartialProductData({ productId, data })

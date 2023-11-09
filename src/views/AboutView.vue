@@ -1,22 +1,68 @@
 <template>
   <v-container fluid>
-    <div class="overflow-auto">
-      <AppLicitacionSeccion />
-      <AppPrintCompaniesSection />
+    <div class="d-flex flex-column align-center">
+      <section class="overflow-auto">
+        <AppLicitacionSeccion />
+        <AppPrintCompaniesSection />
+      </section>
     </div>
+
+    <section
+      v-if="historico.length > 0"
+      ref="DownloadCompHistorico"
+      class="mt-16 pt-16"
+    >
+      <table
+        class="mx-auto"
+        border="1"
+      >
+        <tbody>
+          <tr class="sheet-row">
+            <th>#</th>
+            <th>Texto breve</th>
+            <th>Precio neto</th>
+            <th>Precio Historico</th>
+            <th class="px-3">
+              Variación
+            </th>
+          </tr>
+          <tr
+            v-for="(item,index) in historico"
+            :key="item.id"
+            class="sheet-row"
+          >
+            <td>#{{ index +1 }}</td>
+            <td>
+              <div>
+                <div>{{ item.name }}</div>
+                <small>{{ item.company_name }}</small>
+                <div class="font-weight-medium">
+                  <small v-if="!!item.code ">{{ item.code }}</small>
+                </div>
+              </div>
+            </td>
+            <td>{{ item.price }}</td>
+            <td>{{ item.last_price }}</td>
+            <td>{{ item.variacion }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <v-btn
+      v-if="historico.length > 0"
+      color="info"
+      class="mt-4"
+      @click="printDownload"
+    >
+      Print Historico Download
+    </v-btn>
   </v-container>
 </template>
 
 <script>
-import getLicitacionDataFromExcelTosave from '@/helpers/getLicitacionDataFromExcelTosave'
-import getCompaniesFromExcelTosave from '@/helpers/getCompaniesFromExcelTosave'
-import getProductsDataFromExcelTosave from '@/helpers/getProductsDataFromExcelTosave'
-import getLicitacionDetailsFromExcelTosave from '@/helpers/getLicitacionDetailsFromExcelTosave'
-import getLicitacionDetailsCompared from '@/helpers/getLicitacionDetailsCompared'
-import getProductCodesFromExcelTosave from '@/helpers/getProductCodesFromExcelTosave'
 
-import { read, utils } from 'xlsx-js-style'
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   name: 'AboutView',
@@ -26,101 +72,33 @@ export default {
   },
   data () {
     return {
-      excelData: [],
-      excelFile: null,
-      sheetRows: [],
-      sheetRowsTender: [],
-      sheetRowsProviders: [],
-      sheetRowsProducts: [],
-      firstWorksheet: null,
-      firstWorksheetRows: [],
-      firstWorksheetRef: null,
-      showCellModalEdit: false,
-      showCompativeModal: false,
-      cellDataToEdit: null
     }
   },
   computed: {
     ...mapState({
-      licitacionDetails: (state) => state.licitacion.licitacionDetails,
-      products: (state) => state.licitacion.products
+      historico: (state) => state.licitacion.historico
     })
   },
   methods: {
-    ...mapActions({
-      setLicitacionData: 'licitacion/setLicitacionData',
-      setLicitacionDetails: 'licitacion/setLicitacionDetails',
-      setProducts: 'licitacion/setProducts',
-      setCompanies: 'licitacion/setCompanies'
-    }),
-    uploadExcelFile (event) {
-      const selectedXlsxFile = event.target.files[0]
-      if (this.products.length > 0) {
-        this.$refs.INPUT_PRODUCT_CODES.value = ''
-      }
-      const fileReader = new FileReader()
-
-      fileReader.onload = () => {
-        const arrayBuffer = fileReader.result
-
-        const workbook = read(arrayBuffer)
-        const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]]
-        const firstWorksheetData = utils.sheet_to_json(firstWorksheet, { header: 1, nullError: true })
-
-        this.saveFullData(firstWorksheetData)
-      }
-      fileReader.readAsArrayBuffer(selectedXlsxFile)
-    },
-    uploadProductCodesFile (event) {
-      const selectedXlsxFile = event.target.files[0]
-
-      const fileReader = new FileReader()
-
-      fileReader.onload = () => {
-        const arrayBuffer = fileReader.result
-
-        const workbook = read(arrayBuffer)
-        const firstWorksheet = workbook.Sheets[workbook.SheetNames[1]]
-        const firstWorksheetData = utils.sheet_to_json(firstWorksheet, {
-          header: 12
-        })
-        const products = getProductCodesFromExcelTosave(firstWorksheetData, this.products)
-        this.setProducts({ products: products })
-      }
-      fileReader.readAsArrayBuffer(selectedXlsxFile)
-    },
-    async saveFullData (firstWorksheetData) {
-      const licitacionDataToSave = getLicitacionDataFromExcelTosave(firstWorksheetData)
-      const companiesDataToSave = getCompaniesFromExcelTosave(firstWorksheetData)
-      const productsDataToSave = getProductsDataFromExcelTosave(firstWorksheetData)
-      const licitacionDetails = getLicitacionDetailsFromExcelTosave(firstWorksheetData)
-
-      try {
-        licitacionDetails.forEach(async (detail, index) => {
-          const company = companiesDataToSave.find(company => company.name === detail.company_name)
-          const product = productsDataToSave.find(product => product.name === detail.product_name)
-
-          licitacionDetails[index].licitacion_id = licitacionDataToSave.id
-          licitacionDetails[index].company_id = company.id
-          licitacionDetails[index].producto_id = product.id
-          licitacionDetails[index].producto_position = product.position
-        })
-
-        this.setLicitacionData({ data: licitacionDataToSave })
-        this.setLicitacionDetails({ licitacionDetails: getLicitacionDetailsCompared(licitacionDetails, productsDataToSave) })
-        this.setCompanies({ data: companiesDataToSave })
-        this.setProducts({ products: productsDataToSave })
-      } catch (error) {
-
-      }
+    printDownload () {
+      const w = window.open()
+      w.document.write(this.$refs.DownloadCompHistorico.innerHTML)
+      w.document.close()
+      w.setTimeout(function () {
+        w.print()
+      }, 1000)
     }
   }
 }
 
 </script>
 <style lang="scss" scoped>
-.sheet-table {
+.sheet-table, table {
   border: 1px solid black;
   border-collapse: collapse;
+}
+.sheet-row td, th {
+  border: 1px solid rgb(228, 228, 228);
+  padding: 2px 8px;
 }
 </style>
