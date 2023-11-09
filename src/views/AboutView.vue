@@ -1,51 +1,9 @@
 <template>
   <v-container fluid>
-    <div class="d-flex flex-wrap mb-4 align-center">
-      <div>
-        <div class="primary--text subtitle-2">
-          Subir excel de licitacion
-        </div>
-        <input
-          id="input"
-          type="file"
-          @change="uploadExcelFile($event)"
-        >
-      </div>
-      <div v-if="products.length> 0">
-        <div class="primary--text subtitle-2">
-          Subir codigos de producto
-        </div>
-        <input
-          id="input"
-          ref="INPUT_PRODUCT_CODES"
-          type="file"
-          @change="uploadProductCodesFile($event)"
-        >
-      </div>
-      <v-btn
-        v-if="licitacionDetails.length>0"
-        color="success"
-        class="mx-4 text-none"
-      >
-        Agregar nueva cotización
-      </v-btn>
-      <v-btn
-        v-if="licitacionDetails.length>0"
-        color="primary"
-        class="text-none"
-        @click="showCompativeModal =!showCompativeModal"
-      >
-        Ver historico
-      </v-btn>
-    </div>
-    <v-divider class="mb-4" />
     <div class="overflow-auto">
       <AppLicitacionSeccion />
-      <AppCompaniesSection />
+      <AppPrintCompaniesSection />
     </div>
-    <HistoricoModal
-      v-model="showCompativeModal"
-    />
   </v-container>
 </template>
 
@@ -64,8 +22,7 @@ export default {
   name: 'AboutView',
   components: {
     AppLicitacionSeccion: () => import('@/components/AppLicitacionSeccion.vue'),
-    AppCompaniesSection: () => import('@/components/AppCompaniesSection.vue'),
-    HistoricoModal: () => import('@/components/HistoricoModal.vue')
+    AppPrintCompaniesSection: () => import('@/components/AppPrintCompaniesSection.vue')
   },
   data () {
     return {

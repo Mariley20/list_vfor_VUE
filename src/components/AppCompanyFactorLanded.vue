@@ -67,7 +67,8 @@ export default {
   methods: {
     ...mapActions({
       updatePartialCompanyData: 'licitacion/updatePartialCompanyData',
-      updatePartialLicitacionDetailData: 'licitacion/updatePartialLicitacionDetailData'
+      updatePartialLicitacionDetailData: 'licitacion/updatePartialLicitacionDetailData',
+      resetLicitacionDetailsAvailables: 'licitacion/resetLicitacionDetailsAvailables'
     }),
     handleChangeFactorLanded () {
       const companyId = this.company.id
@@ -84,6 +85,8 @@ export default {
 
         this.updatePartialLicitacionDetailData({ licitacionDetailId: detail.id, data })
       })
+
+      this.resetLicitacionDetailsAvailables()
 
       this.showPriceLandedInput = false
     }

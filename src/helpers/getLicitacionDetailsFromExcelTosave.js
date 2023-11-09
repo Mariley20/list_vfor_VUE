@@ -27,6 +27,7 @@ const getLicitacionDetailsFromExcelTosave = (rows) => {
         company_name: rows[downloadDateIndex + 1][index],
         dias_de_entrega: parseInt(product[0]),
         unidad: product[3],
+        product_position: productIndex,
         // tipo_de_proceso: product[4],
         price: product[5],
         cantidad: product[6],

@@ -7,16 +7,19 @@ import {
   UPDATE_PARTIAL_PRODUCT_DATA,
   UPDATE_PARTIAL_LICITACION_DETAIL_DATA,
   ADD_LICITACION_DETAIL,
-  UPDATE_LICITACION_DETAILS,
-  DISABLE_LICITACION_DETAIL,
-  MANUALLY_SELECT_LICITACION_DETAIL
+  COMPARED_LICITACION_DETAILS,
+  RESET_LICITACION_DETAILS,
+  RESET_LICITACION_DETAILS_AVAILABLES
 } from '@/store/mutationTypes.js'
+import getLicitacionDetailsCompared from '@/helpers/getLicitacionDetailsCompared'
+import getLicitacionDetailsComparedReset from '@/helpers/getLicitacionDetailsComparedReset'
 
 const state = () => ({
   licitacion: null,
   licitacionDetails: [],
   products: [],
-  companies: []
+  companies: [],
+  historico: []
 })
 
 const getters = {
@@ -72,11 +75,35 @@ const actions = {
   updatePartialLicitacionDetailData ({ commit, state }, { licitacionDetailId, data }) {
     commit(UPDATE_PARTIAL_LICITACION_DETAIL_DATA, { licitacionDetailId, data })
   },
+  resetLicitacionDetails ({ commit }) {
+    commit(RESET_LICITACION_DETAILS)
+  },
+  resetLicitacionDetailsAvailables ({ commit }) {
+    commit(RESET_LICITACION_DETAILS_AVAILABLES)
+  },
   disableLicitacionDetail ({ commit }, { licitacionDetailId, productId, disabled }) {
-    commit(DISABLE_LICITACION_DETAIL, { licitacionDetailId, productId, disabled })
+    commit(UPDATE_PARTIAL_LICITACION_DETAIL_DATA, {
+      licitacionDetailId,
+      data: {
+        better_price_landed: false,
+        better_dias_de_entrega: false,
+        manually_selected: false,
+        disabled
+      }
+    })
+    commit(COMPARED_LICITACION_DETAILS)
   },
   manuallySelectLicitacionDetail ({ commit }, { licitacionDetailId, productId, manually }) {
-    commit(MANUALLY_SELECT_LICITACION_DETAIL, { licitacionDetailId, productId, manually })
+    commit(UPDATE_PARTIAL_LICITACION_DETAIL_DATA, {
+      licitacionDetailId,
+      data: {
+        better_price_landed: manually,
+        better_dias_de_entrega: manually,
+        manually_selected: manually,
+        disabled: false
+      }
+    })
+    commit(COMPARED_LICITACION_DETAILS)
   }
 }
 
@@ -117,112 +144,20 @@ const mutations = {
       state.licitacionDetails[licitacionDetailIndex][key] = value
     }
   },
-  [DISABLE_LICITACION_DETAIL] (state, { licitacionDetailId, productId, disabled }) {
-    this.commit('licitacion/UPDATE_PARTIAL_LICITACION_DETAIL_DATA', {
-      licitacionDetailId,
-      data: {
-        better_price_landed: false,
-        better_dias_de_entrega: false,
-        disabled
-      }
-    })
-
-    const productLicitacionDetails = state.licitacionDetails.filter(item => item.producto_id === productId && item.disabled === false)
-    const sortedByPriceLanded = productLicitacionDetails
-      .filter(item => item.price_landed > 0)
-      .sort((a, b) => a.price_landed - b.price_landed)
-
-    sortedByPriceLanded.forEach((item, i) => {
-      const data = {
-        better_price_landed: i === 0
-      }
-      this.commit('licitacion/UPDATE_PARTIAL_LICITACION_DETAIL_DATA', { licitacionDetailId: item.id, data })
-    })
-    const sortedByDiasDeEntrega = productLicitacionDetails
-      .filter(item => item.dias_de_entrega > 0 && item.price_landed > 0)
-      .sort((a, b) => a.dias_de_entrega - b.dias_de_entrega)
-    sortedByDiasDeEntrega.forEach((item, i) => {
-      const data = {
-        better_dias_de_entrega: i === 0
-      }
-      this.commit('licitacion/UPDATE_PARTIAL_LICITACION_DETAIL_DATA', { licitacionDetailId: item.id, data })
-    })
+  [COMPARED_LICITACION_DETAILS] (state) {
+    state.licitacionDetails = getLicitacionDetailsCompared(state.licitacionDetails, state.products)
   },
-  [MANUALLY_SELECT_LICITACION_DETAIL] (state, { licitacionDetailId, productId, manually }) {
-    this.commit('licitacion/UPDATE_PARTIAL_LICITACION_DETAIL_DATA', {
-      licitacionDetailId,
-      data: {
-        better_price_landed: manually,
-        better_dias_de_entrega: manually,
-        manually_selected: manually
-      }
-    })
-    if (manually) {
-      state.licitacionDetails.forEach(item => {
-        if (item.producto_id === productId && item.id !== licitacionDetailId) {
-          item.better_price_landed = false
-          item.better_dias_de_entrega = false
-          item.manually_selected = false
-        }
-      })
-    } else {
-      const productLicitacionDetails = state.licitacionDetails.filter(item => item.producto_id === productId)
-      const sortedByPriceLanded = productLicitacionDetails
-        .filter(item => item.price_landed > 0)
-        .sort((a, b) => a.price_landed - b.price_landed)
-      sortedByPriceLanded.forEach((item, i) => {
-        const data = {
-          better_price_landed: i === 0
-        }
-        this.commit('licitacion/UPDATE_PARTIAL_LICITACION_DETAIL_DATA', { licitacionDetailId: item.id, data })
-      })
-      const sortedByDiasDeEntrega = productLicitacionDetails
-        .filter(item => item.dias_de_entrega > 0 && item.price_landed > 0)
-        .sort((a, b) => a.dias_de_entrega - b.dias_de_entrega)
-      sortedByDiasDeEntrega.forEach((item, i) => {
-        const data = {
-          better_dias_de_entrega: i === 0
-        }
-        this.commit('licitacion/UPDATE_PARTIAL_LICITACION_DETAIL_DATA', { licitacionDetailId: item.id, data })
-      })
-    }
+  [RESET_LICITACION_DETAILS] (state) {
+    state.licitacionDetails = getLicitacionDetailsComparedReset(state.licitacionDetails, state.products)
   },
-  [UPDATE_LICITACION_DETAILS] (state) {
-    const detailsGroup = []
-    state.products.forEach(product => {
-      const licitacionDetails = state.licitacionDetails.filter(detail => detail.producto_id === product.id)
-      detailsGroup.push(licitacionDetails)
+  [RESET_LICITACION_DETAILS_AVAILABLES] (state) {
+    const newlicitacionDetails = JSON.parse(JSON.stringify(state.licitacionDetails))
+    newlicitacionDetails.forEach((element, i) => {
+      newlicitacionDetails[i].better_dias_de_entrega = false
+      newlicitacionDetails[i].better_price_landed = false
+      newlicitacionDetails[i].manually_selected = false
     })
-
-    detailsGroup.forEach(details => {
-      const detailsAvailable = details.filter(item => item.disabled === false)
-      const manuallyUnselected = details.every(item => item.manually_selected === false)
-      if (manuallyUnselected) {
-        const detailProductSorted = detailsAvailable.sort((a, b) => a.price_landed - b.price_landed)
-        detailProductSorted.forEach((item, i) => {
-          const data = {
-            better_dias_de_entrega: i === 0
-          }
-          this.commit('UPDATE_PARTIAL_LICITACION_DETAIL_DATA', { licitacionDetailId: item.id, data })
-        })
-
-        const detailProductSorted2 = detailsAvailable.sort((a, b) => a.dias_de_entrega - b.dias_de_entrega)
-        detailProductSorted2.forEach((item, i) => {
-          const data = {
-            better_price_landed: i === 0
-          }
-          this.commit('UPDATE_PARTIAL_LICITACION_DETAIL_DATA', { licitacionDetailId: item.id, data })
-        })
-      } else {
-        detailsAvailable.forEach((item, i) => {
-          const data = {
-            better_price_landed: item.manually_selected,
-            better_dias_de_entrega: item.manually_selected
-          }
-          this.commit('UPDATE_PARTIAL_LICITACION_DETAIL_DATA', { licitacionDetailId: item.id, data })
-        })
-      }
-    })
+    state.licitacionDetails = getLicitacionDetailsCompared(newlicitacionDetails, state.products)
   }
 }
 

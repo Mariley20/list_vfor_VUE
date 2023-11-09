@@ -38,6 +38,22 @@
       >
         Ver historico
       </v-btn>
+      <v-btn
+        v-if="licitacionDetails.length>0"
+        color="info"
+        class="text-none mx-3"
+        @click="resetLicitacionDetails"
+      >
+        <v-icon>mdi-refresh</v-icon>
+      </v-btn>
+      <v-btn
+        v-if="licitacionDetails.length>0"
+        color="error"
+        class="text-none"
+        :to="{name:'printer'}"
+      >
+        <v-icon>mdi-printer</v-icon>
+      </v-btn>
     </div>
     <v-divider class="mb-4" />
     <div class="overflow-auto">
@@ -103,7 +119,8 @@ export default {
       setLicitacionData: 'licitacion/setLicitacionData',
       setLicitacionDetails: 'licitacion/setLicitacionDetails',
       setProducts: 'licitacion/setProducts',
-      setCompanies: 'licitacion/setCompanies'
+      setCompanies: 'licitacion/setCompanies',
+      resetLicitacionDetails: 'licitacion/resetLicitacionDetails'
     }),
     uploadExcelFile (event) {
       const selectedXlsxFile = event.target.files[0]
@@ -146,15 +163,15 @@ export default {
       const companiesDataToSave = getCompaniesFromExcelTosave(firstWorksheetData)
       const productsDataToSave = getProductsDataFromExcelTosave(firstWorksheetData)
       const licitacionDetails = getLicitacionDetailsFromExcelTosave(firstWorksheetData)
-
       licitacionDetails.forEach(async (detail, index) => {
         const company = companiesDataToSave.find(company => company.name === detail.company_name)
-        const product = productsDataToSave.find(product => product.name === detail.product_name)
+        const product = productsDataToSave
+          .find(product => product.name === detail.product_name && product.position === detail.product_position)
 
         licitacionDetails[index].licitacion_id = licitacionDataToSave.id
         licitacionDetails[index].company_id = company.id
         licitacionDetails[index].producto_id = product.id
-        licitacionDetails[index].producto_position = product.position
+        // licitacionDetails[index].producto_position = product.position
       })
 
       this.setLicitacionData({ data: licitacionDataToSave })

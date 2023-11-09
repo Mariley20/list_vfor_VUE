@@ -6,7 +6,7 @@
       hide-details
       outlined
       rows="1"
-      @change="handleChangeComment"
+      @input="handleChangeComment"
     />
   </div>
 </template>
@@ -30,7 +30,7 @@ export default {
     handleChangeComment () {
       const companyId = this.company.id
       const data = {
-        factor_landed: this.companyFactorLanded
+        comment: this.companyComment
       }
 
       this.updatePartialCompanyData({ companyId, data })

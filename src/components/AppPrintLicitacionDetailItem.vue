@@ -39,52 +39,10 @@
       :class="{ 'text-decoration-line-through error--text': licitacionDetail.disabled }"
     >
       {{ licitacionDetailValorNeto }}
-      <div
-        v-if="licitacionDetail.better_price_landed"
-        class="tag"
-      />
     </div>
     <div :class="{ 'text-decoration-line-through error--text': licitacionDetail.disabled }">
-      <div class="d-flex align-center justify-end">
-        <template v-if="showPriceNetoInput">
-          <input
-            v-model.number="companyPriceNeto"
-            type="number"
-            class="price-input"
-            @change="handlePriceNeto"
-          >
-          <v-btn
-            icon
-            width="24"
-            height="24"
-            color="success"
-            @click="showPriceNetoInput = false"
-          >
-            <v-icon small>
-              mdi-content-save-check
-            </v-icon>
-          </v-btn>
-        </template>
-        <div
-          v-else
-          class="d-flex align-center flex-grow-1"
-        >
-          <div class="text-center flex-grow-1">
-            {{ licitacionDetail.price }}
-          </div>
-          <v-btn
-            v-if="!licitacionDetail.disabled"
-            icon
-            width="24"
-            height="24"
-            color="primary"
-            @click="showPriceNetoInput = true"
-          >
-            <v-icon small>
-              mdi-pencil
-            </v-icon>
-          </v-btn>
-        </div>
+      <div class="text-center">
+        {{ licitacionDetail.price }}
       </div>
     </div>
     <div
@@ -97,22 +55,6 @@
     </div>
     <div :class="{ 'text-decoration-line-through error--text': licitacionDetail.disabled }">
       {{ licitacionDetail.cantidad }}
-    </div>
-    <div>
-      <input
-        v-model="licitacionDetailManually"
-        type="checkbox"
-        :disabled="licitacionDetail.disabled"
-        @change="handleManuallySelectCheckClick($event)"
-      >
-    </div>
-    <div>
-      <input
-        v-model="licitacionDetailDisabled"
-        type="checkbox"
-        class="error--text"
-        @change="handleDisabledCheckClick($event)"
-      >
     </div>
   </div>
 </template>
@@ -217,7 +159,7 @@ export default {
 .licitacion-detail-item {
   display: grid;
   text-align: center;
-  grid-template-columns: 28px 61px 130px 60px 60px 110px repeat(2, 60px) 30px 30px;
+  grid-template-columns: 28px 61px 130px 60px 60px 110px repeat(2, 60px);
   grid-template-rows: 37px;
   // border: 1px solid rgb(228, 228, 228);
 
@@ -229,7 +171,7 @@ export default {
   }
 
   &__hide-products {
-    grid-template-columns: 60px 60px 110px repeat(2, 60px) 30px 30px;
+    grid-template-columns: 60px 60px 110px repeat(2, 60px);
   }
 
   .price-input {
