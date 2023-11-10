@@ -44,13 +44,6 @@
               style="width: 250px;"
             />
             <v-text-field
-              v-model="companyData.descripcion"
-              outlined
-              label="Descripcion"
-              style="width: 250px;"
-              dense
-            />
-            <v-text-field
               v-model="companyData.incoterm"
               outlined
               label="INCOTERM"

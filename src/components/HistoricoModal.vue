@@ -19,6 +19,12 @@
         <v-spacer />
         <v-btn
           icon
+          @click="printDownload"
+        >
+          <v-icon>mdi-printer</v-icon>
+        </v-btn>
+        <v-btn
+          icon
           @click="showModal = false"
         >
           <v-icon>mdi-close</v-icon>
@@ -45,6 +51,10 @@
             />
           </tbody>
         </table>
+        <AppPrintHistoricoSection
+          ref="DownloadCompHistorico"
+          style="display: none;"
+        />
       </v-card-text>
       <v-card-actions>
         <v-spacer />
@@ -68,9 +78,10 @@
 
 import { mapState, mapActions } from 'vuex'
 import HistoricoItem from '@/components/HistoricoItem.vue'
+import AppPrintHistoricoSection from '@/components/AppPrintHistoricoSection.vue'
 export default {
   components: {
-    HistoricoItem
+    HistoricoItem, AppPrintHistoricoSection
   },
   props: {
     value: { type: Boolean, default: false }
@@ -110,6 +121,14 @@ export default {
       console.log(historicoData)
       this.setHistoricoData({ data: historicoData })
       this.showModal = false
+    },
+    printDownload () {
+      const w = window.open()
+      w.document.write(this.$refs.DownloadCompHistorico.$el.innerHTML)
+      w.document.close()
+      w.setTimeout(function () {
+        w.print()
+      }, 1000)
     }
   }
 }

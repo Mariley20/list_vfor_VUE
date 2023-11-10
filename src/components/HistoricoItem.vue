@@ -54,8 +54,8 @@ export default {
       }
     },
     historyVariacion () {
-      const variacion = (this.licitacionDetail.price_landed - this.historyPrice) / this.historyPrice
-      return Math.round(variacion * 100) / 100
+      const variacion = (this.licitacionDetail.price - this.historyPrice) / this.historyPrice
+      return this.historyPrice > 0 ? Math.round(variacion * 100) / 100 : 0
     },
     historyVariacionText () {
       return `${this.historyVariacion * 100}%`
@@ -66,7 +66,7 @@ export default {
     }
   },
   mounted () {
-    this.historyPrice = this.licitacionDetail.price_landed
+    this.historyPrice = this.licitacionDetail.price
   },
   methods: {
     ...mapActions({

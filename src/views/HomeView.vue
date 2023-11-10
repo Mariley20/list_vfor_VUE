@@ -50,10 +50,18 @@
         v-if="licitacionDetails.length>0"
         color="error"
         class="text-none"
-        :to="{name:'printer'}"
+        @click="printDownload"
       >
         <v-icon>mdi-printer</v-icon>
       </v-btn>
+      <!-- <v-btn
+        v-if="licitacionDetails.length>0"
+        color="error"
+        class="text-none"
+        :to="{name:'printer'}"
+      >
+        <v-icon>mdi-printer</v-icon>
+      </v-btn> -->
     </div>
     <v-divider class="mb-4" />
     <div class="overflow-auto">
@@ -67,6 +75,10 @@
       v-if="products.length>0"
       :key="keyNewCotizacionModal"
       v-model="showNewCotizacionModal"
+    />
+    <AppPrintLicitacionFull
+      ref="DownloadLicitacionFull"
+      style="display: none;"
     />
   </v-container>
 </template>
@@ -88,24 +100,15 @@ export default {
     AppLicitacionSeccion: () => import('@/components/AppLicitacionSeccion.vue'),
     AppCompaniesSection: () => import('@/components/AppCompaniesSection.vue'),
     HistoricoModal: () => import('@/components/HistoricoModal.vue'),
+    AppPrintLicitacionFull: () => import('@/components/AppPrintLicitacionFull.vue'),
     NewCotizacionModal: () => import('@/components/NewCotizacionModal.vue')
   },
   data () {
     return {
-      excelData: [],
-      excelFile: null,
-      sheetRows: [],
-      sheetRowsTender: [],
-      sheetRowsProviders: [],
-      sheetRowsProducts: [],
       firstWorksheet: null,
-      firstWorksheetRows: [],
-      firstWorksheetRef: null,
-      showCellModalEdit: false,
       showCompativeModal: false,
       showNewCotizacionModal: false,
-      keyNewCotizacionModal: 0,
-      cellDataToEdit: null
+      keyNewCotizacionModal: 0
     }
   },
   computed: {
@@ -182,6 +185,14 @@ export default {
     handleCreateCotizacion () {
       this.showNewCotizacionModal = true
       this.keyNewCotizacionModal += 1
+    },
+    printDownload () {
+      const w = window.open()
+      w.document.write(this.$refs.DownloadLicitacionFull.$el.innerHTML)
+      w.document.close()
+      w.setTimeout(function () {
+        w.print()
+      }, 1000)
     }
   }
 }
