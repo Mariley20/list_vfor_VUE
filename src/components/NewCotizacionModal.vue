@@ -185,6 +185,7 @@ export default {
     ...mapState({
       licitacion: (state) => state.licitacion.licitacion,
       licitacionDetails: (state) => state.licitacion.licitacionDetails,
+      companies: (state) => state.licitacion.companies,
       products: (state) => state.licitacion.products
     }),
     showModal: {
@@ -197,6 +198,9 @@ export default {
     }
   },
   created () {
+    const companyitem = this.companies[0]
+    this.companyData.moneda_de_la_oferta = companyitem.moneda_de_la_oferta
+    this.companyData.numero_de_oferta = companyitem.numero_de_oferta
     this.products.forEach(product => {
       const data = {
         id: uuidv4(),

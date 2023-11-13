@@ -14,7 +14,7 @@
         :height="40"
       >
         <v-toolbar-title>
-          Editar contenido
+          Cuadro historico
         </v-toolbar-title>
         <v-spacer />
         <v-btn
@@ -30,16 +30,43 @@
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-app-bar>
-      <v-card-text class="fill-height pt-4 d-flex justify-center">
-        <table>
+      <v-card-text class="fill-height pt-4">
+        <div class="mb-3">
+          <div class="primary--text subtitle-2">
+            Subir excel de licitacion
+          </div>
+          <input
+            id="input"
+            type="file"
+            @change="uploadExcelFile($event)"
+          >
+          <v-progress-circular
+            v-if="loadingExcel"
+            indeterminate
+            color="primary"
+          />
+        </div>
+        <table class="mx-auto mt-3">
           <tbody>
             <tr class="sheet-row">
               <th>#</th>
+              <th>Material</th>
               <th>Texto breve</th>
               <th>Precio neto</th>
-              <th>Precio Historico</th>
-              <th class="px-3">
-                Variación
+              <th>Fabricante 1</th>
+              <th>N_parte1</th>
+              <th>Cantidad solicitado</th>
+              <th>Unidad de medida</th>
+              <th>Ultimo prov SAP</th>
+              <th>Ultimo precio SAP</th>
+              <th>Ultimo moneda SAP</th>
+              <th>Fecha ultimo pedido</th>
+              <th>Precio Actual</th>
+              <th class="px-1">
+                Variación (%)
+              </th>
+              <th class="px-1">
+                Variación (MON)
               </th>
             </tr>
             <HistoricoItem
@@ -75,7 +102,7 @@
 </template>
 
 <script>
-
+import { read, utils } from 'xlsx-js-style'
 import { mapState, mapActions } from 'vuex'
 import HistoricoItem from '@/components/HistoricoItem.vue'
 import AppPrintHistoricoSection from '@/components/AppPrintHistoricoSection.vue'
@@ -85,6 +112,11 @@ export default {
   },
   props: {
     value: { type: Boolean, default: false }
+  },
+  data () {
+    return {
+      loadingExcel: false
+    }
   },
   computed: {
     ...mapState({
@@ -129,6 +161,22 @@ export default {
       w.setTimeout(function () {
         w.print()
       }, 1000)
+    },
+    uploadExcelFile (event) {
+      const selectedXlsxFile = event.target.files[0]
+      this.loadingExcel = true
+      const fileReader = new FileReader()
+
+      fileReader.onload = () => {
+        const arrayBuffer = fileReader.result
+
+        const workbook = read(arrayBuffer)
+        const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]]
+        const firstWorksheetData = utils.sheet_to_json(firstWorksheet, { header: 8 })
+        console.log(firstWorksheetData)
+        this.loadingExcel = false
+      }
+      fileReader.readAsArrayBuffer(selectedXlsxFile)
     }
   }
 }

@@ -32,7 +32,48 @@
         'warning': licitacionDetail.better_dias_de_entrega
       }"
     >
-      {{ licitacionDetail.dias_de_entrega }}
+      <div class="d-flex align-center justify-end">
+        <template v-if="showdiasDeEntrega">
+          <input
+            v-model.number="diasDeEntrega"
+            type="number"
+            :min="0"
+            class="price-input"
+            @change="handleDiasDeEntrega"
+          >
+          <v-btn
+            icon
+            width="24"
+            height="24"
+            color="success"
+            @click="showdiasDeEntrega = false"
+          >
+            <v-icon small>
+              mdi-content-save-check
+            </v-icon>
+          </v-btn>
+        </template>
+        <div
+          v-else
+          class="d-flex align-center flex-grow-1"
+        >
+          <div class="text-center flex-grow-1">
+            {{ licitacionDetail.dias_de_entrega }}
+          </div>
+          <v-btn
+            v-if="!licitacionDetail.disabled"
+            icon
+            width="24"
+            height="24"
+            color="primary"
+            @click="showdiasDeEntrega = true"
+          >
+            <v-icon small>
+              mdi-pencil
+            </v-icon>
+          </v-btn>
+        </div>
+      </div>
     </div>
     <div
       style="position: relative;"
@@ -132,7 +173,9 @@ export default {
       companyPriceNeto: 0,
       licitacionDetailManually: false,
       licitacionDetailDisabled: false,
-      showPriceNetoInput: false
+      diasDeEntrega: 0,
+      showPriceNetoInput: false,
+      showdiasDeEntrega: false
     }
   },
   computed: {
@@ -205,6 +248,17 @@ export default {
       })
       this.showPriceNetoInput = false
       this.resetLicitacionDetailsAvailables()
+    },
+    handleDiasDeEntrega () {
+      const data = {
+        dias_de_entrega: this.diasDeEntrega
+      }
+      this.updatePartialLicitacionDetailData({
+        licitacionDetailId: this.licitacionDetail.id,
+        data
+      })
+      this.showdiasDeEntrega = false
+      this.resetLicitacionDetailsAvailables()
     }
   }
 }
@@ -214,7 +268,7 @@ export default {
 .licitacion-detail-item {
   display: grid;
   text-align: center;
-  grid-template-columns: 28px 61px 130px 60px 60px 110px repeat(2, 60px) 30px 30px;
+  grid-template-columns: 28px 61px 130px 100px 60px 110px repeat(2, 60px) 30px 30px;
   grid-template-rows: 37px;
   // border: 1px solid rgb(228, 228, 228);
 
@@ -226,7 +280,7 @@ export default {
   }
 
   &__hide-products {
-    grid-template-columns: 60px 60px 110px repeat(2, 60px) 30px 30px;
+    grid-template-columns: 100px 60px 110px repeat(2, 60px) 30px 30px;
   }
 
   .price-input {
