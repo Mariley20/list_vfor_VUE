@@ -304,6 +304,7 @@
           <td
             v-for="(company, companyIndex) in companies"
             :key="companyIndex"
+            :colspan="companyIndex === 0 ? 2 : 1"
             style="vertical-align: baseline;"
           >
             <AppPrintLicitacionDetailSection
