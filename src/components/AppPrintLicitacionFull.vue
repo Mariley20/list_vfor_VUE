@@ -6,7 +6,7 @@
     <table
       v-if="licitacion"
       border="1"
-      style="margin: 16px auto; border-collapse: collapse; border-color: #909090; font-size: 12px;"
+      style="margin: 16px auto; border-collapse: collapse; border-color: #909090; font-size: 12px;font-family: system-ui;"
     >
       <tbody>
         <tr>
@@ -301,15 +301,20 @@
           </td>
         </tr>
         <tr>
+          <td>
+            <AppPrintLicitacionDetailSection
+              :company="companies[0]"
+              :company-index="0"
+            />
+          </td>
           <td
             v-for="(company, companyIndex) in companies"
             :key="companyIndex"
-            :colspan="companyIndex === 0 ? 2 : 1"
             style="vertical-align: baseline;"
           >
             <AppPrintLicitacionDetailSection
               :company="company"
-              :company-index="companyIndex"
+              :company-index="companyIndex +1"
             />
           </td>
         </tr>

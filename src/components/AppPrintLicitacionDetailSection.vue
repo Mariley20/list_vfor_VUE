@@ -6,32 +6,36 @@
   >
     <tbody>
       <tr>
-        <th
-          v-if="companyIndex === 0"
-          style="width: 16px;max-width: 16px; text-align: center; height: 30px;"
-        >
-          <b>#</b>
-        </th>
-        <th
-          v-if="companyIndex === 0"
-          style="padding: 2px;"
-        >
-          <b>Material</b>
-        </th>
-        <th v-if="companyIndex === 0">
-          <b>Texto breve</b>
-        </th>
-        <th style="height: 30px;">
-          <b>Dias de entrega</b>
-        </th>
-        <th><b>Valor neto</b></th>
-        <th><b>Precio neto</b></th>
-        <th><b>Precio Landed</b></th>
-        <th
-          style="padding: 0 2px;"
-        >
-          <b>Cantidad</b>
-        </th>
+        <template v-if="companyIndex === 0">
+          <th
+            style="width: 16px;max-width: 16px; text-align: center; height: 30px;"
+          >
+            <b>#</b>
+          </th>
+          <th
+            style="padding: 2px;"
+          >
+            <b>Material</b>
+          </th>
+          <th
+            style="padding: 2px;"
+          >
+            <b>Texto breve</b>
+          </th>
+        </template>
+        <template v-else>
+          <th style="height: 30px;">
+            <b>Dias de entrega</b>
+          </th>
+          <th><b>Valor neto</b></th>
+          <th><b>Precio neto</b></th>
+          <th><b>Precio Landed</b></th>
+          <th
+            style="padding: 0 2px;"
+          >
+            <b>Cantidad</b>
+          </th>
+        </template>
       </tr>
       <tr
         v-for="(licitacionDetail, index) in companyLicitacionDetails"
@@ -41,49 +45,53 @@
         }
         "
       >
-        <td
-          v-if="companyIndex === 0"
-          style="height: 40px;max-height: 40px; text-align: center;"
-        >
-          <b><small>{{ index+1 }}</small></b>
-        </td>
-        <td
-          v-if="companyIndex === 0"
-          style="height: 40px;max-height: 40px; text-align: center;"
-        >
-          <small>{{ getProductCode(licitacionDetail) }}</small>
-        </td>
-        <td
-          v-if="companyIndex === 0"
-          style="height: 40px;max-height: 40px; max-width: 182px; width: 182px text-align: center;"
-        >
-          <small>{{ licitacionDetail.product_name }}</small>
-        </td>
-        <td
-          style="height: 40px;max-height: 40px; text-align: center;"
-          :style="{
-            'background-color': licitacionDetail.better_dias_de_entrega ? '#fb8c00': ''
-          }"
-        >
-          {{ licitacionDetail.dias_de_entrega }}
-        </td>
-        <td style="height: 40px;max-height: 40px; text-align: center;">
-          {{ Math.round((licitacionDetail.price * licitacionDetail.cantidad )* 100) / 100 }}
-        </td>
-        <td style="height: 40px;max-height: 40px; text-align: center;">
-          {{ licitacionDetail.price }}
-        </td>
-        <td
-          style="height: 40px;max-height: 40px; text-align: center;"
-          :style="{
-            'background-color': licitacionDetail.better_price_landed ? '#4caf50': ''
-          }"
-        >
-          {{ licitacionDetail.price_landed }}
-        </td>
-        <td style="height: 40px;max-height: 40px; text-align: center;">
-          {{ licitacionDetail.cantidad }}
-        </td>
+        <template v-if="companyIndex === 0">
+          <td
+            v-if="companyIndex === 0"
+            style="height: 40px;max-height: 40px; text-align: center;"
+          >
+            <b><small>{{ index+1 }}</small></b>
+          </td>
+          <td
+            v-if="companyIndex === 0"
+            style="height: 40px;max-height: 40px; text-align: center;"
+          >
+            <small>{{ getProductCode(licitacionDetail) }}</small>
+          </td>
+          <td
+            v-if="companyIndex === 0"
+            style="height: 40px;max-height: 40px; max-width: 182px; width: 182px text-align: center;"
+          >
+            <small>{{ licitacionDetail.product_name }}</small>
+          </td>
+        </template>
+        <template v-else>
+          <td
+            style="height: 40px;max-height: 40px; text-align: center;"
+            :style="{
+              'background-color': licitacionDetail.better_dias_de_entrega ? '#fb8c00': ''
+            }"
+          >
+            {{ licitacionDetail.dias_de_entrega }}
+          </td>
+          <td style="height: 40px;max-height: 40px; text-align: center;">
+            {{ Math.round((licitacionDetail.price * licitacionDetail.cantidad )* 100) / 100 }}
+          </td>
+          <td style="height: 40px;max-height: 40px; text-align: center;">
+            {{ licitacionDetail.price }}
+          </td>
+          <td
+            style="height: 40px;max-height: 40px; text-align: center;"
+            :style="{
+              'background-color': licitacionDetail.better_price_landed ? '#4caf50': ''
+            }"
+          >
+            {{ licitacionDetail.price_landed }}
+          </td>
+          <td style="height: 40px;max-height: 40px; text-align: center;">
+            {{ licitacionDetail.cantidad }}
+          </td>
+        </template>
       </tr>
     </tbody>
   </table>

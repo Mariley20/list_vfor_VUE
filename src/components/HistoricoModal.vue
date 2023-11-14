@@ -141,18 +141,6 @@ export default {
       setHistoricoData: 'licitacion/setHistoricoData'
     }),
     saveHistoricoData () {
-      // const historicoData = []
-      // this.betterLicitacionDetails.forEach(element => {
-      //   const productData = this.products.find(item => item.id === element.producto_id)
-      //   const data = {
-      //     ...productData,
-      //     price: element.price,
-      //     company_name: element.company_name
-      //   }
-      //   historicoData.push(data)
-      // })
-      // console.log(historicoData)
-      // this.setHistoricoData({ data: historicoData })
       this.showModal = false
     },
     printDownload () {
