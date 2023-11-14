@@ -2,27 +2,29 @@
   <tr class="sheet-row">
     <td>#{{ index }}</td>
     <td>
-      <div>
-        <div>{{ licitacionDetail.product_name }}</div>
-        <small>{{ licitacionDetail.company_name }}</small>
-        <div class="font-weight-medium">
-          <small v-if="!!productCode">{{ productCode }}</small>
-        </div>
-      </div>
+      {{ licitacionDetail.material }}
     </td>
-    <td>{{ licitacionDetail.price }}</td>
     <td>
-      <v-text-field
-        v-model.number="historyPrice"
-        height="28"
-        dense
-        hide-details="auto"
-        outlined
-        style="max-width: 100px;"
-        @change="handleUpdateProductPriceHistory"
-      />
+      <div>{{ licitacionDetail.productName }}</div>
+      <v-divider />
+      <small
+        class="font-weight-bold"
+        style="line-height: 1;"
+      >
+        {{ licitacionDetail.companyNameCurrent }}
+      </small>
     </td>
-    <td>{{ historyVariacionText }}</td>
+    <td>{{ licitacionDetail.fabricante }}</td>
+    <td>{{ licitacionDetail.nParte1 }}</td>
+    <td>{{ licitacionDetail.cantidad }}</td>
+    <td>{{ licitacionDetail.unidadDeMedida }}</td>
+    <td>{{ licitacionDetail.ultimoProvSap }}</td>
+    <td>{{ licitacionDetail.ultimoPrecioSap }}</td>
+    <td>{{ licitacionDetail.ultimoMonedaSap }}</td>
+    <td>{{ licitacionDetail.fechaUltimoPedido }}</td>
+    <td>{{ licitacionDetail.priceCurrent }}</td>
+    <td>{{ licitacionDetail.variacionPercentage }}</td>
+    <td>{{ licitacionDetail.variacionMoneda }}</td>
   </tr>
 </template>
 

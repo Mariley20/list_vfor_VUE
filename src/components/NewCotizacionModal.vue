@@ -44,13 +44,6 @@
               style="width: 250px;"
             />
             <v-text-field
-              v-model="companyData.incoterm"
-              outlined
-              label="INCOTERM"
-              style="width: 250px;"
-              dense
-            />
-            <v-text-field
               v-model.number="companyFactorLanded"
               outlined
               label="Factor Landed"
@@ -58,9 +51,9 @@
               dense
             />
             <v-text-field
-              v-model="companyData.comment"
+              v-model="companyData.incoterm"
               outlined
-              label="Comentario"
+              label="INCOTERM"
               style="width: 250px;"
               dense
             />

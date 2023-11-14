@@ -1,9 +1,9 @@
 <template>
   <v-dialog
     v-model="showModal"
-    width="800"
     persistent
     scrollable
+    max-width="1400"
   >
     <v-card>
       <v-app-bar
@@ -52,7 +52,6 @@
               <th>#</th>
               <th>Material</th>
               <th>Texto breve</th>
-              <th>Precio neto</th>
               <th>Fabricante 1</th>
               <th>N_parte1</th>
               <th>Cantidad solicitado</th>
@@ -66,11 +65,11 @@
                 Variación (%)
               </th>
               <th class="px-1">
-                Variación (MON)
+                Variación (MONEDA)
               </th>
             </tr>
             <HistoricoItem
-              v-for="(detail, rowIndex) in betterLicitacionDetails"
+              v-for="(detail, rowIndex) in historico"
               :key="detail.id"
               :index="rowIndex+1"
               :licitacion-detail="detail"
@@ -106,6 +105,7 @@ import { read, utils } from 'xlsx-js-style'
 import { mapState, mapActions } from 'vuex'
 import HistoricoItem from '@/components/HistoricoItem.vue'
 import AppPrintHistoricoSection from '@/components/AppPrintHistoricoSection.vue'
+import getHistoricoFromExcelTosave from '@/helpers/getHistoricoFromExcelTosave.js'
 export default {
   components: {
     HistoricoItem, AppPrintHistoricoSection
@@ -121,7 +121,8 @@ export default {
   computed: {
     ...mapState({
       licitacionDetails: (state) => state.licitacion.licitacionDetails,
-      products: (state) => state.licitacion.products
+      products: (state) => state.licitacion.products,
+      historico: (state) => state.licitacion.historico
     }),
     showModal: {
       get () {
@@ -140,18 +141,18 @@ export default {
       setHistoricoData: 'licitacion/setHistoricoData'
     }),
     saveHistoricoData () {
-      const historicoData = []
-      this.betterLicitacionDetails.forEach(element => {
-        const productData = this.products.find(item => item.id === element.producto_id)
-        const data = {
-          ...productData,
-          price: element.price,
-          company_name: element.company_name
-        }
-        historicoData.push(data)
-      })
-      console.log(historicoData)
-      this.setHistoricoData({ data: historicoData })
+      // const historicoData = []
+      // this.betterLicitacionDetails.forEach(element => {
+      //   const productData = this.products.find(item => item.id === element.producto_id)
+      //   const data = {
+      //     ...productData,
+      //     price: element.price,
+      //     company_name: element.company_name
+      //   }
+      //   historicoData.push(data)
+      // })
+      // console.log(historicoData)
+      // this.setHistoricoData({ data: historicoData })
       this.showModal = false
     },
     printDownload () {
@@ -174,6 +175,10 @@ export default {
         const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]]
         const firstWorksheetData = utils.sheet_to_json(firstWorksheet, { header: 8 })
         console.log(firstWorksheetData)
+        const historico = getHistoricoFromExcelTosave(firstWorksheetData,
+          this.products, this.betterLicitacionDetails)
+        this.setHistoricoData({ data: historico })
+
         this.loadingExcel = false
       }
       fileReader.readAsArrayBuffer(selectedXlsxFile)

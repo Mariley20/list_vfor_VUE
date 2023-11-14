@@ -1,7 +1,8 @@
 <template>
   <table
     border="1"
-    style="border-collapse: collapse; border-color: #909090;font-size: 12px; width: 100%;"
+    style="border-collapse: collapse; border-color: #909090;font-size: 12px; width: 100%;
+    font-family: system-ui;"
   >
     <tbody>
       <tr>
