@@ -5,43 +5,58 @@
   >
     <table
       border="1"
-      style="margin: 16px auto; border-collapse: collapse; border-color: #909090;"
+      style="margin: 16px auto; border-collapse: collapse; border-color: #909090; font-size: 12px;font-family: system-ui; text-align: center;"
     >
       <tbody>
         <tr class="sheet-row">
           <th>#</th>
+          <th>Material</th>
           <th>Texto breve</th>
-          <th>Precio neto</th>
-          <th>Precio Historico</th>
-          <th class="px-3">
-            Variación
+          <th>Fabricante 1</th>
+          <th>N_parte1</th>
+          <th>Cantidad solicitado</th>
+          <th>Unidad de medida</th>
+          <th>Ultimo prov SAP</th>
+          <th>Ultimo precio SAP</th>
+          <th>Ultimo moneda SAP</th>
+          <th>Fecha ultimo pedido</th>
+          <th>Precio Actual</th>
+          <th class="px-1">
+            Variación (%)
+          </th>
+          <th class="px-1">
+            Variación (MONEDA)
           </th>
         </tr>
         <tr
-          v-for="(item,index) in betterLicitacionDetails"
+          v-for="(item,index) in historico"
           :key="item.id"
         >
+          <td>#{{ index + 1 }}</td>
           <td>
-            #{{ index +1 }}
+            {{ item.material }}
           </td>
           <td>
-            <div>
-              <div>{{ item.productName }}</div>
-              <small>{{ item.companyName }}</small>
-              <div class="font-weight-medium">
-                <small v-if="!!item.code ">{{ item.code }}</small>
-              </div>
-            </div>
+            <div>{{ item.productName }}</div>
+            <v-divider />
+            <small
+              class="font-weight-bold"
+              style="line-height: 1;"
+            >
+              {{ item.companyNameCurrent }}
+            </small>
           </td>
-          <td>
-            {{ item.price }}
-          </td>
-          <td>
-            {{ item.lastPrice }}
-          </td>
-          <td>
-            {{ item.variacion }}
-          </td>
+          <td>{{ item.fabricante }}</td>
+          <td>{{ item.nParte1 }}</td>
+          <td>{{ item.cantidad }}</td>
+          <td>{{ item.unidadDeMedida }}</td>
+          <td>{{ item.ultimoProvSap }}</td>
+          <td>{{ item.ultimoPrecioSap }}</td>
+          <td>{{ item.ultimoMonedaSap }}</td>
+          <td>{{ item.fechaUltimoPedido }}</td>
+          <td>{{ item.priceCurrent }}</td>
+          <td>{{ item.variacionPercentage * 100 }}%</td>
+          <td>{{ item.variacionMoneda }}</td>
         </tr>
       </tbody>
     </table>
@@ -53,6 +68,7 @@ import { mapState } from 'vuex'
 export default {
   computed: {
     ...mapState({
+      historico: (state) => state.licitacion.historico,
       licitacionDetails: (state) => state.licitacion.licitacionDetails,
       products: (state) => state.licitacion.products
     }),

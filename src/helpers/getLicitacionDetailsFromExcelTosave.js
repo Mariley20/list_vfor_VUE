@@ -15,6 +15,7 @@ const getLicitacionDetailsFromExcelTosave = (rows) => {
   const companiesProducts = []
 
   companyColIndex.forEach((index) => {
+    const details = []
     productRowsParsed.forEach((row, productIndex) => {
       const product = row.slice(index, index + 8)
 
@@ -38,10 +39,18 @@ const getLicitacionDetailsFromExcelTosave = (rows) => {
         disabled: false
       }
 
-      companiesProducts.push(productData)
+      details.push(productData)
     })
-
-    // companiesProducts.push(data)
+    details.sort((a, b) => {
+      if (a.product_name < b.product_name) {
+        return -1
+      }
+      if (a.product_name > b.product_name) {
+        return 1
+      }
+      return 0
+    })
+    companiesProducts.push(...details)
   })
   return companiesProducts
 }

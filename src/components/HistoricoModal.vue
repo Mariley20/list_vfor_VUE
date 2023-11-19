@@ -31,7 +31,7 @@
         </v-btn>
       </v-app-bar>
       <v-card-text class="fill-height pt-4">
-        <div>
+        <div class="d-flex align-center">
           <div class="mb-3">
             <div class="primary--text subtitle-2">
               Subir excel de licitacion
