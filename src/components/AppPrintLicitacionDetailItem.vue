@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   props: {
@@ -70,12 +70,7 @@ export default {
     companyIndex: { type: Number, default: 0 }
   },
   data () {
-    return {
-      companyPriceNeto: 0,
-      licitacionDetailManually: false,
-      licitacionDetailDisabled: false,
-      showPriceNetoInput: false
-    }
+    return { }
   },
   computed: {
     ...mapState({
@@ -101,52 +96,6 @@ export default {
     },
     licitacionDetailValorNeto () {
       return Math.round((this.licitacionDetail.price * this.licitacionDetail.cantidad) * 100) / 100
-    }
-  },
-  watch: {
-    licitacionDetail: {
-      immediate: false,
-      deep: true,
-      handler (newValue) {
-        this.licitacionDetailManually = this.licitacionDetail.manually_selected
-        this.licitacionDetailDisabled = this.licitacionDetail.disabled
-      }
-    }
-  },
-  mounted () {
-    this.companyPriceNeto = this.licitacionDetail.price
-    this.licitacionDetailManually = this.licitacionDetail.manually_selected
-  },
-  methods: {
-    ...mapActions({
-      updatePartialLicitacionDetailData: 'licitacion/updatePartialLicitacionDetailData',
-      disableLicitacionDetail: 'licitacion/disableLicitacionDetail',
-      manuallySelectLicitacionDetail: 'licitacion/manuallySelectLicitacionDetail',
-      resetLicitacionDetailsAvailables: 'licitacion/resetLicitacionDetailsAvailables'
-    }),
-    handleManuallySelectCheckClick (event) {
-      const licitacionDetailId = this.licitacionDetail.id
-      const productId = this.licitacionDetail.producto_id
-      const manually = event.target.checked
-      this.manuallySelectLicitacionDetail({ licitacionDetailId, productId, manually })
-    },
-    handleDisabledCheckClick (event) {
-      const licitacionDetailId = this.licitacionDetail.id
-      const productId = this.licitacionDetail.producto_id
-      const disabled = event.target.checked
-      this.disableLicitacionDetail({ licitacionDetailId, productId, disabled })
-    },
-    handlePriceNeto () {
-      const data = {
-        price: this.companyPriceNeto,
-        price_landed: Math.round((this.companyPriceNeto + (this.companyPriceNeto * (this.companyFactorLanded / 100))) * 100) / 100
-      }
-      this.updatePartialLicitacionDetailData({
-        licitacionDetailId: this.licitacionDetail.id,
-        data
-      })
-      this.showPriceNetoInput = false
-      this.resetLicitacionDetailsAvailables()
     }
   }
 }

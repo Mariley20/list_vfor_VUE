@@ -20,8 +20,10 @@ const getHistoricoFromExcelTosave = (rows, products, details) => {
     const detail = details.find(detail => detail.producto_id === product.id)
     if (!detail) return
 
-    const variacion = (detail.price - (row[ULTIMO_PRECIO_SAP] || 0)) / (row[ULTIMO_PRECIO_SAP] || 0)
-    const variacionMonedaRound = Math.round((detail.price - (row[ULTIMO_PRECIO_SAP] || 0)) * 100) / 100
+    const ultimoPrecioSap = typeof row[ULTIMO_PRECIO_SAP] === 'number' ? (row[ULTIMO_PRECIO_SAP] || 0) : 0
+
+    const variacion = (detail.price - ultimoPrecioSap) / ultimoPrecioSap
+    const variacionMonedaRound = Math.round((detail.price - ultimoPrecioSap) * 100) / 100
 
     const data = {
       id: uuidv4(),
@@ -32,7 +34,7 @@ const getHistoricoFromExcelTosave = (rows, products, details) => {
       companyNameCurrent: detail.company_name,
       productId: product.id,
       companyId: detail.company_id,
-      variacionPercentage: (row[ULTIMO_PRECIO_SAP] || 0) > 0 ? Math.round(variacion * 100) / 100 : 0,
+      variacionPercentage: ultimoPrecioSap > 0 ? Math.round(variacion * 100) / 100 : 0,
       variacionMoneda: variacionMonedaRound,
       fabricante: row[FRABRICANTE_1],
       fechaUltimoPedido: row[FECHA_ULTIMO_PEDIDO],
@@ -40,7 +42,7 @@ const getHistoricoFromExcelTosave = (rows, products, details) => {
       cantidadSolicitada: row[CANTIDAD_SOLICITADA],
       unidadDeMedida: row[UNIDAD_DE_MEDIDA],
       ultimoProvSap: row[ULTIMO_PROV_SAP],
-      ultimoPrecioSap: row[ULTIMO_PRECIO_SAP] || 0,
+      ultimoPrecioSap: ultimoPrecioSap,
       ultimoMonedaSap: row[ULTIMO_MONEDA_SAD]
     }
     historicos.push(data)

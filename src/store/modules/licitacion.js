@@ -10,7 +10,8 @@ import {
   COMPARED_LICITACION_DETAILS,
   RESET_LICITACION_DETAILS,
   RESET_LICITACION_DETAILS_AVAILABLES,
-  SET_HISTORICO_DATA
+  SET_HISTORICO_DATA,
+  DELETE_COMPANY
 } from '@/store/mutationTypes.js'
 import getLicitacionDetailsCompared from '@/helpers/getLicitacionDetailsCompared'
 import getLicitacionDetailsComparedReset from '@/helpers/getLicitacionDetailsComparedReset'
@@ -74,7 +75,22 @@ const actions = {
     })
     commit(COMPARED_LICITACION_DETAILS)
   },
-  manuallySelectLicitacionDetail ({ commit }, { licitacionDetailId, productId, manually }) {
+  async manuallySelectLicitacionDetail ({ state, commit }, { licitacionDetailId, productId, manually }) {
+    if (manually) {
+      const detailsItems = state.licitacionDetails.filter(item => item.producto_id === productId && item.manually_selected === true)
+      detailsItems.forEach(item => {
+        commit(UPDATE_PARTIAL_LICITACION_DETAIL_DATA, {
+          licitacionDetailId: item.id,
+          data: {
+            better_price_landed: !manually,
+            better_dias_de_entrega: !manually,
+            manually_selected: !manually,
+            disabled: item.disabled
+          }
+        })
+      })
+    }
+
     commit(UPDATE_PARTIAL_LICITACION_DETAIL_DATA, {
       licitacionDetailId,
       data: {
@@ -84,13 +100,21 @@ const actions = {
         disabled: false
       }
     })
+
     commit(COMPARED_LICITACION_DETAILS)
+  },
+  deleteCompany ({ commit }, { companyId }) {
+    commit(DELETE_COMPANY, { companyId })
   }
 }
 
 const mutations = {
   [SET_LICITACION_DATA] (state, { data }) {
     state.licitacion = data
+  },
+  [DELETE_COMPANY] (state, { companyId }) {
+    state.companies = state.companies.filter(company => company.id !== companyId)
+    state.licitacionDetails = state.licitacionDetails.filter(detail => detail.company_id !== companyId)
   },
   [SET_HISTORICO_DATA] (state, { data }) {
     state.historico = data

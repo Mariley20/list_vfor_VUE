@@ -4,15 +4,32 @@
       <table class="sheet-table">
         <tbody>
           <tr>
-            <td class="font-weight-bold">
+            <td
+              class="font-weight-bold"
+              style="vertical-align: middle;"
+            >
               Proveedor
             </td>
             <td
               v-for="(company, companyIndex) in companies"
               :key="companyIndex"
               :class="getCompanyLicitacionSelected(company) ? '' : 'yellow'"
+              style="vertical-align: middle;"
             >
               {{ company.name }}
+              <v-btn
+                fab
+                x-small
+                height="24"
+                width="24"
+                color="error"
+                class="mx-5"
+                @click="handleDeleteCompany(company)"
+              >
+                <v-icon size="14">
+                  mdi-delete
+                </v-icon>
+              </v-btn>
             </td>
           </tr>
           <tr>
@@ -213,7 +230,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   components: {
     AppLicitacionDetailSection: () => import('@/components/AppLicitacionDetailSection.vue'),
@@ -232,6 +249,10 @@ export default {
     })
   },
   methods: {
+    ...mapActions({
+      deleteCompany: 'licitacion/deleteCompany',
+      resetLicitacionDetails: 'licitacion/resetLicitacionDetails'
+    }),
     getTotalOferta (company) {
       const companyLicitacionDetails = this.licitacionDetails.filter(detail => detail.company_id === company.id)
 
@@ -256,6 +277,10 @@ export default {
     getCompanyLicitacionSelected (company) {
       const productLicitacionDetails = this.licitacionDetails.filter(detail => detail.company_id === company.id)
       return productLicitacionDetails.every(detail => detail.better_price_landed === false)
+    },
+    handleDeleteCompany (company) {
+      this.deleteCompany({ companyId: company.id })
+      this.resetLicitacionDetails()
     }
   }
 }

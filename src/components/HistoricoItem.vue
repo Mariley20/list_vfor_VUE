@@ -23,7 +23,7 @@
     <td>{{ licitacionDetail.ultimoMonedaSap }}</td>
     <td>{{ licitacionDetail.fechaUltimoPedido }}</td>
     <td>{{ licitacionDetail.priceCurrent }}</td>
-    <td>{{ licitacionDetail.variacionPercentage }}</td>
+    <td>{{ licitacionDetail.variacionPercentage * 100 }}%</td>
     <td>{{ licitacionDetail.variacionMoneda }}</td>
   </tr>
 </template>

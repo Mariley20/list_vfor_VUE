@@ -31,20 +31,30 @@
         </v-btn>
       </v-app-bar>
       <v-card-text class="fill-height pt-4">
-        <div class="mb-3">
-          <div class="primary--text subtitle-2">
-            Subir excel de licitacion
+        <div>
+          <div class="mb-3">
+            <div class="primary--text subtitle-2">
+              Subir excel de licitacion
+            </div>
+            <input
+              id="input"
+              type="file"
+              @change="uploadExcelFile($event)"
+            >
+            <v-progress-circular
+              v-if="loadingExcel"
+              indeterminate
+              color="primary"
+            />
           </div>
-          <input
-            id="input"
-            type="file"
-            @change="uploadExcelFile($event)"
+          <v-btn
+            v-if="historicoFile.length>0"
+            color="info"
+            class="text-none mx-3"
+            @click="calculateHistoricos"
           >
-          <v-progress-circular
-            v-if="loadingExcel"
-            indeterminate
-            color="primary"
-          />
+            <v-icon>mdi-refresh</v-icon>
+          </v-btn>
         </div>
         <table class="mx-auto mt-3">
           <tbody>
@@ -115,7 +125,8 @@ export default {
   },
   data () {
     return {
-      loadingExcel: false
+      loadingExcel: false,
+      historicoFile: []
     }
   },
   computed: {
@@ -134,6 +145,13 @@ export default {
     },
     betterLicitacionDetails () {
       return this.licitacionDetails.filter(detail => detail.better_price_landed === true)
+    }
+  },
+  showModal: {
+    data (newValue, oldValue) {
+      if (newValue) {
+        this.calculateHistoricos()
+      }
     }
   },
   methods: {
@@ -162,14 +180,17 @@ export default {
         const workbook = read(arrayBuffer)
         const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]]
         const firstWorksheetData = utils.sheet_to_json(firstWorksheet, { header: 8 })
-        console.log(firstWorksheetData)
-        const historico = getHistoricoFromExcelTosave(firstWorksheetData,
-          this.products, this.betterLicitacionDetails)
-        this.setHistoricoData({ data: historico })
+        this.historicoFile = firstWorksheetData
+        this.calculateHistoricos()
 
         this.loadingExcel = false
       }
       fileReader.readAsArrayBuffer(selectedXlsxFile)
+    },
+    calculateHistoricos () {
+      const historico = getHistoricoFromExcelTosave(this.historicoFile,
+        this.products, this.betterLicitacionDetails)
+      this.setHistoricoData({ data: historico })
     }
   }
 }
