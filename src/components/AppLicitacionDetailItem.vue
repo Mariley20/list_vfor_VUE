@@ -29,50 +29,11 @@
     <div
       :class="{
         'text-decoration-line-through error--text': licitacionDetail.disabled,
-        'warning': licitacionDetail.better_dias_de_entrega
+        'yellow': licitacionDetail.better_dias_de_entrega
       }"
     >
       <div class="d-flex align-center justify-end">
-        <template v-if="showdiasDeEntrega">
-          <input
-            v-model.number="diasDeEntrega"
-            type="number"
-            :min="0"
-            class="price-input"
-            @change="handleDiasDeEntrega"
-          >
-          <v-btn
-            icon
-            width="24"
-            height="24"
-            color="success"
-            @click="showdiasDeEntrega = false"
-          >
-            <v-icon small>
-              mdi-content-save-check
-            </v-icon>
-          </v-btn>
-        </template>
-        <div
-          v-else
-          class="d-flex align-center flex-grow-1"
-        >
-          <div class="text-center flex-grow-1">
-            {{ licitacionDetail.dias_de_entrega }}
-          </div>
-          <v-btn
-            v-if="!licitacionDetail.disabled"
-            icon
-            width="24"
-            height="24"
-            color="primary"
-            @click="showdiasDeEntrega = true"
-          >
-            <v-icon small>
-              mdi-pencil
-            </v-icon>
-          </v-btn>
-        </div>
+        {{ licitacionDetail.dias_de_entrega }}
       </div>
     </div>
     <div
@@ -131,7 +92,7 @@
     <div
       :class="{
         'text-decoration-line-through error--text': licitacionDetail.disabled,
-        'success': licitacionDetail.better_price_landed
+        'yellow': licitacionDetail.better_price_landed
       }"
     >
       {{ licitacionDetail.price_landed }}

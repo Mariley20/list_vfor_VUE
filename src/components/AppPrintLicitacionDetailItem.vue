@@ -29,7 +29,7 @@
     <div
       :class="{
         'text-decoration-line-through error--text': licitacionDetail.disabled,
-        'warning': licitacionDetail.better_dias_de_entrega
+        'yellow': licitacionDetail.better_dias_de_entrega
       }"
     >
       {{ licitacionDetail.dias_de_entrega }}

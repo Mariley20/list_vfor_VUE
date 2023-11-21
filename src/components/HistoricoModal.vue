@@ -3,7 +3,6 @@
     v-model="showModal"
     persistent
     scrollable
-    max-width="1400"
   >
     <v-card>
       <v-app-bar
@@ -56,7 +55,7 @@
             <v-icon>mdi-refresh</v-icon>
           </v-btn>
         </div>
-        <table class="mx-auto mt-3">
+        <table class="mx-auto mt-3 text-caption">
           <tbody>
             <tr class="sheet-row">
               <th>#</th>
@@ -76,6 +75,9 @@
               </th>
               <th class="px-1">
                 Variación (MONEDA)
+              </th>
+              <th class="px-1">
+                Proveedor
               </th>
             </tr>
             <HistoricoItem
@@ -190,6 +192,16 @@ export default {
     calculateHistoricos () {
       const historico = getHistoricoFromExcelTosave(this.historicoFile,
         this.products, this.betterLicitacionDetails)
+
+      historico.sort((a, b) => {
+        if (a.productName < b.productName) {
+          return -1
+        }
+        if (a.productName > b.productName) {
+          return 1
+        }
+        return 0
+      })
       this.setHistoricoData({ data: historico })
     }
   }

@@ -51,6 +51,20 @@
               dense
             />
             <v-text-field
+              v-model.number="companyData.cond_de_pago"
+              outlined
+              label="Cond de pago"
+              style="width: 250px;"
+              dense
+            />
+            <v-text-field
+              v-model.number="companyData.vig_de_cotizacion"
+              outlined
+              label="Vig de cotización"
+              style="width: 250px;"
+              dense
+            />
+            <v-text-field
               v-model="companyData.incoterm"
               outlined
               label="INCOTERM"
@@ -99,11 +113,7 @@
                 {{ getPriceLanded(item, index ) }}
               </td>
               <td>
-                <input
-                  v-model.number="item.cantidad"
-                  type="number"
-                  class="product-input"
-                >
+                {{ item.cantidad }}
               </td>
             </tr>
           </tbody>
@@ -193,7 +203,8 @@ export default {
   created () {
     const companyitem = this.companies[0]
     this.companyData.moneda_de_la_oferta = companyitem.moneda_de_la_oferta
-    this.companyData.numero_de_oferta = companyitem.numero_de_oferta
+    this.companyData.descripcion = companyitem.descripcion
+    this.companyData.numero_de_oferta = 'Manual'
     this.products.forEach(product => {
       const data = {
         id: uuidv4(),

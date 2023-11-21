@@ -5,14 +5,7 @@
       {{ licitacionDetail.material }}
     </td>
     <td>
-      <div>{{ licitacionDetail.productName }}</div>
-      <v-divider />
-      <small
-        class="font-weight-bold"
-        style="line-height: 1;"
-      >
-        {{ licitacionDetail.companyNameCurrent }}
-      </small>
+      {{ licitacionDetail.productName }}
     </td>
     <td>{{ licitacionDetail.fabricante }}</td>
     <td>{{ licitacionDetail.nParte1 }}</td>
@@ -25,6 +18,7 @@
     <td>{{ licitacionDetail.priceCurrent }}</td>
     <td>{{ licitacionDetail.variacionPercentage * 100 }}%</td>
     <td>{{ licitacionDetail.variacionMoneda }}</td>
+    <td>{{ licitacionDetail.companyNameCurrent }}</td>
   </tr>
 </template>
 

@@ -14,7 +14,7 @@
         class="mr-4"
       >
 
-      <v-toolbar-title>Southern Perú</v-toolbar-title>
+      <v-toolbar-title>Cuadro comparativo</v-toolbar-title>
     </v-app-bar>
     <v-main>
       <router-view />

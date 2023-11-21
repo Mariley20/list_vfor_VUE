@@ -24,16 +24,8 @@
       <div>{{ licitacion.moneda }}</div>
     </div>
     <div class="licitacion-grid">
-      <b class="px-3">Fecha de inicio :</b>
-      <div>{{ licitacion.fecha_de_inicio }}</div>
-    </div>
-    <div class="licitacion-grid">
       <b class="px-3">Plazo para presentación de la oferta :</b>
       <div>{{ licitacion.plazo_para_presentacion_de_la_oferta }}</div>
-    </div>
-    <div class="licitacion-grid">
-      <b class="px-3">Fecha apertura :</b>
-      <div>{{ licitacion.fecha_apertura }}</div>
     </div>
     <div class="licitacion-grid">
       <b class="px-3">Fecha de descarga :</b>

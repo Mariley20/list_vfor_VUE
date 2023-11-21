@@ -16,20 +16,24 @@
               :class="getCompanyLicitacionSelected(company) ? '' : 'yellow'"
               style="vertical-align: middle;"
             >
-              {{ company.name }}
-              <v-btn
-                fab
-                x-small
-                height="24"
-                width="24"
-                color="error"
-                class="mx-5"
-                @click="handleDeleteCompany(company)"
-              >
-                <v-icon size="14">
-                  mdi-delete
-                </v-icon>
-              </v-btn>
+              <div class="d-flex ">
+                <div class="flex-grow-1">
+                  {{ company.name }}
+                </div>
+                <v-btn
+                  fab
+                  x-small
+                  height="24"
+                  width="24"
+                  color="error"
+                  class="mx-5"
+                  @click="handleDeleteCompany(company)"
+                >
+                  <v-icon size="14">
+                    mdi-delete
+                  </v-icon>
+                </v-btn>
+              </div>
             </td>
           </tr>
           <tr>
@@ -52,28 +56,6 @@
               :key="companyIndex"
             >
               {{ company.cond_de_pago }}
-            </td>
-          </tr>
-          <tr>
-            <td class="font-weight-bold">
-              Costo de Embalaje
-            </td>
-            <td
-              v-for="(company, companyIndex) in companies"
-              :key="companyIndex"
-            >
-              {{ company.costo_de_embalaje }}
-            </td>
-          </tr>
-          <tr>
-            <td class="font-weight-bold">
-              Costo de flete
-            </td>
-            <td
-              v-for="(company, companyIndex) in companies"
-              :key="companyIndex"
-            >
-              {{ company.costo_de_flete }}
             </td>
           </tr>
           <tr>
@@ -109,37 +91,16 @@
               {{ company.numero_de_oferta }}
             </td>
           </tr>
-          <tr style="background-color: #92d050;">
+          <tr>
             <td class="font-weight-bold">
               Valor total final
             </td>
             <td
               v-for="(company, companyIndex) in companies"
               :key="companyIndex"
+              class="font-weight-bold"
             >
               {{ getValorTotalFinal(company) }}
-            </td>
-          </tr>
-          <tr>
-            <td class="font-weight-bold">
-              Valor neto anterior
-            </td>
-            <td
-              v-for="(company, companyIndex) in companies"
-              :key="companyIndex"
-            >
-              {{ company.valor_neto_anterior }}
-            </td>
-          </tr>
-          <tr>
-            <td class="font-weight-bold">
-              Ponderacion Tecnica
-            </td>
-            <td
-              v-for="(company, companyIndex) in companies"
-              :key="companyIndex"
-            >
-              {{ company.ponderacion_tecnica }}
             </td>
           </tr>
           <tr>

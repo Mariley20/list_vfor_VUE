@@ -25,7 +25,7 @@ const getCompaniesFromExcelTosave = (rows) => {
       costo_de_flete: providerRowsParsed[4][index],
       vig_de_cotizacion: providerRowsParsed[5][index],
       descripcion: providerRowsParsed[6][index],
-      numero_de_oferta: providerRowsParsed[7][index],
+      numero_de_oferta: providerRowsParsed[7][index].trim(),
       valor_total_final: providerRowsParsed[8][index],
       valor_neto_anterior: providerRowsParsed[9][index],
       ponderacion_tecnica: providerRowsParsed[10][index],

@@ -156,7 +156,7 @@ export default {
         const firstWorksheetData = utils.sheet_to_json(firstWorksheet, {
           header: 12
         })
-        const products = getProductCodesFromExcelTosave(firstWorksheetData, this.products)
+        const products = getProductCodesFromExcelTosave(firstWorksheetData, this.products, this.licitacionDetails)
         this.setProducts({ products: products })
       }
       fileReader.readAsArrayBuffer(selectedXlsxFile)
@@ -174,7 +174,7 @@ export default {
         licitacionDetails[index].licitacion_id = licitacionDataToSave.id
         licitacionDetails[index].company_id = company.id
         licitacionDetails[index].producto_id = product.id
-        // licitacionDetails[index].producto_position = product.position
+        licitacionDetails[index].company_numero_de_oferta = company.numero_de_oferta
       })
 
       this.setLicitacionData({ data: licitacionDataToSave })
