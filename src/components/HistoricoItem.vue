@@ -12,12 +12,18 @@
     <td>{{ licitacionDetail.cantidad }}</td>
     <td>{{ licitacionDetail.unidadDeMedida }}</td>
     <td>{{ licitacionDetail.ultimoProvSap }}</td>
-    <td>{{ licitacionDetail.ultimoPrecioSap }}</td>
+    <td>{{ getNumberFormatted(licitacionDetail.ultimoPrecioSap) }}</td>
     <td>{{ licitacionDetail.ultimoMonedaSap }}</td>
-    <td>{{ licitacionDetail.fechaUltimoPedido }}</td>
-    <td>{{ licitacionDetail.priceCurrent }}</td>
-    <td>{{ licitacionDetail.variacionPercentage * 100 }}%</td>
-    <td>{{ licitacionDetail.variacionMoneda }}</td>
+    <td>{{ new Date(licitacionDetail.fechaUltimoPedido).toLocaleDateString('es-PE') }}</td>
+    <td>{{ getNumberFormatted(licitacionDetail.priceCurrent) }}</td>
+    <td
+      :class="{
+        'red--text': licitacionDetail.variacionPercentage > 0
+      }"
+    >
+      {{ licitacionDetail.variacionPercentage * 100 }}%
+    </td>
+    <td>{{ getNumberFormatted(licitacionDetail.variacionMoneda ) }}</td>
     <td>{{ licitacionDetail.companyNameCurrent }}</td>
   </tr>
 </template>
@@ -25,7 +31,7 @@
 <script>
 
 import { mapState, mapActions } from 'vuex'
-
+import getNumberFormatted from '@/helpers/getNumberFormatted'
 export default {
   props: {
     value: { type: Boolean, default: false },
@@ -65,6 +71,7 @@ export default {
     this.historyPrice = this.licitacionDetail.price
   },
   methods: {
+    getNumberFormatted,
     ...mapActions({
       updatePartialProductData: 'licitacion/updatePartialProductData'
     }),

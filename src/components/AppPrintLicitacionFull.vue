@@ -341,6 +341,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import getNumberFormatted from '@/helpers/getNumberFormatted'
 
 export default {
   components: {
@@ -355,6 +356,7 @@ export default {
     })
   },
   methods: {
+    getNumberFormatted,
     getTotalOferta (company) {
       const companyLicitacionDetails = this.licitacionDetails.filter(detail => detail.company_id === company.id)
 

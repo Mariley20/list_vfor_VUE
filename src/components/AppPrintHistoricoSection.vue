@@ -27,6 +27,7 @@
           <th class="px-1">
             Variación (MONEDA)
           </th>
+          <th>Proveedor Actual</th>
         </tr>
         <tr
           v-for="(item,index) in historico"
@@ -38,25 +39,19 @@
           </td>
           <td>
             <div>{{ item.productName }}</div>
-            <v-divider />
-            <small
-              class="font-weight-bold"
-              style="line-height: 1;"
-            >
-              {{ item.companyNameCurrent }}
-            </small>
           </td>
           <td>{{ item.fabricante }}</td>
           <td>{{ item.nParte1 }}</td>
           <td>{{ item.cantidad }}</td>
           <td>{{ item.unidadDeMedida }}</td>
           <td>{{ item.ultimoProvSap }}</td>
-          <td>{{ item.ultimoPrecioSap }}</td>
+          <td>{{ getNumberFormatted(item.ultimoPrecioSap) }}</td>
           <td>{{ item.ultimoMonedaSap }}</td>
-          <td>{{ item.fechaUltimoPedido }}</td>
-          <td>{{ item.priceCurrent }}</td>
+          <td>{{ new Date(item.fechaUltimoPedido).toLocaleDateString('es-PE') }}</td>
+          <td>{{ getNumberFormatted(item.priceCurrent) }}</td>
           <td>{{ item.variacionPercentage * 100 }}%</td>
-          <td>{{ item.variacionMoneda }}</td>
+          <td>{{ getNumberFormatted(item.variacionMoneda ) }}</td>
+          <td>{{ item.companyNameCurrent }}</td>
         </tr>
       </tbody>
     </table>
@@ -65,6 +60,8 @@
 
 <script>
 import { mapState } from 'vuex'
+import getNumberFormatted from '@/helpers/getNumberFormatted'
+
 export default {
   computed: {
     ...mapState({
@@ -91,6 +88,9 @@ export default {
         }
       })
     }
+  },
+  methods: {
+    getNumberFormatted
   }
 }
 </script>

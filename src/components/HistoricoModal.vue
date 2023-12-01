@@ -77,7 +77,7 @@
                 Variación (MONEDA)
               </th>
               <th class="px-1">
-                Proveedor
+                Proveedor Actual
               </th>
             </tr>
             <HistoricoItem
