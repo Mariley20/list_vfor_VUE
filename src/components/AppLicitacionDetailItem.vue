@@ -40,7 +40,7 @@
       style="position: relative;"
       :class="{ 'text-decoration-line-through error--text': licitacionDetail.disabled }"
     >
-      {{ licitacionDetailValorNeto }}
+      {{ getNumberFormatted(licitacionDetailValorNeto) }}
       <div
         v-if="licitacionDetail.better_price_landed"
         class="tag"
@@ -72,7 +72,7 @@
           class="d-flex align-center flex-grow-1"
         >
           <div class="text-center flex-grow-1">
-            {{ licitacionDetail.price }}
+            {{ getNumberFormatted(licitacionDetail.price) }}
           </div>
           <v-btn
             v-if="!licitacionDetail.disabled"
@@ -95,7 +95,7 @@
         'yellow': licitacionDetail.better_price_landed
       }"
     >
-      {{ licitacionDetail.price_landed }}
+      {{ getNumberFormatted(licitacionDetail.price_landed) }}
     </div>
     <div :class="{ 'text-decoration-line-through error--text': licitacionDetail.disabled }">
       {{ licitacionDetail.cantidad }}
@@ -121,6 +121,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import getNumberFormatted from '@/helpers/getNumberFormatted'
 
 export default {
   props: {
@@ -186,6 +187,7 @@ export default {
       manuallySelectLicitacionDetail: 'licitacion/manuallySelectLicitacionDetail',
       resetLicitacionDetailsAvailables: 'licitacion/resetLicitacionDetailsAvailables'
     }),
+    getNumberFormatted,
     handleManuallySelectCheckClick (event) {
       const licitacionDetailId = this.licitacionDetail.id
       const productId = this.licitacionDetail.producto_id

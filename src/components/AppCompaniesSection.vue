@@ -192,6 +192,8 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import getNumberFormatted from '@/helpers/getNumberFormatted'
+
 export default {
   components: {
     AppLicitacionDetailSection: () => import('@/components/AppLicitacionDetailSection.vue'),
@@ -221,7 +223,7 @@ export default {
         return accumulator + (currentValue.price * currentValue.cantidad)
       }, 0)
 
-      return Math.round((total) * 100) / 100
+      return getNumberFormatted(Math.round((total) * 100) / 100)
     },
     getValorTotalFinal (company) {
       const companyLicitacionDetails = this.licitacionDetails.filter(detail => detail.company_id === company.id)
@@ -233,7 +235,7 @@ export default {
         return accumulator + 0
       }, 0)
 
-      return Math.round((total) * 100) / 100
+      return getNumberFormatted(Math.round((total) * 100) / 100)
     },
     getCompanyLicitacionSelected (company) {
       const productLicitacionDetails = this.licitacionDetails.filter(detail => detail.company_id === company.id)

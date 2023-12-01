@@ -100,7 +100,7 @@
                 >
               </td>
               <td>
-                {{ item.price * item.cantidad }}
+                {{ getNumberFormatted( item.price * item.cantidad) }}
               </td>
               <td>
                 <input
@@ -140,6 +140,7 @@
 </template>
 
 <script>
+import getNumberFormatted from '@/helpers/getNumberFormatted'
 
 import { mapState, mapActions } from 'vuex'
 import { v4 as uuidv4 } from 'uuid'
@@ -181,7 +182,8 @@ export default {
       },
       validForm: true,
       showPassword: false,
-      processingForm: false
+      processingForm: false,
+      getNumberFormatted
     }
   },
   computed: {
@@ -246,7 +248,7 @@ export default {
     getPriceLanded (detail, index) {
       const priceLanded = Math.round((detail.price + (detail.price * (this.companyFactorLanded / 100))) * 100) / 100
       this.newLicitacionDetails[index].price_landed = priceLanded
-      return priceLanded
+      return getNumberFormatted(priceLanded)
     }
   }
 }
