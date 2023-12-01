@@ -18,15 +18,7 @@ const getProductsDataFromExcelTosave = (rows) => {
     }
     productsDataToSave.push(data)
   })
-  return productsDataToSave.sort((a, b) => {
-    if (a.name < b.name) {
-      return -1
-    }
-    if (a.name > b.name) {
-      return 1
-    }
-    return 0
-  })
+  return productsDataToSave
 }
 
 export default getProductsDataFromExcelTosave

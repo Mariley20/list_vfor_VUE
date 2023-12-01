@@ -6,6 +6,7 @@
       hide-details
       outlined
       rows="1"
+      class="text-caption"
       @input="handleChangeComment"
     />
   </div>

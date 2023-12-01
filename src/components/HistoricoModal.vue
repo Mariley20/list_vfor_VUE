@@ -193,15 +193,6 @@ export default {
       const historico = getHistoricoFromExcelTosave(this.historicoFile,
         this.products, this.betterLicitacionDetails)
 
-      historico.sort((a, b) => {
-        if (a.productName < b.productName) {
-          return -1
-        }
-        if (a.productName > b.productName) {
-          return 1
-        }
-        return 0
-      })
       this.setHistoricoData({ data: historico })
     }
   }

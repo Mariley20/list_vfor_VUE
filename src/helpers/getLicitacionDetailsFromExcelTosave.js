@@ -41,15 +41,6 @@ const getLicitacionDetailsFromExcelTosave = (rows) => {
 
       details.push(productData)
     })
-    details.sort((a, b) => {
-      if (a.product_name < b.product_name) {
-        return -1
-      }
-      if (a.product_name > b.product_name) {
-        return 1
-      }
-      return 0
-    })
     companiesProducts.push(...details)
   })
   return companiesProducts
