@@ -3,7 +3,7 @@
     <div class="d-flex flex-wrap mb-4 align-center">
       <div>
         <div class="primary--text subtitle-2">
-          Subir excel de licitacion
+          CARGAR CUADRO COMPARATIVO
         </div>
         <input
           id="input"
@@ -13,7 +13,7 @@
       </div>
       <div v-if="products.length> 0">
         <div class="primary--text subtitle-2">
-          Subir codigos de producto
+          CARGAR CÓDIGOS DE MATERIAL
         </div>
         <input
           id="input"
