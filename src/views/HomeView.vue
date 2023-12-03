@@ -63,9 +63,7 @@
         <v-icon>mdi-printer</v-icon>
       </v-btn> -->
     </div>
-    <v-divider class="mb-4" />
     <div class="overflow-auto">
-      <AppLicitacionSeccion />
       <AppCompaniesSection />
     </div>
     <HistoricoModal
@@ -97,7 +95,7 @@ import { mapState, mapActions } from 'vuex'
 export default {
   name: 'AboutView',
   components: {
-    AppLicitacionSeccion: () => import('@/components/AppLicitacionSeccion.vue'),
+    // AppLicitacionSeccion: () => import('@/components/AppLicitacionSeccion.vue'),
     AppCompaniesSection: () => import('@/components/AppCompaniesSection.vue'),
     HistoricoModal: () => import('@/components/HistoricoModal.vue'),
     AppPrintLicitacionFull: () => import('@/components/AppPrintLicitacionFull.vue'),

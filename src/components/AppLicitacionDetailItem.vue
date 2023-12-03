@@ -1,5 +1,122 @@
 <template>
-  <div
+  <tr>
+    <template v-if="companyIndex === 0">
+      <td
+        class="font-weight-bold"
+        style="line-height: normal;"
+        :class="{ 'error--text': productUnlisted }"
+      >
+        <b> <small>#{{ licitacionDetailIndex + 1 }}</small></b>
+      </td>
+      <td
+        class="font-weight-bold"
+        style="line-height: normal;"
+        :class="{ 'error--text': productUnlisted }"
+      >
+        <small>{{ productCode }}</small>
+      </td>
+      <td
+        class="font-weight-bold overflow-hidden"
+        style="line-height: normal;"
+        :class="{ 'error--text': productUnlisted }"
+      >
+        <small>{{ licitacionDetail.product_name }}</small>
+      </td>
+    </template>
+    <template v-else>
+      <td
+        :class="{
+          'text-decoration-line-through error--text': licitacionDetail.disabled,
+          'yellow': licitacionDetail.better_dias_de_entrega
+        }"
+      >
+        <!-- <div class="d-flex align-center justify-end"> -->
+        {{ licitacionDetail.dias_de_entrega }}
+        <!-- </div> -->
+      </td>
+      <td
+        style="position: relative;"
+        :class="{ 'text-decoration-line-through error--text': licitacionDetail.disabled }"
+      >
+        {{ getNumberFormatted(licitacionDetailValorNeto) }}
+        <div
+          v-if="licitacionDetail.better_price_landed"
+          class="tag"
+        />
+      </td>
+      <td :class="{ 'text-decoration-line-through error--text': licitacionDetail.disabled }">
+        <div class="d-flex align-center justify-end">
+          <template v-if="showPriceNetoInput">
+            <input
+              v-model.number="companyPriceNeto"
+              type="number"
+              class="price-input"
+              @change="handlePriceNeto"
+            >
+            <v-btn
+              icon
+              width="24"
+              height="24"
+              color="success"
+              @click="showPriceNetoInput = false"
+            >
+              <v-icon small>
+                mdi-content-save-check
+              </v-icon>
+            </v-btn>
+          </template>
+          <div
+            v-else
+            class="d-flex align-center flex-grow-1"
+          >
+            <div class="text-center flex-grow-1">
+              {{ getNumberFormatted(licitacionDetail.price) }}
+            </div>
+            <v-btn
+              v-if="!licitacionDetail.disabled"
+              icon
+              width="24"
+              height="24"
+              color="primary"
+              @click="showPriceNetoInput = true"
+            >
+              <v-icon small>
+                mdi-pencil
+              </v-icon>
+            </v-btn>
+          </div>
+        </div>
+      </td>
+      <td
+        :class="{
+          'text-decoration-line-through error--text': licitacionDetail.disabled,
+          'yellow': licitacionDetail.better_price_landed
+        }"
+      >
+        {{ getNumberFormatted(licitacionDetail.price_landed) }}
+      </td>
+      <td :class="{ 'text-decoration-line-through error--text': licitacionDetail.disabled }">
+        {{ licitacionDetail.cantidad }}
+      </td>
+      <td>
+        <input
+          v-model="licitacionDetailManually"
+          type="checkbox"
+          :disabled="licitacionDetail.disabled"
+          @change="handleManuallySelectCheckClick($event)"
+        >
+      </td>
+      <td>
+        <input
+          v-model="licitacionDetailDisabled"
+          type="checkbox"
+          class="error--text"
+          @change="handleDisabledCheckClick($event)"
+        >
+      </td>
+    </template>
+  </tr>
+  <!-- <div
     class="licitacion-detail-item"
     :class="{ 'licitacion-detail-item__hide-products': !showProductName }"
   >
@@ -116,7 +233,7 @@
         @change="handleDisabledCheckClick($event)"
       >
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
@@ -228,39 +345,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.licitacion-detail-item {
-  display: grid;
-  text-align: center;
-  grid-template-columns: 28px 61px 130px 100px 60px 110px repeat(2, 60px) 30px 30px;
-  grid-template-rows: 37px;
-  // border: 1px solid rgb(228, 228, 228);
-
-  &>div {
-    padding: 4px;
-    align-self: stretch;
-    border-left: 1px solid #ddd;
-    border-top: 1px solid #ddd;
-  }
-
-  &__hide-products {
-    grid-template-columns: 100px 60px 110px repeat(2, 60px) 30px 30px;
-  }
-
-  .price-input {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    max-width: 65px;
-    padding: 2px 4px;
-    margin-right: 4px;
-  }
-
-  .tag {
-    height: 5px;
-    width: 8px;
-    background-color: #92d050;
-    position: absolute;
-    bottom: 0;
-    right: 0;
-  }
-}
 </style>

@@ -1,5 +1,49 @@
 <template>
-  <div>
+  <table class="sheet-table-detail">
+    <tbody>
+      <tr>
+        <template v-if="companyIndex === 0">
+          <th>
+            <b>#</b>
+          </th>
+          <th
+            style="padding: 2px;"
+          >
+            <b>Material</b>
+          </th>
+          <th
+            style="padding: 2px; min-width: 150px;"
+          >
+            <b>Texto breve</b>
+          </th>
+        </template>
+        <template v-else>
+          <th>
+            <b>Dias de entrega</b>
+          </th>
+          <th><b>Valor neto</b></th>
+          <th><b>Precio neto</b></th>
+          <th><b>Precio Landed</b></th>
+          <th
+            style="padding: 0 2px;"
+          >
+            <b>Cantidad</b>
+          </th>
+          <th>✅</th>
+          <th>❌</th>
+        </template>
+      </tr>
+      <AppLicitacionDetailItem
+        v-for="(licitacionDetail, index) in companyLicitacionDetails"
+        :key="index"
+        :company="company"
+        :company-index="companyIndex"
+        :licitacion-detail="licitacionDetail"
+        :licitacion-detail-index="index"
+      />
+    </tbody>
+  </table>
+  <!-- <div>
     <div
       class="licitacion-detail font-weight-bold"
       :class="{ 'licitacion-detail__hide-products': !showProductName }"
@@ -32,7 +76,7 @@
       :licitacion-detail="licitacionDetail"
       :licitacion-detail-index="index"
     />
-  </div>
+  </div> -->
 </template>
 
 <script>
@@ -60,21 +104,24 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.licitacion-detail {
-  display: grid;
-  text-align: center;
-  grid-template-columns: 28px 61px 130px 100px 60px 110px repeat(2, 60px) 30px 30px;
-  // border: 1px solid rgb(228, 228, 228);
+<style lang="scss"  >
+.sheet-table-detail {
+  border-collapse: collapse;
 
-  &>div {
-    padding: 4px;
-    align-self: stretch;
-    border-left: 1px solid #ddd;
+  td{
+    vertical-align: middle;
+    border-right: 1px solid rgb(228, 228, 228);
+    border-top: 1px solid rgb(228, 228, 228);
+    line-height: 1;
+    padding: 0 4px;
+    height: 40px;
+    text-align: center;
   }
-
-  &__hide-products {
-    grid-template-columns: 100px 60px 110px repeat(2, 60px) 30px 30px;
+  th {
+    border-right: 1px solid rgb(228, 228, 228);
+    line-height: 1;
+    padding: 0 4px;
+    height: 35px;
   }
 }
 </style>

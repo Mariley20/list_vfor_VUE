@@ -47,19 +47,16 @@
       >
         <template v-if="companyIndex === 0">
           <td
-            v-if="companyIndex === 0"
             style="height: 40px;max-height: 40px; text-align: center;"
           >
             <b><small>{{ index+1 }}</small></b>
           </td>
           <td
-            v-if="companyIndex === 0"
             style="height: 40px;max-height: 40px; text-align: center;"
           >
             <small>{{ getProductCode(licitacionDetail) }}</small>
           </td>
           <td
-            v-if="companyIndex === 0"
             style="height: 40px;max-height: 40px; max-width: 182px; width: 182px text-align: center;"
           >
             <small>{{ licitacionDetail.product_name }}</small>
