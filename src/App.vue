@@ -15,6 +15,15 @@
       >
 
       <v-toolbar-title>Cuadro comparativo</v-toolbar-title>
+      <v-spacer />
+
+      <v-btn
+        fab
+        icon
+        @click="handleClose"
+      >
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
     </v-app-bar>
     <v-main>
       <router-view />
@@ -29,6 +38,11 @@ export default {
 
   data: () => ({
     //
-  })
+  }),
+  methods: {
+    handleClose () {
+      window.location.reload()
+    }
+  }
 }
 </script>

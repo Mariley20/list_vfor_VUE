@@ -54,14 +54,6 @@
       >
         <v-icon>mdi-printer</v-icon>
       </v-btn>
-      <!-- <v-btn
-        v-if="licitacionDetails.length>0"
-        color="error"
-        class="text-none"
-        :to="{name:'printer'}"
-      >
-        <v-icon>mdi-printer</v-icon>
-      </v-btn> -->
     </div>
     <div class="overflow-auto">
       <AppCompaniesSection />
