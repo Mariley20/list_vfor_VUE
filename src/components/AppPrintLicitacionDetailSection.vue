@@ -71,7 +71,12 @@
           >
             {{ licitacionDetail.dias_de_entrega }}
           </td>
-          <td style="height: 40px;max-height: 40px; text-align: center;">
+          <td
+            style="height: 40px;max-height: 40px; text-align: center;"
+            :style="{
+              'font-weight': licitacionDetail.better_price_landed? 'bold': 'normal'
+            }"
+          >
             {{ getNumberFormatted(Math.round((licitacionDetail.price * licitacionDetail.cantidad )* 100) / 100 ) }}
           </td>
           <td style="height: 40px;max-height: 40px; text-align: center;">

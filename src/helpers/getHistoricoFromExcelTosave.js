@@ -16,7 +16,7 @@ const getHistoricoFromExcelTosave = (rows, products, details) => {
     const rowMaterial = row[MATERIAL]
     const product = products.find(product => product.code === rowMaterial)
     if (!product) return
-    console.log(product)
+    // console.log(product)
     const detail = details.find(detail => detail.producto_id === product.id)
     if (!detail) return
 
