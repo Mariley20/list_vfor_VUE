@@ -33,6 +33,7 @@ const getHistoricoFromExcelTosave = (rows, products, details) => {
       priceCurrent: detail.price,
       companyNameCurrent: detail.company_name,
       productId: product.id,
+      product_position: product.position,
       companyId: detail.company_id,
       variacionPercentage: ultimoPrecioSap > 0 ? Math.round(variacion * 100) / 100 : 0,
       variacionMoneda: variacionMonedaRound,
@@ -47,7 +48,9 @@ const getHistoricoFromExcelTosave = (rows, products, details) => {
     }
     historicos.push(data)
   })
-  return historicos
+  return historicos.sort((a, b) => {
+    return a.product_position - b.product_position
+  })
 }
 
 export default getHistoricoFromExcelTosave
