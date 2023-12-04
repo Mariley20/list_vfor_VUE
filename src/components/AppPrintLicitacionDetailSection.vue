@@ -66,24 +66,24 @@
           <td
             style="height: 40px;max-height: 40px; text-align: center;"
             :style="{
-              'background-color': licitacionDetail.better_dias_de_entrega ? '#fb8c00': ''
+              'background-color': licitacionDetail.better_dias_de_entrega ? '#ffeb3b': ''
             }"
           >
             {{ licitacionDetail.dias_de_entrega }}
           </td>
           <td style="height: 40px;max-height: 40px; text-align: center;">
-            {{ Math.round((licitacionDetail.price * licitacionDetail.cantidad )* 100) / 100 }}
+            {{ getNumberFormatted(Math.round((licitacionDetail.price * licitacionDetail.cantidad )* 100) / 100 ) }}
           </td>
           <td style="height: 40px;max-height: 40px; text-align: center;">
-            {{ licitacionDetail.price }}
+            {{ getNumberFormatted(licitacionDetail.price) }}
           </td>
           <td
             style="height: 40px;max-height: 40px; text-align: center;"
             :style="{
-              'background-color': licitacionDetail.better_price_landed ? '#4caf50': ''
+              'background-color': licitacionDetail.better_price_landed ? '#ffeb3b': ''
             }"
           >
-            {{ licitacionDetail.price_landed }}
+            {{ getNumberFormatted(licitacionDetail.price_landed) }}
           </td>
           <td style="height: 40px;max-height: 40px; text-align: center;">
             {{ licitacionDetail.cantidad }}
@@ -96,6 +96,8 @@
 
 <script>
 import { mapState } from 'vuex'
+import getNumberFormatted from '@/helpers/getNumberFormatted'
+
 export default {
   props: {
     company: { type: Object, default: null },
@@ -114,6 +116,7 @@ export default {
     }
   },
   methods: {
+    getNumberFormatted,
     getProductCode (detail) {
       const product = this.products.find(item => item.id === detail.producto_id)
       return product.code

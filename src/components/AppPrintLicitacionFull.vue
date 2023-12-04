@@ -1,12 +1,16 @@
 <template>
   <section
-    style="font-size: 12px;"
+    style="font-size: 12px;font-family: system-ui;"
     class="overflow-auto"
   >
+    <h2 style="text-align: center;font-family: system-ui; ">
+      CUADRO COMPARATIVO
+    </h2>
+
     <table
       v-if="licitacion"
       border="1"
-      style="margin: 16px auto; border-collapse: collapse; border-color: #909090; font-size: 12px;font-family: system-ui;"
+      style="margin: 10px auto; border-collapse: collapse; border-color: #909090; font-size: 12px;font-family: system-ui;"
     >
       <tbody>
         <tr>
@@ -68,17 +72,6 @@
         </tr>
         <tr>
           <td style="padding-left: 4px;">
-            <b>Fecha de inicio :</b>
-          </td>
-          <td
-            :colspan="companies.length"
-            style="padding-left: 4px;"
-          >
-            {{ licitacion.fecha_de_inicio }}
-          </td>
-        </tr>
-        <tr>
-          <td style="padding-left: 4px;">
             <b>Plazo para presentación de la oferta :</b>
           </td>
           <td
@@ -86,17 +79,6 @@
             style="padding-left: 4px;"
           >
             {{ licitacion.plazo_para_presentacion_de_la_oferta }}
-          </td>
-        </tr>
-        <tr>
-          <td style="padding-left: 4px;">
-            <b>Fecha apertura :</b>
-          </td>
-          <td
-            :colspan="companies.length"
-            style="padding-left: 4px;"
-          >
-            {{ licitacion.fecha_apertura }}
           </td>
         </tr>
         <tr>
@@ -152,30 +134,6 @@
         </tr>
         <tr>
           <td style="padding-left: 4px;">
-            <b>Costo de Embalaje</b>
-          </td>
-          <td
-            v-for="(company, companyIndex) in companies"
-            :key="companyIndex"
-            style="padding-left: 4px;"
-          >
-            {{ company.costo_de_embalaje }}
-          </td>
-        </tr>
-        <tr>
-          <td style="padding-left: 4px;">
-            <b>Costo de flete</b>
-          </td>
-          <td
-            v-for="(company, companyIndex) in companies"
-            :key="companyIndex"
-            style="padding-left: 4px;"
-          >
-            {{ company.costo_de_flete }}
-          </td>
-        </tr>
-        <tr>
-          <td style="padding-left: 4px;">
             <b>Vig de Cotizacion</b>
           </td>
           <td
@@ -219,34 +177,10 @@
             :key="companyIndex"
             style="padding-left: 4px;"
             :style="{
-              'background-color': getValorTotalFinal(company) > 0? '#92d050': ''
+              'background-color': getValorTotalFinal(company) > 0? '#ffeb3b': ''
             }"
           >
             {{ getValorTotalFinal(company) }}
-          </td>
-        </tr>
-        <tr>
-          <td style="padding-left: 4px;">
-            <b>Valor neto anterior</b>
-          </td>
-          <td
-            v-for="(company, companyIndex) in companies"
-            :key="companyIndex"
-            style="padding-left: 4px;"
-          >
-            {{ company.valor_neto_anterior }}
-          </td>
-        </tr>
-        <tr>
-          <td style="padding-left: 4px;">
-            <b>Ponderacion Tecnica</b>
-          </td>
-          <td
-            v-for="(company, companyIndex) in companies"
-            :key="companyIndex"
-            style="padding-left: 4px;"
-          >
-            {{ company.ponderacion_tecnica }}
           </td>
         </tr>
         <tr>
@@ -364,7 +298,7 @@ export default {
         return accumulator + (currentValue.price * currentValue.cantidad)
       }, 0)
 
-      return Math.round((total) * 100) / 100
+      return getNumberFormatted(Math.round((total) * 100) / 100)
     },
     getValorTotalFinal (company) {
       const companyLicitacionDetails = this.licitacionDetails.filter(detail => detail.company_id === company.id)
@@ -376,11 +310,11 @@ export default {
         return accumulator + 0
       }, 0)
 
-      return Math.round((total) * 100) / 100
+      return getNumberFormatted(Math.round((total) * 100) / 100)
     },
     getCompanyLicitacionSelected (company) {
       const productLicitacionDetails = this.licitacionDetails.filter(detail => detail.company_id === company.id)
-      return productLicitacionDetails.every(detail => detail.better_price_landed === false) ? '' : '#ffff00'
+      return productLicitacionDetails.every(detail => detail.better_price_landed === false) ? '' : '#ffeb3b'
     },
     getCompanyFactorLandedFormat (company) {
       return company.factor_landed > 0 ? company.factor_landed * 100 : 0

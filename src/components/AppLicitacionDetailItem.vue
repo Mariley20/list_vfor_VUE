@@ -36,13 +36,10 @@
       </td>
       <td
         style="position: relative;"
-        :class="{ 'text-decoration-line-through error--text': licitacionDetail.disabled }"
+        :class="{ 'text-decoration-line-through error--text': licitacionDetail.disabled,
+                  'font-weight-bold': licitacionDetail.better_price_landed }"
       >
         {{ getNumberFormatted(licitacionDetailValorNeto) }}
-        <div
-          v-if="licitacionDetail.better_price_landed"
-          class="tag"
-        />
       </td>
       <td :class="{ 'text-decoration-line-through error--text': licitacionDetail.disabled }">
         <div class="d-flex align-center justify-end">
