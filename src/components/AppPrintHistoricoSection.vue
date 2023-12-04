@@ -47,9 +47,15 @@
           <td>{{ item.ultimoProvSap }}</td>
           <td>{{ getNumberFormatted(item.ultimoPrecioSap) }}</td>
           <td>{{ item.ultimoMonedaSap }}</td>
-          <td>{{ new Date(item.fechaUltimoPedido).toLocaleDateString('es-PE') }}</td>
+          <td>{{ getNumberDateFormatted(item.fechaUltimoPedido) }}</td>
           <td>{{ getNumberFormatted(item.priceCurrent) }}</td>
-          <td>{{ item.variacionPercentage * 100 }}%</td>
+          <td
+            :style="{
+              'color': item.variacionPercentage > 0 ? 'red':''
+            }"
+          >
+            {{ getPercentageNumberFormatted(item.variacionPercentage) }}
+          </td>
           <td>{{ getNumberFormatted(item.variacionMoneda ) }}</td>
           <td>{{ item.companyNameCurrent }}</td>
         </tr>
@@ -61,7 +67,8 @@
 <script>
 import { mapState } from 'vuex'
 import getNumberFormatted from '@/helpers/getNumberFormatted'
-
+import getPercentageNumberFormatted from '@/helpers/getPercentageNumberFormatted'
+import getNumberDateFormatted from '@/helpers/getNumberDateFormatted'
 export default {
   computed: {
     ...mapState({
@@ -90,7 +97,9 @@ export default {
     }
   },
   methods: {
-    getNumberFormatted
+    getNumberFormatted,
+    getPercentageNumberFormatted,
+    getNumberDateFormatted
   }
 }
 </script>
