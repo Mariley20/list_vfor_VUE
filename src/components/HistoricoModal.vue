@@ -141,7 +141,8 @@ export default {
     ...mapState({
       licitacionDetails: (state) => state.licitacion.licitacionDetails,
       products: (state) => state.licitacion.products,
-      historico: (state) => state.licitacion.historico
+      historico: (state) => state.licitacion.historico,
+      licitacion: (state) => state.licitacion.licitacion
     }),
     showModal: {
       get () {
@@ -187,7 +188,7 @@ export default {
       clonedElement.style.display = 'block'
       const opt = {
         margin: 0.1,
-        filename: 'myfile.pdf',
+        filename: this.licitacion.numero_de_la_licitacion,
         // image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 1 },
         jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' }
