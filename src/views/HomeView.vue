@@ -1,5 +1,9 @@
 <template>
-  <v-container fluid>
+  <v-container
+    fluid
+    class="overflow-auto"
+    style="height: calc(100vh - 56px);"
+  >
     <div class="d-flex flex-wrap mb-4 align-center">
       <div>
         <div class="primary--text subtitle-2">
@@ -55,9 +59,7 @@
         <v-icon>mdi-printer</v-icon>
       </v-btn>
     </div>
-    <div class="overflow-auto">
-      <AppCompaniesSection />
-    </div>
+    <AppCompaniesSection />
     <HistoricoModal
       v-model="showCompativeModal"
     />
