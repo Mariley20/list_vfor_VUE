@@ -14,7 +14,7 @@
     <td>{{ licitacionDetail.ultimoProvSap }}</td>
     <td>{{ getNumberFormatted(licitacionDetail.ultimoPrecioSap) }}</td>
     <td>{{ licitacionDetail.ultimoMonedaSap }}</td>
-    <td>{{ new Date(licitacionDetail.fechaUltimoPedido).toLocaleDateString('es-PE') }}</td>
+    <td>{{ getNumberDateFormatted(licitacionDetail.fechaUltimoPedido) }}</td>
     <td>{{ getNumberFormatted(licitacionDetail.priceCurrent) }}</td>
     <td
       :class="{
@@ -33,6 +33,8 @@
 import { mapState, mapActions } from 'vuex'
 import getNumberFormatted from '@/helpers/getNumberFormatted'
 import getPercentageNumberFormatted from '@/helpers/getPercentageNumberFormatted'
+import getNumberDateFormatted from '@/helpers/getNumberDateFormatted'
+
 export default {
   props: {
     value: { type: Boolean, default: false },
@@ -74,6 +76,7 @@ export default {
   methods: {
     getNumberFormatted,
     getPercentageNumberFormatted,
+    getNumberDateFormatted,
     ...mapActions({
       updatePartialProductData: 'licitacion/updatePartialProductData'
     }),
