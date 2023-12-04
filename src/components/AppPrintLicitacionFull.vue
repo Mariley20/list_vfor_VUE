@@ -3,10 +3,28 @@
     style="font-size: 12px;font-family: system-ui;"
     class="overflow-auto"
   >
-    <h2 style="text-align: center;font-family: system-ui; ">
+    <!-- <h2 style="text-align: center;font-family: system-ui; ">
       CUADRO COMPARATIVO
-    </h2>
-
+    </h2> -->
+    <table style="background-color: #d72630; width: 101%; margin: -8px -8px 8px -8px;">
+      <tbody>
+        <tr>
+          <td style="width: 40px;max-width: 40px;">
+            <img
+              src="@/assets/southern-logo.jpeg"
+              alt=""
+              height="35"
+              class="mr-4"
+            >
+          </td>
+          <td>
+            <h3 style="text-align: left;font-family: system-ui; margin: 0; color: white; ">
+              CUADRO COMPARATIVO
+            </h3>
+          </td>
+        </tr>
+      </tbody>
+    </table>
     <table
       v-if="licitacion"
       border="1"
@@ -323,4 +341,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+body {
+  margin: 0;
+}
+</style>
