@@ -21,7 +21,7 @@
         'red--text': licitacionDetail.variacionPercentage > 0
       }"
     >
-      {{ licitacionDetail.variacionPercentage * 100 }}%
+      {{ getPercentageNumberFormatted(licitacionDetail.variacionPercentage) }}
     </td>
     <td>{{ getNumberFormatted(licitacionDetail.variacionMoneda ) }}</td>
     <td>{{ licitacionDetail.companyNameCurrent }}</td>
@@ -32,6 +32,7 @@
 
 import { mapState, mapActions } from 'vuex'
 import getNumberFormatted from '@/helpers/getNumberFormatted'
+import getPercentageNumberFormatted from '@/helpers/getPercentageNumberFormatted'
 export default {
   props: {
     value: { type: Boolean, default: false },
@@ -72,6 +73,7 @@ export default {
   },
   methods: {
     getNumberFormatted,
+    getPercentageNumberFormatted,
     ...mapActions({
       updatePartialProductData: 'licitacion/updatePartialProductData'
     }),
