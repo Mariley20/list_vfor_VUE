@@ -18,6 +18,7 @@
         <v-spacer />
         <v-btn
           icon
+          :loading="printting"
           @click="printDownload"
         >
           <v-icon>mdi-printer</v-icon>
@@ -90,6 +91,7 @@
           </tbody>
         </table>
         <AppPrintHistoricoSection
+          id="DownloadCompHistorico"
           ref="DownloadCompHistorico"
           style="display: none;"
         />
@@ -118,6 +120,8 @@ import { mapState, mapActions } from 'vuex'
 import HistoricoItem from '@/components/HistoricoItem.vue'
 import AppPrintHistoricoSection from '@/components/AppPrintHistoricoSection.vue'
 import getHistoricoFromExcelTosave from '@/helpers/getHistoricoFromExcelTosave.js'
+import html2pdf from 'html2pdf.js'
+
 export default {
   components: {
     HistoricoItem, AppPrintHistoricoSection
@@ -128,7 +132,9 @@ export default {
   data () {
     return {
       loadingExcel: false,
-      historicoFile: []
+      historicoFile: [],
+      printting: false
+
     }
   },
   computed: {
@@ -163,13 +169,35 @@ export default {
     saveHistoricoData () {
       this.showModal = false
     },
-    printDownload () {
-      const w = window.open()
-      w.document.write(this.$refs.DownloadCompHistorico.$el.innerHTML)
-      w.document.close()
-      w.setTimeout(function () {
-        w.print()
-      }, 1000)
+    async printDownload () {
+      // const w = window.open()
+      // w.document.write(this.$refs.DownloadCompHistorico.$el.innerHTML)
+      // w.document.close()
+      // w.setTimeout(function () {
+      //   w.print()
+      // }, 1000)
+      this.printting = true
+      const element = document.getElementById('DownloadCompHistorico')
+      // Choose the element that our invoice is rendered in.
+
+      // clone the element
+      const clonedElement = element.cloneNode(true)
+
+      // change display of cloned element
+      clonedElement.style.display = 'block'
+      const opt = {
+        margin: 0.1,
+        filename: 'myfile.pdf',
+        // image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 1 },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' }
+      }
+      // Choose the clonedElement and save the PDF for our user.
+      await html2pdf(clonedElement, opt)
+
+      // remove cloned element
+      clonedElement.remove()
+      this.printting = false
     },
     uploadExcelFile (event) {
       const selectedXlsxFile = event.target.files[0]

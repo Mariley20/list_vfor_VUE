@@ -51,14 +51,14 @@
               dense
             />
             <v-text-field
-              v-model.number="companyData.cond_de_pago"
+              v-model="companyData.cond_de_pago"
               outlined
               label="Cond de pago"
               style="width: 250px;"
               dense
             />
             <v-text-field
-              v-model.number="companyData.vig_de_cotizacion"
+              v-model="companyData.vig_de_cotizacion"
               outlined
               label="Vig de cotización"
               style="width: 250px;"
