@@ -16,9 +16,9 @@ const getProductCodesFromExcelTosave = (rows, products, details) => {
     const name = row && !!row[__EMPTY_13] ? row[__EMPTY_13] : ''
     const idCategoria = row && !!row[__EMPTY_14] ? row[__EMPTY_14] : ''
     const unidad = row && !!row[__EMPTY_19] ? row[__EMPTY_19] : ''
-    const priceNeto = row && !!row[__EMPTY_21] ? row[__EMPTY_21] : 0
+    const priceNeto = row && !!row[__EMPTY_21] ? row[__EMPTY_21].replace(',', '') : 0
 
-    // console.log(numeroOferta)
+    // console.log(name, priceNeto)
     return {
       name: name.trim(),
       code_position: parseInt(position),
@@ -30,16 +30,24 @@ const getProductCodesFromExcelTosave = (rows, products, details) => {
       unidad: unidad.trim()
     }
   })
-  console.log({ productsCodes })
+  const codeOferta = productsCodes[0].codeNumeroOferta
   const newProducts = products.map((product, index) => {
-    const productDetails = details.filter(item => item.producto_id === product.id)
+    const productWithOferta = details.find(item => item.producto_id === product.id && item.company_numero_de_oferta === codeOferta)
     const productCode = productsCodes.find(item => {
-      const productWithOferta = productDetails.find(detail => detail.company_numero_de_oferta === item.codeNumeroOferta)
-      return !!productWithOferta && item.name.toLowerCase() === product.name.toLowerCase() &&
+      // if (item.name === product.name) {
+      //   console.log(item.name, '=== ', product.name)
+      //   console.log(item.unidad, '=== ', product.unidad)
+      //   console.log(item.idCategoria, '=== ', product.id_categoria)
+      //   console.log(item.cantidad, '=== ', product.cantidad)
+      //   console.log(productWithOferta.price, '=== ', item.codePriceNeto)
+      //   console.log('---------', productWithOferta.product_name)
+      // }
+      return !!productWithOferta && item.name === product.name &&
         item.unidad === product.unidad &&
         item.idCategoria === product.id_categoria &&
         item.cantidad === product.cantidad && productWithOferta.price === item.codePriceNeto
     })
+
     return {
       ...product,
       ...productCode
