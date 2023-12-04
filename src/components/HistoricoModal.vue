@@ -13,7 +13,7 @@
         :height="40"
       >
         <v-toolbar-title>
-          Cuadro historico
+          Cuadro histórico
         </v-toolbar-title>
         <v-spacer />
         <v-btn
@@ -33,7 +33,7 @@
         <div class="d-flex align-center">
           <div class="mb-3">
             <div class="primary--text subtitle-2">
-              Subir excel de licitacion
+              CARGAR INFORMACIÓN HISTÓRICA (MRP)
             </div>
             <input
               id="input"
