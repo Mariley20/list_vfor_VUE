@@ -27,8 +27,8 @@
       <td
         :class="{
           'text-decoration-line-through error--text': licitacionDetail.disabled,
-          'yellow': licitacionDetail.better_dias_de_entrega
         }"
+        :style="{'background-color':cantidadItemBgColor}"
       >
         <!-- <div class="d-flex align-center justify-end"> -->
         {{ licitacionDetail.dias_de_entrega }}
@@ -113,124 +113,6 @@
       </td>
     </template>
   </tr>
-  <!-- <div
-    class="licitacion-detail-item"
-    :class="{ 'licitacion-detail-item__hide-products': !showProductName }"
-  >
-    <template v-if="showProductName">
-      <div
-        class="font-weight-bold"
-        style="line-height: normal;"
-        :class="{ 'error--text': productUnlisted }"
-      >
-        <small>#{{ licitacionDetailIndex + 1 }}</small>
-      </div>
-      <div
-        class="font-weight-bold"
-        style="line-height: normal;"
-        :class="{ 'error--text': productUnlisted }"
-      >
-        <small>{{ productCode }}</small>
-      </div>
-      <div
-        class="font-weight-bold overflow-hidden"
-        style="line-height: normal;"
-        :class="{ 'error--text': productUnlisted }"
-      >
-        <small>{{ licitacionDetail.product_name }}</small>
-      </div>
-    </template>
-    <div
-      :class="{
-        'text-decoration-line-through error--text': licitacionDetail.disabled,
-        'yellow': licitacionDetail.better_dias_de_entrega
-      }"
-    >
-      <div class="d-flex align-center justify-end">
-        {{ licitacionDetail.dias_de_entrega }}
-      </div>
-    </div>
-    <div
-      style="position: relative;"
-      :class="{ 'text-decoration-line-through error--text': licitacionDetail.disabled }"
-    >
-      {{ getNumberFormatted(licitacionDetailValorNeto) }}
-      <div
-        v-if="licitacionDetail.better_price_landed"
-        class="tag"
-      />
-    </div>
-    <div :class="{ 'text-decoration-line-through error--text': licitacionDetail.disabled }">
-      <div class="d-flex align-center justify-end">
-        <template v-if="showPriceNetoInput">
-          <input
-            v-model.number="companyPriceNeto"
-            type="number"
-            class="price-input"
-            @change="handlePriceNeto"
-          >
-          <v-btn
-            icon
-            width="24"
-            height="24"
-            color="success"
-            @click="showPriceNetoInput = false"
-          >
-            <v-icon small>
-              mdi-content-save-check
-            </v-icon>
-          </v-btn>
-        </template>
-        <div
-          v-else
-          class="d-flex align-center flex-grow-1"
-        >
-          <div class="text-center flex-grow-1">
-            {{ getNumberFormatted(licitacionDetail.price) }}
-          </div>
-          <v-btn
-            v-if="!licitacionDetail.disabled"
-            icon
-            width="24"
-            height="24"
-            color="primary"
-            @click="showPriceNetoInput = true"
-          >
-            <v-icon small>
-              mdi-pencil
-            </v-icon>
-          </v-btn>
-        </div>
-      </div>
-    </div>
-    <div
-      :class="{
-        'text-decoration-line-through error--text': licitacionDetail.disabled,
-        'yellow': licitacionDetail.better_price_landed
-      }"
-    >
-      {{ getNumberFormatted(licitacionDetail.price_landed) }}
-    </div>
-    <div :class="{ 'text-decoration-line-through error--text': licitacionDetail.disabled }">
-      {{ licitacionDetail.cantidad }}
-    </div>
-    <div>
-      <input
-        v-model="licitacionDetailManually"
-        type="checkbox"
-        :disabled="licitacionDetail.disabled"
-        @change="handleManuallySelectCheckClick($event)"
-      >
-    </div>
-    <div>
-      <input
-        v-model="licitacionDetailDisabled"
-        type="checkbox"
-        class="error--text"
-        @change="handleDisabledCheckClick($event)"
-      >
-    </div>
-  </div> -->
 </template>
 
 <script>
@@ -278,6 +160,15 @@ export default {
     },
     licitacionDetailValorNeto () {
       return Math.round((this.licitacionDetail.price * this.licitacionDetail.cantidad) * 100) / 100
+    },
+    cantidadItemBgColor () {
+      if (this.licitacionDetailManually) {
+        return '#A9D08E'
+      }
+      if (this.licitacionDetail.better_dias_de_entrega) {
+        return '#E2EFDA'
+      }
+      return null
     }
   },
   watch: {

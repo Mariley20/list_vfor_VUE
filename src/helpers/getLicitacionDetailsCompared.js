@@ -12,7 +12,7 @@ const getLicitacionDetailsCompared = (licitacionDetails, products) => {
     if (manuallySelectedDetail) {
       newlicitacionDetails.forEach((item, itemIndex) => {
         if (productDetailsAvailableIds.includes(item.id)) {
-          newlicitacionDetails[itemIndex].better_dias_de_entrega = item.id === manuallySelectedDetail.id
+          // newlicitacionDetails[itemIndex].better_dias_de_entrega = item.id === manuallySelectedDetail.id
           newlicitacionDetails[itemIndex].better_price_landed = item.id === manuallySelectedDetail.id
           newlicitacionDetails[itemIndex].manually_selected = item.id === manuallySelectedDetail.id
         }
