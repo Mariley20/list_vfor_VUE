@@ -12,7 +12,7 @@ const getProductCodesFromExcelTosave = (rows, products, details) => {
     const numeroOferta = row && !!row['Document Number'] ? row['Document Number'] : '0'
     const position = row && !!row[__EMPTY_4] ? row[__EMPTY_4] : '0'
     const code = row && !!row[__EMPTY_10] ? row[__EMPTY_10].slice(-8) : ''
-    const cantidad = row && !!row[__EMPTY_18] ? row[__EMPTY_18] : ''
+    const cantidad = row && !!row[__EMPTY_18] ? row[__EMPTY_18].replace(',', '') : ''
     const name = row && !!row[__EMPTY_13] ? row[__EMPTY_13] : ''
     const idCategoria = row && !!row[__EMPTY_14] ? row[__EMPTY_14] : ''
     const unidad = row && !!row[__EMPTY_19] ? row[__EMPTY_19] : ''
