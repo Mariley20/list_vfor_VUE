@@ -57,7 +57,7 @@
             <small>{{ getProductCode(licitacionDetail) }}</small>
           </td>
           <td
-            style="height: 40px;max-height: 40px; max-width: 182px; width: 182px text-align: center;"
+            style="height: 40px;max-height: 40px; min-width: 180px; max-width: 182px; width: 182px text-align: center;"
           >
             <small>{{ licitacionDetail.product_name }}</small>
           </td>

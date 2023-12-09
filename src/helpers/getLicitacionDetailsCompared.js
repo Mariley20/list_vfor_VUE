@@ -34,7 +34,9 @@ const getLicitacionDetailsCompared = (licitacionDetails, products) => {
       newlicitacionDetails.forEach((item, itemIndex) => {
         if (productDetailsAvailableIds.includes(item.id)) {
           newlicitacionDetails[itemIndex].better_price_landed = !!detailBestPriceLanded && item.id === detailBestPriceLanded.id
-          newlicitacionDetails[itemIndex].better_dias_de_entrega = !!detailBestDiadeEntrega && item.id === detailBestDiadeEntrega.id
+          newlicitacionDetails[itemIndex].better_dias_de_entrega = !!detailBestDiadeEntrega &&
+            item.producto_id === detailBestDiadeEntrega.producto_id &&
+            item.dias_de_entrega === detailBestDiadeEntrega.dias_de_entrega
           newlicitacionDetails[itemIndex].manually_selected = !!detailBestPriceLanded && item.id === detailBestPriceLanded.id
         }
       })
