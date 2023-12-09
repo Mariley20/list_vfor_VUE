@@ -48,6 +48,7 @@
               v-model.number="companyPriceNeto"
               type="number"
               class="price-input"
+              style="max-width: 85px;"
               @change="handlePriceNeto"
             >
             <v-btn

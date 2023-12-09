@@ -66,7 +66,7 @@
           <td
             style="height: 40px;max-height: 40px; text-align: center;"
             :style="{
-              'background-color': licitacionDetail.better_dias_de_entrega ? '#A9D08E': ''
+              'background-color': licitacionDetail.manually_selected ? '#A9D08E': ''
             }"
           >
             {{ licitacionDetail.dias_de_entrega }}
